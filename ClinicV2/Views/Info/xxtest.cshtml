@@ -1,0 +1,12 @@
+﻿@using clinic.Models
+@model SignupModel
+
+@{
+    ViewBag.Title = "Test";
+}
+
+@foreach (var clinic in Model.listofClinic)
+{
+    <h1>@clinic.Name</h1>
+}
+

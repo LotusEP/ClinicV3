@@ -1,0 +1,54 @@
+﻿@using clinic.Models
+
+@{
+    ViewBag.Title = "EmailRequest";
+}
+
+<p>hello</p>
+
+
+ 
+
+
+@*@{
+    var PatientFirstName = Request["Pfname"];
+    var PatientLastName = Request["Plname"];
+    var PatientEmail = Request["Pemail"];
+    var PatientStreet = Request["Pstreet"];
+    var PatientState = Request["Pstate"];
+    var PatientZip = Request["Pzip"];
+    var PatientCity = Request["Pcity"];
+    var PatientPhone = Request["Pphone"];
+    var errorMessage = "";
+
+    try
+    {
+        // Initialize WebMail helper
+        WebMail.SmtpServer = "smtp.mail.yahoo.com";
+        WebMail.SmtpPort = 465;
+        WebMail.UserName = "skyty7564@yahoo.com";
+        WebMail.Password = "Powpow123@pow";
+        WebMail.From = "Skyty7564@yahoo.com";
+
+        // Send email
+        WebMail.Send(to: PatientEmail,
+            subject: "New Patient: " + PatientFirstName + " " + PatientLastName,
+            body: "Patient Phone Number: " + PatientPhone + " : " +  "Patient Email Address: " + PatientEmail
+        );
+    }
+    catch (Exception ex)
+    {
+        errorMessage = ex.Message;
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Request for Assistance</title>
+</head>
+<body>
+    <p>
+        Thank You for your request.
+    </p>
+</body>
+</html>*@

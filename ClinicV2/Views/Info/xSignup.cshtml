@@ -1,0 +1,191 @@
+﻿@model ClinicV2.Models.Patient
+
+@{
+    ViewData["Title"] = "Signup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Signup</h1>
+
+<h4>Patient Information</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Signup">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FName" class="control-label"></label>
+                <input asp-for="FName" class="form-control" />
+                <span asp-validation-for="FName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LName" class="control-label"></label>
+                <input asp-for="LName" class="form-control" />
+                <span asp-validation-for="LName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Street" class="control-label"></label>
+                <input asp-for="Street" class="form-control" />
+                <span asp-validation-for="Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CellPhone" class="control-label"></label>
+                <input asp-for="CellPhone" class="form-control" />
+                <span asp-validation-for="CellPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Zip" class="control-label"></label>
+                <input asp-for="Zip" class="form-control" />
+                <span asp-validation-for="Zip" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="State" class="control-label"></label>
+                <input asp-for="State" class="form-control" />
+                <span asp-validation-for="State" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="ValIncome">
+                <label asp-for="Income" class="control-label"></label>
+                <input asp-for="Income" class="form-control" />
+                <span asp-validation-for="Income" class="text-danger"></span>
+            </div>
+            <div id="Household" class="form-group">
+                <label asp-for="Household" class="control-label"></label>
+                <input id="house" asp-for="Household" class="form-control" />
+                <span asp-validation-for="Household" class="text-danger"></span>
+            </div>
+
+            <div id="EligibileChecker">
+                <input type="checkbox" id="House" onclick="displayEligible()">Housing
+
+                <input type="checkbox" id="18+" onclick="displayEligible()"> Over 18
+                <div id="ageReq" style="display:none">
+                    <label>Age:</label>
+                    <input type="text" id="age" onkeypup="displayClinic()" />
+                    <br />
+             </div>
+
+                <input type="checkbox" id="Income" onclick="displayEligible()"> Income
+
+                <input type="checkbox" id="Insurance" onclick="displayClinic()"> Insurance
+                <h2>Eligible clinic</h2>
+
+                @foreach (var c in ViewBag.Collection)
+                {
+                    <div id="clinic_@c.ID" style="display:none">
+
+                        <input type="checkbox" name="clinicName" onclick="displayClinic()" value="@c.Email">@c.Name <br />
+                        @c.Email <br />
+                        @c.PhoneNumber<br />
+                        @c.Address<br />
+                        @*<input typeof="text" name="clinicIncome" value=@c.Income style="display:none">
+                    <input typeof="text" name="clinicAge" id="A_@c.ID"value=@c.Age style="display:none">
+                    <input typeof="text" name="clinicInsur" value=@c.Insurance style="display:none">
+                    <input typeof="text" name="clinicHouse" value=@c.Housing style="display:none">*@
+                        <input typeof="text" name="clinicID" id="I_@c.ID" value=@c.ID style="display:none">
+
+
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<button onclick="displayClinic()">Try it</button>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<p id="test">hi</p>
+
+<script type="text/javascript">
+    var input = document.getElementById("house");
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            alert('it wor;');
+        }
+    }
+    );
+
+    function displayEligible() {
+        alert('test');
+        var check = [];
+        check.push(document.getElementById("House"));
+        check.push(document.getElementById("18+"));
+        check.push(document.getElementById("Income"));
+        check.push(document.getElementById("Insurance"));
+
+
+        var display = null;
+      
+        if (check[0].checked == true) {
+           
+            var x = 0;
+            x = document.getElementsByName("clinicName").length;
+          //alert(x);
+            var value = 0;
+            value = parseInt(document.getElementById("house").value);
+            //alert("house" + value);
+            var ageReq = 0;
+            var i;
+             //alert('why');
+            for (i = 1 ; i < x+1; i++) {
+                //alert('#' + i);
+                //alert(x);
+                ageReq = parseInt(document.getElementById("I_" + i.toString()).value);
+                //alert(ageReq);
+                if (ageReq == value) {
+                    var dis = document.getElementById("clinic_" + i.toString());
+                    dis.style.display = "block";
+                }
+            }
+           //display =  document.getElementById("Household");
+           // display.style.display = "block";
+
+        }
+
+    }
+    //function displayClinic() {
+
+    //    var x = 0;
+    //    x = document.getElementsByName("clinicName").length;
+        
+    //    var value = 0;
+    //    value = parseInt(document.getElementById("age").value);
+    //    var ageReq = 0;
+    //      var i = 0;
+    //    for (i = 1; i < x.length + 1; i++) {
+
+    //        ageReq = parseInt(document.getElementById("A_" + i.toString()).value);
+
+    //        if (ageReq > value) {
+    //            var dis = document.getElementById("clinic_" + i.toString());
+    //            dis.style.display = "block";
+    //        }
+
+            
+
+    //     }
+
+
+    function test() {
+
+    }
+    
+</script>
