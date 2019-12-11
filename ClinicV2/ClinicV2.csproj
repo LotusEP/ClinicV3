@@ -67,6 +67,7 @@
       <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.ComponentModel" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
@@ -141,12 +142,14 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminOptionsController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\clinicModel.cs" />
     <Compile Include="Models\CreateCriteriaModel.cs" />
+    <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\Criteria.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\Patient.cs" />
@@ -165,6 +168,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\ClinicV220191210082525 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -204,6 +208,13 @@
     <Content Include="Views\Info\CreateReq.cshtml" />
     <Content Include="Views\Info\EditCriteria.cshtml" />
     <Content Include="Views\Info\_GetRequirement.cshtml" />
+    <Content Include="Views\AdminOptions\AddClinic.cshtml" />
+    <Content Include="Views\AdminOptions\ClinicAdded.cshtml" />
+    <Content Include="Views\AdminOptions\DeleteClinics.cshtml" />
+    <Content Include="Views\AdminOptions\EditClinics.cshtml" />
+    <Content Include="Views\AdminOptions\ViewDemographics.cshtml" />
+    <Content Include="Views\AdminOptions\AdminOptions.cshtml" />
+    <Content Include="Views\AdminOptions\Logout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

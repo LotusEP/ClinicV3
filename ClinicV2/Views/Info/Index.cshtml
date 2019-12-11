@@ -1,8 +1,21 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@*@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@
+
+@{
+    ViewBag.Title = "Admin Login";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-   
-</div>
+<center><h2>Admin Login</h2></center>
+
+<p><br /></p>
+<p class="">Enter your username and password to login.</p>
+<p><br /></p>
+<form action='' method='post'>
+    <label><strong><p class="">Username:</p></strong> <input type='text' name='username' required></label><br /><br />
+    <label><strong><p class="">Password:</p></strong> <input type='password' name='password' required></label><br /><br />
+    <input type="button" value="Login" class="btn btn-primary" onclick="CompareCredentials(username, password);" />&nbsp;&nbsp;<button type='reset' class="btn btn-primary" value='Clear'>Clear</button>
+    <p><br /></p><p><br /></p>
+
+</form>
+<br /><br />

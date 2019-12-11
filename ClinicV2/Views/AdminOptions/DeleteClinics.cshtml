@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Delete Clinics";
+}
+
+<center><h2>@ViewBag.Title</h2></center>
+
+<p><br /></p>
+<p>Please select clinic(s) to be deleted.</p>
+<div>
+    <ol>
+        <li><input type="checkbox" value="Clinic 1" /> Clinic 1</li>
+        <li><input type="checkbox" value="Clinic 2" /> Clinic 2</li>
+        <li><input type="checkbox" value="Clinic 3" /> Clinic 3</li>
+    </ol>
+
+</div>
+
+<input type='button' class="btn btn-primary" value="Cancel" onclick="window.location.href ='@Url.Action("AdminOptions", "Home")';" />
+<input type='button' class="btn btn-primary" value="Logout" onclick="window.location.href ='@Url.Action("Logout", "Home")';" />

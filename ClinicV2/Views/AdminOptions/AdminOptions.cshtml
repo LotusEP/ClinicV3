@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "Admin Options";
+}
+
+<center><h2>@ViewBag.Title</h2></center>
+
+<p>Please select an option.</p>
+
+
+
+<form method="post">
+
+    <center><input type="button" value="Add Clinic" class="btn btn-primary" onclick="window.location.href = '@Url.Action("AddClinics", "AdminOptions")';" /></center>
+    <p><br /></p>
+
+
+    <center><input type="button" value="Edit Clinics" class="btn btn-primary" onclick="window.location.href = '@Url.Action("EditClinics", "AdminOptions")';" /></center>
+    <p><br /></p>
+
+
+    <center><input type="button" value="Delete Clinics" class="btn btn-primary" onclick="window.location.href = '@Url.Action("DeleteClinics", "AdminOptions")';" /></center>
+    <p><br /></p>
+
+    <center><input type="button" value="Demographics" class="btn btn-primary" onclick="window.location.href = '@Url.Action("ViewDemographics", "AdminOptions")';" /></center>
+    <p><br /></p>
+
+    <input type='button' class="btn btn-primary" value="Logout" onclick="window.location.href ='@Url.Action("Logout", "Home")';" />
+</form>
+<br /><br />
