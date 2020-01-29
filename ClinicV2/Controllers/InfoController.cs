@@ -154,6 +154,7 @@ namespace ClinicV2.Controllers
         public ActionResult CreateReq(CreateCriteriaModel req)
         {
 
+ 
             ViewBag.ExistMess = Criteria.AddCriteria(req.Criteria);
             
             return RedirectToAction("CreateReq");
