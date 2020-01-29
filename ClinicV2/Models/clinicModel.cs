@@ -14,6 +14,11 @@ namespace ClinicV2.Models
         public string Email { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string zip { get; set; }
+        public string state { get; set; }
         public string Address { get; set; }
 
         //public int Age { get; set; }
@@ -114,10 +119,57 @@ namespace ClinicV2.Models
             return listofClinic;
         }
 
-        public static void CreateClinic()
-        { 
-        
+        public static void CreateClinic(clinicModel newClinic)
+        {
+
+            string connString;
+            MySqlConnection cnn;
+            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
+            cnn = new MySqlConnection(connString);
+
+            MySqlCommand comm;
+
+            string sql;
+            //sql= "IF EXISTS(SELECT * FROM Req WHERE ReqName="+req.Name+") Update Req"
+            //sql = "Insert Into Req Values(@Aug1,@Aug2,@State,@ReqName)";
+            sql = "Insert Into Clinic (Name,Email,PhoneNumber,Street,City,State,Zip,NameAbbrev) Values('"+
+                newClinic.Name.ToString() +
+                "','" + newClinic.Email.ToString() +
+                "','" + newClinic.PhoneNumber.ToString() +
+                "','" + newClinic.Street.ToString() +
+                "','" + newClinic.City.ToString() +
+                "','" + newClinic.state.ToString() +
+                "','" + Int32.Parse(newClinic.zip) +      
+                "','" + newClinic.AddrName.ToString() + "')";
+            comm = new MySqlCommand(sql, cnn);
+
+            MySqlCommand cmm = new MySqlCommand(sql, cnn);
+            cnn.Open();
+            cmm.ExecuteNonQuery();
+            cnn.Close();
+
         }
+
+        public static void deleteClinic(string name)
+        {
+            string connString;
+            MySqlConnection cnn;
+            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
+            cnn = new MySqlConnection(connString);
+
+
+
+            string sql;
+            sql = "Delete From Clinic Where Name ='" + name + "';";
+            MySqlCommand cmm = new MySqlCommand(sql, cnn);
+            cmm = new MySqlCommand(sql, cnn);
+            cnn.Open();
+            cmm.ExecuteNonQuery();
+            cnn.Close();
+
+        }
+
+
     }
 
 

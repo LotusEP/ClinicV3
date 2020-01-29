@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
-
+using ClinicV2.Models;
 using System.Web.Mvc;
 using clinic.Models;
 using System.Activities;
@@ -45,13 +45,18 @@ namespace ClinicV2.Controllers
             return View();
         }
 
-
+        [HttpGet]
         public ActionResult ClinicAdded()
         {
             ViewBag.Message = "Clinic added";
             return View();
         }
 
+        [HttpPost]
+        public ActionResult ClinicAdd(clinicModel NewClinic)
+        {
+            return RedirectToAction("listofCLinic", "Info");
+        }
          public ActionResult FindClinics()
             {
                 ViewBag.Message = "Find Clinics page.";

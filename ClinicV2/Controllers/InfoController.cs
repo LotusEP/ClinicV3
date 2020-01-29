@@ -110,6 +110,16 @@ namespace ClinicV2.Controllers
             return View(listofClinic);
         }
 
+        public ActionResult DeleteClinic(string name)
+        {
+            clinicModel.deleteClinic(name);
+
+            return RedirectToAction("listofCLinic");
+
+        }
+                      
+   
+      
 
         [HttpGet]
         public ActionResult ClinicAdd()
@@ -119,8 +129,8 @@ namespace ClinicV2.Controllers
         [HttpPost]
         public ActionResult ClinicAdd(clinicModel clinic)
         {
-
-            return View();
+            clinicModel.CreateClinic(clinic);
+            return RedirectToAction("listofCLinic");
         }
         [HttpGet]
         public ActionResult GetRequirement()
