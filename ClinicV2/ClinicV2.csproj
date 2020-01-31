@@ -201,7 +201,7 @@
     <Content Include="Views\Info\_testSign.cshtml" />
     <Content Include="Views\Info\_testView.cshtml" />
     <Content Include="Views\Info\test.cshtml" />
-    <Content Include="Views\Info\Signup.cshtml" />
+    <Content Include="Views\Info\xxSignup.cshtml" />
     <Content Include="Views\Info\_ClinicPartView.cshtml" />
     <Content Include="Views\Info\listofClinic.cshtml" />
     <Content Include="Views\Info\ClinicAdd.cshtml" />

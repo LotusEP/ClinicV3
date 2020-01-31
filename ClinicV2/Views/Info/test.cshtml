@@ -16,9 +16,9 @@
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
-       @Html.LabelFor(model => model.newPatient.FName, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.newPatient.FName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-           @Html.EditorFor(model => model.newPatient.FName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.newPatient.FName, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.newPatient.FName, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -115,9 +115,25 @@
         <input type="radio" name="insurance" value="Yes" checked> Yes<br>
         <input type="radio" name="insurance" value="No"> No<br>
     </div>
-    <div name="InsuranceInput">
-        Insurance <input type="text" name="Insurance">
-    </div>
+
+
+    @foreach (var item in Model.listofCriteria)
+    {
+        <input type="checkbox" id="@item.Name" onclick="insurancecheck('@item.Name')" />@item.Name
+
+        if (item.Name == "Housing" | item.Name == "Income")
+        {
+
+   
+        }
+        else
+        {
+            <div name="@item.Name">
+                <input type="text" id="Input_@item.Name" name="Insurance">
+            </div>
+        }
+
+    }
 
     <div>
         @Html.Partial("_ClinicPartView", Model.listofClinic)
@@ -137,6 +153,7 @@
 </div>
 
 <script>
+    var Requi = "check";
     var list = [];
     list = @Html.Raw(Json.Encode(Model.listofClinic));
     function Getnewlist() {
@@ -148,8 +165,52 @@
        // alert(list[1].Req[0].Name);
     }
 
-    function insurancecheck() {
+    function insurancecheck(xas) {
+ 
+        //var xas = 'Input_' + Requi;
 
+
+        if (xas == "Income") {
+   
+            displayClinic()
+        }
+        else {
+
+            var Requirement = document.getElementById("Input_" + xas).value;
+            alert(Requirement);
+            var Period = document.getElementById('Period').value;
+            var Requiredhouse = 0;
+            var dis = null;
+            var x = 0;
+            //go through the clinics
+            for (x = 0; x < list.length; x++) {
+                var y = 0;
+                //go through each clinic requirement
+                for (y = 0; y < list[x].Req.length; y++) {
+
+                    //check if the requirement is income
+                    if (list[x].Req[y].Name == (xas)) {
+
+                        // get that income requirement value
+                        var val = list[x].Req[y].Value;
+
+                        if (Requirement == val) {
+
+                            dis = document.getElementById(list[x].Name);
+                            dis.style.display = "block";
+                        }
+                        else {
+                            dis = document.getElementById(list[x].Name);
+                            dis.style.display = "none";
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+     
 
     }
     function displayClinic() {
@@ -180,18 +241,22 @@
 
         var dis = null;
         var x = 0;
-
+        //go through the clinics
         for (x =0; x < list.length; x++) {
             var y = 0;
              // alert('pass1:' + x);
+            //go through each clinic requirement
             for (y =0; y < list[x].Req.length; y++) {
                 //  alert('pass2:' + y);
+                //check if the requirement is income
                 if (list[x].Req[y].Name == ("Income")) {
                     //   alert('pass3');
+                   // get that income requirement value
                     var val = parseInt(list[x].Req[y].Value);
                     // alert(val + "Income For clinic");
                     // alert(Income);
                     var z, w = 0;
+                     //get the addition income per household value
                     for (z = 0; z < list.length; z++) {
                      
                         for (w = 0; w < list[z].Req.length; w++) {
@@ -201,7 +266,7 @@
                             //alert("Income addition: " + Requiredhouse);
                         }
                     }
-
+                    //increase the total income value
                     if (Household > 1) {
                         val = val + Requiredhouse;
                        // alert(val);
