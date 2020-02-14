@@ -394,5 +394,30 @@ namespace ClinicV2.Models
             return ls;
 
         }
+        public static List<string> GetSpecificCriteira(string specValueNeed)
+        {
+            List<string> SpecList = new List<string>();
+            string connString;
+            MySqlDataReader rdr = null;
+            MySqlConnection cnn;
+            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
+            cnn = new MySqlConnection(connString);
+
+
+
+            string sql;
+            sql = "Select Value from CriteriaOption Where CriteriaOp_Name = '" + specValueNeed + "';";
+            MySqlCommand cmd = new MySqlCommand(sql, cnn);
+            cnn.Open();
+            rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                SpecList.Add(rdr.GetValue(0).ToString());
+            }
+            cnn.Close();
+
+            return SpecList;
+        }
+  
     }
 }

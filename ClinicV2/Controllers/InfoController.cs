@@ -166,6 +166,7 @@ namespace ClinicV2.Controllers
             SignupModel tModel = new SignupModel();
             tModel.listofClinic = clinicModel.GetClinicList();
             tModel.listofCriteria = Criteria.GetReqList("old");
+            tModel.listofInsurance = Criteria.GetSpecificCriteira("Insurance");
             tModel.newPatient = new Patient();
 
 
