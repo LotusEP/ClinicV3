@@ -21,7 +21,7 @@
                 @foreach (var item in Model)
                 {
 
-                    <tr id="@item.Name" style="display:none">
+                    <tr id="@item.Name">
                         <td><input type="checkbox" name="clinicName" value="@item.Name"> @Html.DisplayFor(modelItem => item.Name)</td>
                     </tr>
                 }

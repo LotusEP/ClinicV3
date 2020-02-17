@@ -13,6 +13,11 @@
 
 <div class="form-horizontal">
     <h4>Patient</h4>
+
+    <div>
+        @Html.Partial("_ClinicPartView", Model.listofClinic)
+    </div>
+
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
@@ -124,7 +129,7 @@
         if (item.Name == "Housing" | item.Name == "Income")
         {
 
-   
+
         }
         else
         {
@@ -135,9 +140,6 @@
 
     }
 
-    <div>
-        @Html.Partial("_ClinicPartView", Model.listofClinic)
-    </div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
