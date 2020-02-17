@@ -197,6 +197,10 @@ namespace ClinicV2.Controllers
             return RedirectToAction("CreateReq");
         }
 
+        public ActionResult Testview()
+        {
+            return View();
+        }
 
     }
 }
