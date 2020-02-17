@@ -194,11 +194,10 @@
     <Content Include="Views\Info\Index.cshtml" />
     <Content Include="Views\Info\PatientSignUp.cshtml" />
     <Content Include="Views\Info\xSignup.cshtml" />
-    <Content Include="Views\Info\xxtest.cshtml" />
     <Content Include="Views\Info\_testSign.cshtml" />
     <Content Include="Views\Info\_testView.cshtml" />
     <Content Include="Views\Info\test.cshtml" />
-    <Content Include="Views\Info\Signup.cshtml" />
+    <Content Include="Views\Info\xxSignup.cshtml" />
     <Content Include="Views\Info\_ClinicPartView.cshtml" />
     <Content Include="Views\Info\listofClinic.cshtml" />
     <Content Include="Views\Info\ClinicAdd.cshtml" />

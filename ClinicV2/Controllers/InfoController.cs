@@ -147,6 +147,7 @@ namespace ClinicV2.Controllers
             CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
             NewCriteria.listofClinic = clinicModel.GetClinicList();
             NewCriteria.listofCriteria = Criteria.GetReqList("-10");
+            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
             NewCriteria.Criteria = new Criteria();
             return View(NewCriteria);
         }
@@ -164,6 +165,8 @@ namespace ClinicV2.Controllers
         {
             SignupModel tModel = new SignupModel();
             tModel.listofClinic = clinicModel.GetClinicList();
+            tModel.listofCriteria = Criteria.GetReqList("old");
+            tModel.listofInsurance = Criteria.GetSpecificCriteira("Insurance");
             tModel.newPatient = new Patient();
 
 
