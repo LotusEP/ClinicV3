@@ -1,6 +1,8 @@
 ﻿@model ClinicV2.Models.SignupModel
 
 @{
+                /**/
+
 
                 ViewBag.Title = "SignUp";
                 Layout = "~/Views/Shared/_Layout.cshtml";
@@ -25,15 +27,41 @@
     <h4>Patient</h4>
     <hr />
     <div>
-        Do you have insurance? <br>
-        <input type="radio" name="insurance" value="Yes" onclick="Getnewlist()" checked> Yes<br>
-        <input type="radio" name="insurance" value="No" onclick="insurancecheck('No')" checked="checked"> No<br>
-        <div class="col-md-10" id="Insurancelist" style="display:none">
-            <label class="control-label"> Insurance</label>
-            @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })
+        <div class="col-md-3">
+            Do you have insurance? <br>
+            <input type="radio" name="insurance" value="Yes" onclick="Getnewlist()" checked> Yes<br>
+            <input type="radio" name="insurance" value="No" onclick="insurancecheck('No')" checked="checked"> No<br>
+            <div class="col-md-10" id="Insurancelist" style="display:none">
+                <label class="control-label"> Insurance</label>
+                @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })
+            </div>
         </div>
+      
+        <div class="col-md-3">
+            Do you have an income?
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.newPatient.Income, htmlAttributes: new { @class = "control-label" })
+                <select id="Period" class=" form-control">
+                    <option value="Weekly">Weekly</option>
+                    <option value="BikWeekly">Yearly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Yearly">Yearly</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
     </div>
 
+
+    
+
+    
 
     <hr />
 
@@ -158,20 +186,7 @@
                 @Html.ValidationMessageFor(model => model.newPatient.Email, "", new { @class = "text-danger" })
             </div>
 
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.newPatient.Income, htmlAttributes: new { @class = "control-label" })
-                <select id="Period" class=" form-control">
-                    <option value="Weekly">Weekly</option>
-                    <option value="BikWeekly">Yearly</option>
-                    <option value="Monthly">Monthly</option>
-                    <option value="Yearly">Yearly</option>
-                </select>
-            </div>
 
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
-            </div>
 
 
 
@@ -181,7 +196,7 @@
                 @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
             </div>
 
-    
+
             @foreach (var item in Model.listofCriteria)
             {
                 <div class="col-md-8">
@@ -228,9 +243,9 @@
     //document.getElementById("listofInsurance").addEventListener("click", Getnewlist);
     var Requi = "check";
     var list = [];
-    var Clinistodisplay = [];
+    var Clinistodisplay = ["inital"];
     list = @Html.Raw(Json.Encode(Model.listofClinic));
- 
+
     function Getnewlist() {
 
 
@@ -239,7 +254,7 @@
 
         Requirement.style.display = "";
 
-           
+
 
        // alert(list[1].Req[0].Name);
     }
@@ -256,7 +271,7 @@
         }
         else {
             if (xas == "Insurance") {
-            
+
                 var Requirement = document.getElementById("listofInsurance").value;
 
             }
@@ -267,25 +282,42 @@
             //alert(Requirement);
             var dis = null;
             var x = 0;
-            var counter = 0;
+
             //go through the clinics
             for (x = 0; x < list.length; x++) {
+                var counter = 0;
                 var y = 0;
+                dis = document.getElementById(list[x].Name);
+                dis.style.display = "none";
                 //go through each clinic requirement
                 for (y = 0; y < list[x].Req.length; y++) {
+                    var clinicName = list[x].Name;
 
                     //check if the requirement match
                     if (list[x].Req[y].Name == (xas)) {
-
+                        //alert("Yes1");
                         // is so check the value
                         var val = list[x].Req[y].Value;
 
                         if (Requirement == val) {
-                          
-                            dis = document.getElementById(list[x].Name);
-                            Clinistodisplay.push(dis);
                             counter = 1;
-                         
+                            //alert("Yes2");
+                            for (var t = 0; t < Clinistodisplay.length; t++) {
+                                var counter2 = 0;
+                                if (list[x].Name == Clinistodisplay[t]) {
+
+                                    break;
+                                }
+                                else {
+
+                                    counter2 = 1;
+                                }
+                            }
+                            if (counter2 > 0) {
+
+                                Clinistodisplay.push(list[x].Name);
+                            }
+
                         }
                         //else {
                         //    dis = document.getElementById(list[x].Name);
@@ -294,23 +326,33 @@
                     }
 
                 }
-                var ClinicName = list[x].Name;
-                if (counter == 0) {
-                    for (q = 0; q < Clinistodisplay.length; x++) {
 
-                       
+
+
+                var temp;
+                if (counter == 0) {
+
+                    for (q = 0; q < Clinistodisplay.length; q++) {
+                   // alert(Clinistodisplay[q] + ";" + clinicName);
+
+                        if (clinicName == Clinistodisplay[q]) {
+
+                            Clinistodisplay.splice(q ,1);
+                            q = 0;
+
+                        }
+
                     }
                 }
 
             }
 
-
-            for (x = 0; x < Clinistodisplay.length; x++)
-            {
-                Clinistodisplay[x].style.display = "";
-            }
         }
-
+             for (x = 1; x < Clinistodisplay.length; x++)
+             {
+                 dis = document.getElementById(Clinistodisplay[x]);
+                 dis.style.display = "";
+            }
 
 
     }
@@ -345,7 +387,9 @@
         var dis = null;
         var x = 0;
         //go through the clinics
-        for (x =0; x < list.length; x++) {
+        for (x = 0; x < list.length; x++) {
+            dis = document.getElementById(list[x].Name);
+            dis.style.display = "none";
             var y = 0;
            //  alert('pass1:' + x);
             //go through each clinic requirement
@@ -375,7 +419,7 @@
                         val = val + Requiredhouse;
                         alert(val);
                     }
-                    if (Income < val) {
+                    if (Income <= val) {
 
                         //alert('Patient Income:' + Income);
                         //alert('the requirement amount:' + val)
