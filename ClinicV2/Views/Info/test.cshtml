@@ -13,8 +13,23 @@
 {
     @Html.AntiForgeryToken()
 
-    <h4>Patient</h4>
+    <h4>Patient Sign-up Form</h4>
     <hr />
+
+    <div class="col-md-12">
+        <div>
+            @Html.Partial("_ClinicPartView", Model.listofClinic)<br />
+
+            
+        </div>
+    </div>
+    
+    <div class="form-group col-md-12 col-md-push-0 ">
+        <div class="col-md-offset-0 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+
     <div>
         Do you have insurance? <br>
         <input type="radio" name="insurance" value="Yes" onclick="displayClinic2('Yes')" checked> Yes<br>
@@ -43,27 +58,20 @@
 
 
 
-            <div class="col-md-10">
+            <div class="col-md-4">
                 @Html.LabelFor(model => model.newPatient.Street, htmlAttributes: new { @class = "control-label " })
                 @Html.EditorFor(model => model.newPatient.Street, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Street, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.newPatient.Street, "", new { @class = "text-danger" })<br /><br />
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.newPatient.City, htmlAttributes: new { @class = "control-label " })
                 @Html.EditorFor(model => model.newPatient.City, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.newPatient.City, "", new { @class = "text-danger" })
             </div>
 
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.newPatient.Zip, htmlAttributes: new { @class = "control-label " })
-                @Html.EditorFor(model => model.newPatient.Zip, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Zip, "", new { @class = "text-danger" })
-            </div>
-
-
-            <div class="col-md-8">
-                @Html.LabelFor(model => model.newPatient.State, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.newPatient.State, htmlAttributes: new { @class = "control-label" })<br />
                 @Html.DropDownListFor(model => model.newPatient.State, new List<SelectListItem> {
 
                     new SelectListItem {Text = "Alabama", Value = "AL"},
@@ -120,8 +128,14 @@
 
 
 
-                }, "", new {@class = "from-control "})
-                @Html.ValidationMessageFor(model => model.newPatient.State, "", new { @class = "text-danger" })
+                }, "", new { @class = "from-control " })
+                @Html.ValidationMessageFor(model => model.newPatient.State, "", new { @class = "text-danger" })<br /><br />
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.newPatient.Zip, htmlAttributes: new { @class = "control-label " })
+                @Html.EditorFor(model => model.newPatient.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.Zip, "", new { @class = "text-danger" })<br /><br />
             </div>
 
             <div class="col-md-6">
@@ -130,10 +144,10 @@
                 @Html.ValidationMessageFor(model => model.newPatient.CellPhone, "", new { @class = "text-danger" })
             </div>
 
-            <div class="col-md-10">
+            <div class="col-md-6">
                 @Html.LabelFor(model => model.newPatient.Email, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.newPatient.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Email, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.newPatient.Email, "", new { @class = "text-danger" })<br /><br />
             </div>
 
             <div class="col-md-3">
@@ -146,7 +160,8 @@
                 </select>
             </div>
 
-            <div class="col-md-10">
+            <div class="col-md-3">
+                <label class="control-label">Amount</label>
                 @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
             </div>
@@ -156,19 +171,20 @@
             <div class="col-md-3">
                 @Html.LabelFor(model => model.newPatient.Household, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })<br /><br />
             </div>
 
             <div class="col-md-10">
-                <label class="control-label"> Insurance</label>
-                @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance))
+                <label class="control-label"> Insurance</label><br />
+                @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance))<br /><br />
             </div>
             @foreach (var item in Model.listofCriteria)
             {
-            <div class="col-md-8">
-            
-                <input type="checkbox" id="@item.Name" onclick="insurancecheck('@item.Name')" />@item.Name
-            </div>
+                <div class="col-md-8">
+
+                    <input type="checkbox" id="@item.Name" onclick="insurancecheck('@item.Name')" />@item.Name 
+                    
+                </div>
 
 
                 @*if (item.Name == "Housing" | item.Name == "Income")
@@ -189,19 +205,19 @@
 
 
         </div>
-        <div class="col-md-5">
-            <div>
-                @Html.Partial("_ClinicPartView", Model.listofClinic)
+        <!--<div class="col-md-5">
+        <div>
+            @Html.Partial("_ClinicPartView", Model.listofClinic)
 
-                <p> TESTSETESTS</p>
-            </div>
+            <p> TESTSETESTS</p>
         </div>
+    </div>
 
-          <div class="form-group col-md-12 col-md-push-2 ">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
-            </div>
+    <div class="form-group col-md-12 col-md-push-2 ">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>-->
     </div>
 }
 
@@ -241,7 +257,7 @@
             else {
                 var Requirement = document.getElementById("Input_" + xas).value;
             }
-         
+
             //alert(Requirement);
             var dis = null;
             var x = 0;
@@ -277,7 +293,7 @@
 
     }
     function displayClinic() {
-    
+
         var Income = parseInt(document.getElementById('newPatient_Income').value);
         var Household = parseInt(document.getElementById('newPatient_Household').value);
         var Period = document.getElementById('Period').value;
@@ -358,11 +374,11 @@
                 else {
 
                     noMatch = false;
-                 
+
                 }
 
             }
-        
+
 
         }
 
@@ -370,7 +386,7 @@
 
     }
     function displayClinic2(InsuranceCheck) {
-       
+
         if (InsuranceCheck == 'No') {
             for (x = 0; x < list.length; x++) {
                 dis = document.getElementById(list[x].Name);
@@ -411,7 +427,7 @@
             }
 
         }
- 
+
 
     }
 </script>
