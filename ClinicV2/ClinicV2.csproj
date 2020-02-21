@@ -204,7 +204,7 @@
     <Content Include="Views\Info\_ClinicPartView.cshtml" />
     <Content Include="Views\Info\listofClinic.cshtml" />
     <Content Include="Views\Info\ClinicAdd.cshtml" />
-    <Content Include="Views\Info\CreateReq.cshtml" />
+    <Content Include="Views\Info\ViewReq.cshtml" />
     <Content Include="Views\Info\EditCriteria.cshtml" />
     <Content Include="Views\Info\_GetRequirement.cshtml" />
     <Content Include="Views\AdminOptions\AddClinic.cshtml" />
@@ -214,6 +214,7 @@
     <Content Include="Views\AdminOptions\ViewDemographics.cshtml" />
     <Content Include="Views\AdminOptions\AdminOptions.cshtml" />
     <Content Include="Views\AdminOptions\Logout.cshtml" />
+    <Content Include="Views\Info\CreateReq.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

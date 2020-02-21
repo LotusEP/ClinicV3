@@ -141,7 +141,7 @@ namespace ClinicV2.Controllers
         }
 
         [HttpGet]
-        public ActionResult CreateReq()
+        public ActionResult ViewReq()
         {
 
             CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
@@ -152,13 +152,13 @@ namespace ClinicV2.Controllers
             return View(NewCriteria);
         }
         [HttpPost]
-        public ActionResult CreateReq(CreateCriteriaModel req)
+        public ActionResult ViewReq(CreateCriteriaModel req)
         {
 
  
             ViewBag.ExistMess = Criteria.AddCriteria(req.Criteria);
             
-            return RedirectToAction("CreateReq");
+            return RedirectToAction("ViewReq");
         }
    
         public ActionResult test()
@@ -188,7 +188,7 @@ namespace ClinicV2.Controllers
 
             Criteria.AddCriteria(req);
 
-            return RedirectToAction("CreateReq");
+            return RedirectToAction("ViewReq");
         }
         [HttpGet]
         public ActionResult DeleteCriteria(int id)
@@ -197,7 +197,12 @@ namespace ClinicV2.Controllers
             req = Criteria.GetCriteria(id);
             Criteria.DeleteCriteria(req);
 
-            return RedirectToAction("CreateReq");
+            return RedirectToAction("ViewReq");
+        }
+
+        public ActionResult CreateReq()
+        {
+            return View();
         }
 
 

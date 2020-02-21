@@ -1,4 +1,5 @@
-﻿@model ClinicV2.Models.CreateCriteriaModel
+﻿@model ClinicV2.Models.Criteria
+
 @{
     ViewBag.Title = "CreateReq";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,41 +7,51 @@
 
 <h2>CreateReq</h2>
 
-<body>
 
-    @using (Html.BeginForm("CreateReq", "Info", FormMethod.Post))
-    {
-        <div>
-
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Criteria</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.clinicName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                Clinic   @Html.DropDownListFor(model => model.Criteria.clinicName, new SelectList(Model.listofClinic, "Name", "Name"))
+                @Html.EditorFor(model => model.clinicName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.clinicName, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                Criteria    @Html.DropDownListFor(model => model.Criteria.Name, new SelectList(Model.CriteriaOption))
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 
- 
         <div class="form-group">
-            @Html.LabelFor(model => model.Criteria.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Criteria.Value, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
             </div>
         </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
-
-    }
-
-
-    <div>
-        @Html.Partial("_GetRequirement", Model.listofCriteria)
     </div>
-</body>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
