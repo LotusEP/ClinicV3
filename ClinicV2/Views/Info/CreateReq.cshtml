@@ -11,24 +11,24 @@
     @using (Html.BeginForm("CreateReq", "Info", FormMethod.Post))
     {
         <div>
-           
+
             <div class="col-md-10">
                 Clinic   @Html.DropDownListFor(model => model.Criteria.clinicName, new SelectList(Model.listofClinic, "Name", "Name"))
             </div>
         </div>
-        
+
         <div class="form-group">
-         
+
             <div class="col-md-10">
                 Criteria    @Html.DropDownListFor(model => model.Criteria.Name, new SelectList(Model.CriteriaOption))
-
             </div>
         </div>
+
+ 
         <div class="form-group">
             @Html.LabelFor(model => model.Criteria.Value, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Criteria.Value, new { htmlAttributes = new { @class = "form-control" } })
-
             </div>
         </div>
         <div class="form-group">

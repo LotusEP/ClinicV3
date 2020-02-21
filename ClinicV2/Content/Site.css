@@ -22,3 +22,37 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 100vh;
+}
+
+.rightside {
+    float: left;
+    width: 30%;
+    padding: 10px;
+    background-color: red;
+
+}
+.leftside {
+    float:left;
+    width: 70%;
+    padding:10px;
+    background-color: yellow;
+
+}
+.rowtable:after {
+    content: "";
+    background-color: red;
+    display: table;
+    clear: both;
+}
+
+table {
+
+    table-layout:fixed;
+    border:1px black;
+}

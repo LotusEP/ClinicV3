@@ -1,8 +1,8 @@
 ﻿@model  IEnumerable<ClinicV2.Models.clinicModel>
-            
+
 @{
     ViewBag.Title = "GetRequirement";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css">
 }
 
 
@@ -12,17 +12,25 @@
 
     <div>
         @*<input type="checkbox" id="18+" onclick="Getnewlist()">Age <br />
-        <input type="checkbox" id="Housing" onclick="Getnewlist()"> Housing<br />
-        <input type="checkbox" id="Income" onclick="displayClinic()"> Income<br />
-        <input type="checkbox" id="Insurance" onclick="Getnewlist()"> Insurance<br />*@
+            <input type="checkbox" id="Housing" onclick="Getnewlist()"> Housing<br />
+            <input type="checkbox" id="Income" onclick="displayClinic()"> Income<br />
+            <input type="checkbox" id="Insurance" onclick="Getnewlist()"> Insurance<br />*@
         <div>
-            <table>
-                <tr id="Clinic"></tr>
+            <table class="table-bordered">
+                <tr>
+
+                    <th>Clinic Name</th>   
+                    <th>Address</th>    
+                    <th>Email and <br /> Phone Number</th>
+                </tr>
+              
                 @foreach (var item in Model)
                 {
-
-                    <tr id="@item.Name">
-                        <td><input type="checkbox" name="clinicName" value="@item.Name"> @Html.DisplayFor(modelItem => item.Name)</td>
+                    
+                    <tr id="@item.Name" >
+                        <td><input type="checkbox" name="clinicName" value="@item.Email"><a href="https://massclinic.org/" target="_blank">@item.Name</a></td>
+                        <td><label> @item.Address </label></td>
+                        <td><label> @item.PhoneNumber <br /> @item.Email </label></td>
                     </tr>
                 }
             </table>

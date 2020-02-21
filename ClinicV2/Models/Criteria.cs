@@ -64,7 +64,7 @@ namespace ClinicV2.Models
             {
                 string sql = "Select ClinicCriteriaID, ClinicCriteria.Clinic_Name, ClinicCriteria.Criteria_Name, CriteriaOption.Value From ClinicCriteria " +
                               "Join CriteriaOption on CriteriaOption.CriteriaOptionID = ClinicCriteria.Criteria_OptionID " +
-                              "Where Clinic_Name = @clinic;";
+                              "Where Clinic_Name ='" + clinic + "';";
                 //string sql = "Select Clinic.Name, Criteria.CriteriaName, CriteriaOption.Value From ClinicCriteria " +
                 //              "Join Clinic On Clinic.Name = ClinicCriteria.Clinic_Name " +
                 //              "Join Criteria on Criteria.CriteriaName = ClinicCriteria.Criteria_Name " +
@@ -72,7 +72,6 @@ namespace ClinicV2.Models
                 //              "Where Clinic_Name =  '" + clinic + "'" ;
 
                 MySqlCommand cmd = new MySqlCommand(sql, cnn);
-                cmd.Parameters.AddWithValue("@clinic", clinic);
                 rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
@@ -138,10 +137,8 @@ namespace ClinicV2.Models
             //sql = "Insert Into Req Values(@Aug1,@Aug2,@State,@ReqName)";
             sql = "Select count(1) " +
                     "From ClinicCriteria " +
-                    "Join Clinic On Clinic.Name = ClinicCriteria.Clinic_Name " +
-                    "Join Criteria on Criteria.CriteriaName = ClinicCriteria.Criteria_Name " +
-                    "Join CriteriaOption on CriteriaOption.CriteriaOp_Name = ClinicCriteria.Criteria_Name " +
-                    "Where Clinic_Name = @clinicName and CriteriaName = @name and CriteriaOption.Value = @value";
+                    "Join CriteriaOption on CriteriaOption.CriteriaOptionID = ClinicCriteria.Criteria_OptionID  " +
+                    "Where Clinic_Name = '" + newCriteria.clinicName + "' and Criteria_Name = '" + newCriteria.Name + "' and CriteriaOption.Value = '" + newCriteria.Value + "'";
 
 
             MySqlDataReader rdr = null;
@@ -150,9 +147,6 @@ namespace ClinicV2.Models
 
             int val = 0;
             MySqlCommand cmm = new MySqlCommand(sql, cnn);
-            cmm.Parameters.AddWithValue("@clinicName", newCriteria.clinicName);
-            cmm.Parameters.AddWithValue("@name", newCriteria.Name);
-            cmm.Parameters.AddWithValue("@value", newCriteria.Value);
             cnn.Open();
             rdr = cmm.ExecuteReader();
             while (rdr.Read())
@@ -168,9 +162,9 @@ namespace ClinicV2.Models
 
             {
                 //if no match check if there is already a criterian Name
-                sql = "Select count(1) From Criteria Where CriteriaName = @name";
+                sql = "Select count(1) From Criteria Where CriteriaName = '" + newCriteria.Name + "'";
                 cmm = new MySqlCommand(sql, cnn);
-                cmm.Parameters.AddWithValue("@name", newCriteria.Name);
+        
                 cnn.Open();
                 rdr = cmm.ExecuteReader();
                 while (rdr.Read())
@@ -181,9 +175,8 @@ namespace ClinicV2.Models
                 if (val > 0)
                 {
                     //it there is check to see if there is a value for it
-                    sql = "Select count(1 ) From CriteriaOption Where Value = @values";
+                    sql = "Select count(1 ) From CriteriaOption Where Value = '" + newCriteria.Value + "'";
                     cmm = new MySqlCommand(sql, cnn);
-                    cmm.Parameters.AddWithValue("@values", newCriteria.Value);
                     cnn.Open();
                     rdr = cmm.ExecuteReader();
                     while (rdr.Read())
@@ -197,30 +190,22 @@ namespace ClinicV2.Models
                         int values = FindDuplicate(newCriteria.Value);
                         sql = "Begin; " +
 
-                       "Insert Into ClinicCriteria(Clinic_Name, Criteria_Name, Criteria_OptionID) Values(@clinicName, @name, @values); " +
+                       "Insert Into ClinicCriteria(Clinic_Name, Criteria_Name, Criteria_OptionID) Values('" + newCriteria.clinicName + "','" + newCriteria.Name + "','" +  values+"'); " +
                        "Commit; ";
                         cmm = new MySqlCommand(sql, cnn);
-                        cmm.Parameters.AddWithValue("@clinicName", newCriteria.clinicName);
-                        cmm.Parameters.AddWithValue("@name", newCriteria.Name);
-                        cmm.Parameters.AddWithValue("@values", values);
                         cnn.Open();
                         cmm.ExecuteNonQuery();
                     }
                     else
                     {
 
-                        sql = "Insert Into CriteriaOption (CriteriaOp_Name,Value) Values(@name, @values);";
+                        sql = "Insert Into CriteriaOption (CriteriaOp_Name,Value) Values('" + newCriteria.Name + "','" + newCriteria.Value + "');";
                         cmm = new MySqlCommand(sql, cnn);
-                        cmm.Parameters.AddWithValue("@name", newCriteria.Name);
-                        cmm.Parameters.AddWithValue("@values", newCriteria.Value);
                         cnn.Open();
                         cmm.ExecuteNonQuery();
                         int values = FindDuplicate(newCriteria.Value);
-                        sql = "Insert Into ClinicCriteria(Clinic_Name, Criteria_Name ,Criteria_OptionID) Values(@clinicName, @name, @values);";
+                        sql = "Insert Into ClinicCriteria(Clinic_Name, Criteria_Name ,Criteria_OptionID) Values('" + newCriteria.clinicName + "','" + newCriteria.Name + "','" + values + "');";
                         cmm = new MySqlCommand(sql, cnn);
-                        cmm.Parameters.AddWithValue("@clinicName", newCriteria.clinicName);
-                        cmm.Parameters.AddWithValue("@name", newCriteria.Name);
-                        cmm.Parameters.AddWithValue("@values", values);
                         cmm.ExecuteNonQuery();
 
                     }
@@ -231,20 +216,15 @@ namespace ClinicV2.Models
                         {
                    
                         sql = "Begin; " +
-                                      "Insert Into Criteria (CriteriaName) Values(@name);" +
-                                      "Insert Into CriteriaOption (CriteriaOp_Name,Value) Values(@name, @value);" +
+                                      "Insert Into Criteria (CriteriaName) Values('" + newCriteria.Name + "');" +
+                                      "Insert Into CriteriaOption (CriteriaOp_Name,Value) Values('" + newCriteria.Name + "','" + newCriteria.Value +  "');" +
                                       "Commit ;";
                                 cmm = new MySqlCommand(sql, cnn);
-                                cmm.Parameters.AddWithValue("@name", newCriteria.Name);
-                                cmm.Parameters.AddWithValue("@value", newCriteria.Value);
                                 cnn.Open();
                                 cmm.ExecuteNonQuery();
                         int values = FindDuplicate(newCriteria.Value);
-                        sql = "Insert Into ClinicCriteria(Clinic_Name, Criteria_Name ,Criteria_OptionID) Values(@clinicName, @name, @value); ";
+                        sql = "Insert Into ClinicCriteria(Clinic_Name, Criteria_Name ,Criteria_OptionID) Values('" + newCriteria.clinicName + "','" + newCriteria.Name + "','" + val + "'); ";
                         cmm = new MySqlCommand(sql, cnn);
-                        cmm.Parameters.AddWithValue("@clinicName", newCriteria.clinicName);
-                        cmm.Parameters.AddWithValue("@name", newCriteria.Name);
-                        cmm.Parameters.AddWithValue("@value", val);
                         cmm.ExecuteNonQuery();
                         cnn.Close();
                         }
@@ -270,9 +250,8 @@ namespace ClinicV2.Models
 
 
             string sql;
-            sql = "Delete From ClinicCriteria Where ClinicCriteriaID = @criteriaID;";
+            sql = "Delete From ClinicCriteria Where ClinicCriteriaID =" + oldCriteria.CriteriaID + ";";
             MySqlCommand cmm = new MySqlCommand(sql, cnn);
-            cmm.Parameters.AddWithValue("@criteriaID", oldCriteria.CriteriaID);
             cmm = new MySqlCommand(sql, cnn);
             cnn.Open();
             cmm.ExecuteNonQuery();
@@ -290,9 +269,9 @@ namespace ClinicV2.Models
 
             MySqlDataReader rdr = null;
             string sql;
-            sql = "Select CriteriaOptionID From CriteriaOption Where Value = @value;";
+            sql = "Select CriteriaOptionID From CriteriaOption Where Value ='" + val + "';";
             MySqlCommand cmm = new MySqlCommand(sql, cnn);
-            cmm.Parameters.AddWithValue("@value", val);
+            cmm = new MySqlCommand(sql, cnn);
             cnn.Open();
             rdr = cmm.ExecuteReader();
             while (rdr.Read())
@@ -303,7 +282,50 @@ namespace ClinicV2.Models
 
             return v;
         }
+        public static void EditCriteria(Criteria UpCriteria)
+        {
+            string connString;
+            MySqlConnection cnn;
+            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
+            cnn = new MySqlConnection(connString);
+            String Mess = null;
 
+            //check for exisitng criteria
+            string sql;
+            //sql= "IF EXISTS(SELECT * FROM Req WHERE ReqName="+req.Name+") Update Req"
+            //sql = "Insert Into Req Values(@Aug1,@Aug2,@State,@ReqName)";
+            sql = "Select count(1) " +
+                    "From ClinicCriteria " +
+                    "Join Clinic On Clinic.Name = ClinicCriteria.Clinic_Name " +
+                    "Join Criteria on Criteria.CriteriaName = ClinicCriteria.Criteria_Name " +
+                    "Join CriteriaOption on CriteriaOption.CriteriaOp_Name = ClinicCriteria.Criteria_Name " +
+                    "Where Clinic_Name = '" + UpCriteria.clinicName + "' and CriteriaName = '" + UpCriteria.Name + "' and CriteriaOption.Value = '" + UpCriteria.Value + "'";
+
+
+            MySqlDataReader rdr = null;
+
+
+
+            int val = 0;
+            MySqlCommand cmm = new MySqlCommand(sql, cnn);
+            cnn.Open();
+            rdr = cmm.ExecuteReader();
+            while (rdr.Read())
+            {
+                val = Convert.ToInt32(rdr.GetValue(0).ToString());
+            }
+            cnn.Close();
+            if (val > 0)
+            {
+                int values = FindDuplicate(UpCriteria.Value);
+             
+            }
+ 
+
+
+            
+
+        }
         public static Criteria GetCriteria(int ID)
         {
             Criteria clinicReq = null;
@@ -323,9 +345,8 @@ namespace ClinicV2.Models
             if (ID != -10)
             {
                 string sql = "Select ClinicCriteriaID, ClinicCriteria.Clinic_Name, ClinicCriteria.Criteria_Name, CriteriaOption.Value From ClinicCriteria " +
-                              "Join CriteriaOption on CriteriaOption.CriteriaOptionID = ClinicCriteria.Criteria_OptionID Where ClinicCriteriaID = @id;";
+                              "Join CriteriaOption on CriteriaOption.CriteriaOptionID = ClinicCriteria.Criteria_OptionID Where ClinicCriteriaID = '"+ ID +"';";
                 MySqlCommand cmd = new MySqlCommand(sql, cnn);
-                cmd.Parameters.AddWithValue("@id", ID);
                 rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
@@ -373,5 +394,30 @@ namespace ClinicV2.Models
             return ls;
 
         }
+        public static List<string> GetSpecificCriteira(string specValueNeed)
+        {
+            List<string> SpecList = new List<string>();
+            string connString;
+            MySqlDataReader rdr = null;
+            MySqlConnection cnn;
+            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
+            cnn = new MySqlConnection(connString);
+
+
+
+            string sql;
+            sql = "Select Value from CriteriaOption Where CriteriaOp_Name = '" + specValueNeed + "';";
+            MySqlCommand cmd = new MySqlCommand(sql, cnn);
+            cnn.Open();
+            rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                SpecList.Add(rdr.GetValue(0).ToString());
+            }
+            cnn.Close();
+
+            return SpecList;
+        }
+  
     }
 }
