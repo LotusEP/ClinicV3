@@ -1,12 +1,12 @@
 ﻿@model ClinicV2.Models.SignupModel
 
 @{
-                /**/
+    /**/
 
 
-                ViewBag.Title = "SignUp";
-                Layout = "~/Views/Shared/_Layout.cshtml";
-                <link href="~/Content/Site.css" rel="stylesheet" type="text/css">
+    ViewBag.Title = "SignUp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css">
 }
 
 <style>
@@ -25,33 +25,38 @@
     @Html.AntiForgeryToken()
 
     <h4>Patient</h4>
-    <hr />
+    <hr>
     <div>
         <div class="col-md-3">
             Do you have insurance? <br>
-            <input type="radio" name="insurance" value="Yes" onclick="Getnewlist()" checked> Yes<br>
+            <input type="radio" name="insurance" value="Yes" onclick="Getnewlist('Insurance')" checked> Yes<br>
             <input type="radio" name="insurance" value="No" onclick="insurancecheck('No')" checked="checked"> No<br>
             <div class="col-md-10" id="Insurancelist" style="display:none">
                 <label class="control-label"> Insurance</label>
-                @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })
+                @*@Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })*@
+                  @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
             </div>
         </div>
-      
-        <div class="col-md-3">
-            Do you have an income?
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.newPatient.Income, htmlAttributes: new { @class = "control-label" })
-                <select id="Period" class=" form-control">
-                    <option value="Weekly">Weekly</option>
-                    <option value="BikWeekly">Yearly</option>
-                    <option value="Monthly">Monthly</option>
-                    <option value="Yearly">Yearly</option>
-                </select>
-            </div>
 
-            <div class="col-md-3">
-                @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
+        <div class="col-md-5">
+            <div class="col-md-4">
+                Do you have an income? <br />
+                <input type="radio" name="Income" value="Yes" onclick="Getnewlist('Income')" checked> Yes<br>
+                <input type="radio" name="Income" value="No" onclick="insurancecheck('No')" checked="checked"> No<br>
+
+                <div id="PatientIncome" style="display:none">
+                    <select id="Period" class=" form-control col-md-3">
+                        <option value="Weekly">Weekly</option>
+                        <option value="BikWeekly">Yearly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Yearly">Yearly</option>
+                    </select>
+
+                    @*@Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "displayClinic()"} })*@
+                    @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "checkorder()"} })
+                    @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
+                </div>
+              
             </div>
         </div>
 
@@ -59,18 +64,17 @@
     </div>
 
 
-    
+   
 
-    
-
-    <hr />
-
-    <div class="col-md-6 order-md-1 ">
+    <div class="col-md-12  ">
         <div>
             @Html.Partial("_ClinicPartView", Model.listofClinic)
 
         </div>
     </div>
+
+
+
     <div class="row">
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -170,7 +174,7 @@
 
 
 
-                }, "Select State", new { @class = "from-control "} )
+                }, "Select State", new { @class = "from-control " })
                 @Html.ValidationMessageFor(model => model.newPatient.State, "", new { @class = "text-danger" })
             </div>
 
@@ -245,20 +249,50 @@
     var list = [];
     var Clinistodisplay = ["inital"];
     list = @Html.Raw(Json.Encode(Model.listofClinic));
+    var criteria = ['Income','Insurance','Employeed'];
 
-    function Getnewlist() {
+    function ListCriteraCheck(criteriaVar, Value) {
 
+        switch (Value) {
 
+            case '1':
+                     criteria[0] = criteriaVar;
+                break;
+            case '2':
+                    criteria[1] = criteriaVar;
+                break;
+            case '3':
+                    criteria[2] = criteriaVar;
+                break;
+            default:
+        }
+        
+    }
+    function Getnewlist(Question) {
 
-        var Requirement = document.getElementById("Insurancelist");
+        if (Question == "Insurance")
+        {
+            var Requirement = document.getElementById("Insurancelist");
 
-        Requirement.style.display = "";
+             Requirement.style.display = "";
+
+        }
+        else if(Question == "Income")
+        {
+            var Requirement = document.getElementById("PatientIncome");
+
+             Requirement.style.display = "";
+        }
+
 
 
 
        // alert(list[1].Req[0].Name);
     }
-
+    function checkorder() {
+        displayClinic();
+        insurancecheck('Insurance');
+    }
     function insurancecheck(xas) {
 
         //var xas = 'Input_' + Requi;
@@ -417,7 +451,7 @@
                     //increase the total income value
                     if (Household > 1) {
                         val = val + Requiredhouse;
-                        alert(val);
+               
                     }
                     if (Income <= val) {
 
