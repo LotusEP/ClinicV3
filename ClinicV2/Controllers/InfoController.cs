@@ -53,7 +53,7 @@ namespace ClinicV2.Controllers
             //        var mess = new MailMessage();
             //        var senderEmail = new MailAddress("Baon23@outlook.com", "Bao");
             //        var receiverEmail = new MailAddress(patient.Email, "Receiver");
-            //        var password = "Hello123@@";
+            //        var password = "RandomPass";
             //        var sub = "New Patient";
             //        var body = message;
             //        var smtp = new SmtpClient
@@ -90,13 +90,13 @@ namespace ClinicV2.Controllers
 
 
                 return RedirectToAction("test");
-         //       }
-         //   }
-          //  catch (Exception)
-         //   {
-          //      ViewBag.Error = "Some Error";
-          //  }
-         //   return RedirectToAction("test");
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    ViewBag.Error = "Some Error";
+            //}
+            //return RedirectToAction("test");
 
         }
 
