@@ -20,234 +20,11 @@
     }
 </style>
 
-@using (Html.BeginForm("Signup", "Info", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-
-
-       
-    <h4>Patient</h4>
-    <hr>
-    <div>
-        <div class="col-md-3">
-            Do you have insurance? <br>
-            <input type="radio" name="insurance" value="Yes" onclick="Getnewlist('Insurance')" checked> Yes<br>
-            <input type="radio" name="insurance" value="No" onclick="insurancecheck('No')" checked="checked"> No<br>
-            <div class="col-md-10" id="Insurancelist" style="display:none">
-                <label class="control-label"> Insurance</label>
-                @*@Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })*@
-                  @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
-            </div>
-        </div>
-
-        <div class="col-md-5">
-            <div class="col-md-4">
-                Do you have an income? <br />
-                <input type="radio" name="Income" value="Yes" onclick="Getnewlist('Income')" checked> Yes<br>
-                <input type="radio" name="Income" value="No" onclick="insurancecheck('No')" checked="checked"> No<br>
-
-                <div id="PatientIncome" style="display:none">
-                    <select id="Period" class=" form-control col-md-3">
-                        <option value="Weekly">Weekly</option>
-                        <option value="BikWeekly">Yearly</option>
-                        <option value="Monthly">Monthly</option>
-                        <option value="Yearly">Yearly</option>
-                    </select>
-
-                         <div class="col-md-3">
-                @Html.LabelFor(model => model.newPatient.Household, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
-                     </div>
-
-                    @*@Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "displayClinic()"} })*@
-                    @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "checkorder()"} })
-                    @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
-                </div>
-              
-            </div>
-        </div>
-
-
-    </div>
-
-
-   
-
-    <div class="col-md-12  ">
-        <div>
-            @Html.Partial("_ClinicPartView", Model.listofClinic)
-
-        </div>
-    </div>
-
-
-
-    <div class="row">
-
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="col-md-5 ">
-            @*@Html.LabelFor(model => model.newPatient.FName, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <div class="col-md-6">
-                <label class="control-label"> First Name</label>
-                @Html.EditorFor(model => model.newPatient.FName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.FName, "", new { @class = "text-danger" })
-            </div>
-
-            @*@Html.LabelFor(model => model.newPatient.LName, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <div class="col-md-5">
-                <label class="control-label"> Last Name</label>
-                @Html.EditorFor(model => model.newPatient.LName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.LName, "", new { @class = "text-danger" })
-            </div>
-
-
-
-            <div class="col-md-10">
-                @Html.LabelFor(model => model.newPatient.Street, htmlAttributes: new { @class = "control-label " })
-                @Html.EditorFor(model => model.newPatient.Street, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Street, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.newPatient.City, htmlAttributes: new { @class = "control-label " })
-                @Html.EditorFor(model => model.newPatient.City, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.City, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.newPatient.Zip, htmlAttributes: new { @class = "control-label " })
-                @Html.EditorFor(model => model.newPatient.Zip, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Zip, "", new { @class = "text-danger" })
-            </div>
-
-
-            <div class="col-md-8">
-                @Html.LabelFor(model => model.newPatient.State, htmlAttributes: new { @class = "control-label" })
-                <br />
-                @Html.DropDownListFor(model => model.newPatient.State, new List<SelectListItem> {
-
-                    new SelectListItem {Text = "Alabama", Value = "AL"},
-                    new SelectListItem {Text = "Alaska", Value = "AK"},
-                    new SelectListItem {Text = "Arizona", Value = "AZ"},
-                    new SelectListItem {Text = "Arkansas", Value = "AR"},
-                    new SelectListItem {Text = "California", Value = "CA"},
-                    new SelectListItem {Text = "Colorado", Value = "CO"},
-                    new SelectListItem {Text = "Connecticut", Value = "CT"},
-                    new SelectListItem {Text = "District of Columbia", Value = "DC"},
-                    new SelectListItem {Text = "Delaware", Value = "DE"},
-                    new SelectListItem {Text = "Florida", Value = "FL"},
-                    new SelectListItem {Text = "Georgia", Value = "GA"},
-                    new SelectListItem {Text = "Hawaii", Value = "HI"},
-                    new SelectListItem {Text = "Idaho", Value = "ID"},
-                    new SelectListItem {Text = "Illinois", Value = "IL"},
-                    new SelectListItem {Text = "Indiana", Value = "IN"},
-                    new SelectListItem {Text = "Iowa", Value = "IA"},
-                    new SelectListItem {Text = "Kansas", Value = "KS"},
-                    new SelectListItem {Text = "Kentucky", Value = "KY"},
-                    new SelectListItem {Text = "Louisiana", Value = "LA"},
-                    new SelectListItem {Text = "Maine", Value = "ME"},
-                    new SelectListItem {Text = "Maryland", Value = "MD"},
-                    new SelectListItem {Text = "Massachusetts", Value = "MA"},
-                    new SelectListItem {Text = "Michigan", Value = "MI"},
-                    new SelectListItem {Text = "Minnesota", Value = "MN"},
-                    new SelectListItem {Text = "Mississippi", Value = "MS"},
-                    new SelectListItem {Text = "Missouri", Value = "MO"},
-                    new SelectListItem {Text = "Montana", Value = "MT"},
-                    new SelectListItem {Text = "Nebraska", Value = "NE"},
-                    new SelectListItem {Text = "Nevada", Value = "NV"},
-                    new SelectListItem {Text = "New Hampshire", Value = "NH"},
-                    new SelectListItem {Text = "New Jersey", Value = "NJ"},
-                    new SelectListItem {Text = "New Mexico", Value = "NM"},
-                    new SelectListItem {Text = "New York", Value = "NY"},
-                    new SelectListItem {Text = "North Carolina", Value = "NC"},
-                    new SelectListItem {Text = "North Dakota", Value = "ND"},
-                    new SelectListItem {Text = "Ohio", Value = "OH"},
-                    new SelectListItem {Text = "Oklahoma", Value = "OK"},
-                    new SelectListItem {Text = "Oregon", Value = "OR"},
-                    new SelectListItem {Text = "Pennsylvania", Value = "PA"},
-                    new SelectListItem {Text = "Rhode Island", Value = "RI"},
-                    new SelectListItem {Text = "South Carolina", Value = "SC"},
-                    new SelectListItem {Text = "South Dakota", Value = "SD"},
-                    new SelectListItem {Text = "Tennessee", Value = "TN"},
-                    new SelectListItem {Text = "Texas", Value = "TX"},
-                    new SelectListItem {Text = "Utah", Value = "UT"},
-                    new SelectListItem {Text = "Vermont", Value = "VT"},
-                    new SelectListItem {Text = "Virginia", Value = "VA"},
-                    new SelectListItem {Text = "Washington", Value = "WA"},
-                    new SelectListItem {Text = "West Virginia", Value = "WV"},
-                    new SelectListItem {Text = "Wisconsin", Value = "WI"},
-                    new SelectListItem {Text = "Wyoming", Value = "WY"}
-
-
-
-                }, "Select State", new { @class = "from-control " })
-                @Html.ValidationMessageFor(model => model.newPatient.State, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-6">
-                @Html.LabelFor(model => model.newPatient.CellPhone, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.newPatient.CellPhone, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.CellPhone, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-10">
-                @Html.LabelFor(model => model.newPatient.Email, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.newPatient.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Email, "", new { @class = "text-danger" })
-            </div>
-
-
-
-
-
-       
-
-
-            @foreach (var item in Model.listofCriteria)
-            {
-                <div class="col-md-8">
-
-                    <input type="checkbox" id="@item.Name" onclick="insurancecheck('@item.Name')" />@item.Name
-                </div>
-
-
-                @*if (item.Name == "Housing" | item.Name == "Income")
-                    {
-
-
-                    }
-                    else
-                    {
-                        <div name="@item.Name">
-                            <input type="text" id="Input_@item.Name" name="Insurance">
-                        </div>
-                    }*@
-
-            }
-
-
-
-
-        </div>
-
-
-        <div class="form-group col-md-12 col-md-push-2  ">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
-@* ------------------------------------------------------------------------------------------------------------- *@
-
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
 <script>
+
+    var referrer = document.referrer;
+
+    
     //document.getElementById("listofInsurance").addEventListener("click", Getnewlist);
     var Requi = "check";
     var list = [];
@@ -270,22 +47,51 @@
                 break;
             default:
         }
-        
+
     }
     function Getnewlist(Question) {
 
-        if (Question == "Insurance")
-        {
-            var Requirement = document.getElementById("Insurancelist");
+        //if (Question == "Insurance") {
+        //    var Requirement = document.getElementById("Insurancelist");
 
-             Requirement.style.display = "";
+        //    Requirement.style.display = "";
 
-        }
-        else if(Question == "Income")
-        {
-            var Requirement = document.getElementById("PatientIncome");
+        //}
+        //else if (Question == "Income") {
+        //    var Requirement = document.getElementById("PatientIncome");
 
-             Requirement.style.display = "";
+        //    Requirement.style.display = "";
+        //}
+        //else if (Question == "IncomeNo") {
+        //    var Requirement = document.getElementById("PatientIncome");
+
+        //    Requirement.style.display = "None";
+        //}
+
+
+        switch (Question) {
+
+            case "Insurance":
+                var Requirement = document.getElementById("Insurancelist");
+                Requirement.style.display = "";
+                break;
+            case "Income":
+                var Requirement = document.getElementById("PatientIncome");
+                Requirement.style.display = "";
+                break;
+            case "InsuranceNo":
+                var Requirement = document.getElementById("Insurancelist");
+                Requirement.style.display = "None";
+                break;
+            case "IncomeNo":
+            case "Income":
+                var Requirement = document.getElementById("PatientIncome");
+                Requirement.style.display = "None";
+                break;
+
+
+
+
         }
 
 
@@ -455,7 +261,7 @@
                     //increase the total income value
                     if (Household > 1) {
                         val = val + Requiredhouse;
-               
+
                     }
                     if (Income <= val) {
 
@@ -537,6 +343,238 @@
 
     }
 </script>
+
+@using (Html.BeginForm("Signup", "Info", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+
+  
+    <h4>Patient</h4>
+    <hr>
+    <div>
+        <div class="col-md-3">
+            Do you have insurance? <br>
+            <input type="radio" name="insurance" value="Yes" onclick="Getnewlist('Insurance')" checked> Yes<br>
+            <input type="radio" name="insurance" value="No" onclick="Getnewlist('InsuranceNo')" checked="checked"> No<br>
+            <div class="col-md-10" id="Insurancelist" style="display:none">
+                <label class="control-label"> Insurance</label>
+                @*@Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })*@
+                  @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="col-md-4">
+                Do you have an income? <br />
+                <input type="radio" name="Income" value="Yes" onclick="Getnewlist('Income')" checked> Yes<br>
+                <input type="radio" name="Income" value="No" onclick="Getnewlist('IncomeNo')" checked="checked"> No<br>
+
+
+                
+                <div id="PatientIncome" style="display:none">
+                    <hr />
+                Paid Period:
+                    <select id="Period" class=" form-control col-md-3">
+                        <option value="Weekly">Weekly</option>
+                        <option value="BikWeekly">Yearly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Yearly">Yearly</option>
+                    </select>
+
+            
+                Household size:
+                @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
+      
+                Income:
+                @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "checkorder()"} })
+                @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
+                </div>
+              
+            </div>
+        </div>
+
+
+    </div>
+
+
+   
+
+    <div class="col-md-12  ">
+        <div>
+            @Html.Partial("_ClinicPartView", Model.listofClinic)
+
+        </div>
+    </div>
+
+
+
+    <div class="row">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="col-md-5 ">
+            @*@Html.LabelFor(model => model.newPatient.FName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="col-md-6">
+                <label class="control-label"> First Name</label>
+                @Html.EditorFor(model => model.newPatient.FName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.FName, "", new { @class = "text-danger" })
+            </div>
+
+            @*@Html.LabelFor(model => model.newPatient.LName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="col-md-5">
+                <label class="control-label"> Last Name</label>
+                @Html.EditorFor(model => model.newPatient.LName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.LName, "", new { @class = "text-danger" })
+            </div>
+
+
+
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.newPatient.Street, htmlAttributes: new { @class = "control-label " })
+                @Html.EditorFor(model => model.newPatient.Street, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.Street, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.newPatient.City, htmlAttributes: new { @class = "control-label " })
+                @Html.EditorFor(model => model.newPatient.City, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.City, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.newPatient.Zip, htmlAttributes: new { @class = "control-label " })
+                @Html.EditorFor(model => model.newPatient.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.Zip, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.newPatient.State, htmlAttributes: new { @class = "control-label" })
+                <br />
+                @Html.DropDownListFor(model => model.newPatient.State, new List<SelectListItem> {
+
+                    new SelectListItem {Text = "Alabama", Value = "AL"},
+                    new SelectListItem {Text = "Alaska", Value = "AK"},
+                    new SelectListItem {Text = "Arizona", Value = "AZ"},
+                    new SelectListItem {Text = "Arkansas", Value = "AR"},
+                    new SelectListItem {Text = "California", Value = "CA"},
+                    new SelectListItem {Text = "Colorado", Value = "CO"},
+                    new SelectListItem {Text = "Connecticut", Value = "CT"},
+                    new SelectListItem {Text = "District of Columbia", Value = "DC"},
+                    new SelectListItem {Text = "Delaware", Value = "DE"},
+                    new SelectListItem {Text = "Florida", Value = "FL"},
+                    new SelectListItem {Text = "Georgia", Value = "GA"},
+                    new SelectListItem {Text = "Hawaii", Value = "HI"},
+                    new SelectListItem {Text = "Idaho", Value = "ID"},
+                    new SelectListItem {Text = "Illinois", Value = "IL"},
+                    new SelectListItem {Text = "Indiana", Value = "IN"},
+                    new SelectListItem {Text = "Iowa", Value = "IA"},
+                    new SelectListItem {Text = "Kansas", Value = "KS"},
+                    new SelectListItem {Text = "Kentucky", Value = "KY"},
+                    new SelectListItem {Text = "Louisiana", Value = "LA"},
+                    new SelectListItem {Text = "Maine", Value = "ME"},
+                    new SelectListItem {Text = "Maryland", Value = "MD"},
+                    new SelectListItem {Text = "Massachusetts", Value = "MA"},
+                    new SelectListItem {Text = "Michigan", Value = "MI"},
+                    new SelectListItem {Text = "Minnesota", Value = "MN"},
+                    new SelectListItem {Text = "Mississippi", Value = "MS"},
+                    new SelectListItem {Text = "Missouri", Value = "MO"},
+                    new SelectListItem {Text = "Montana", Value = "MT"},
+                    new SelectListItem {Text = "Nebraska", Value = "NE"},
+                    new SelectListItem {Text = "Nevada", Value = "NV"},
+                    new SelectListItem {Text = "New Hampshire", Value = "NH"},
+                    new SelectListItem {Text = "New Jersey", Value = "NJ"},
+                    new SelectListItem {Text = "New Mexico", Value = "NM"},
+                    new SelectListItem {Text = "New York", Value = "NY"},
+                    new SelectListItem {Text = "North Carolina", Value = "NC"},
+                    new SelectListItem {Text = "North Dakota", Value = "ND"},
+                    new SelectListItem {Text = "Ohio", Value = "OH"},
+                    new SelectListItem {Text = "Oklahoma", Value = "OK"},
+                    new SelectListItem {Text = "Oregon", Value = "OR"},
+                    new SelectListItem {Text = "Pennsylvania", Value = "PA"},
+                    new SelectListItem {Text = "Rhode Island", Value = "RI"},
+                    new SelectListItem {Text = "South Carolina", Value = "SC"},
+                    new SelectListItem {Text = "South Dakota", Value = "SD"},
+                    new SelectListItem {Text = "Tennessee", Value = "TN"},
+                    new SelectListItem {Text = "Texas", Value = "TX"},
+                    new SelectListItem {Text = "Utah", Value = "UT"},
+                    new SelectListItem {Text = "Vermont", Value = "VT"},
+                    new SelectListItem {Text = "Virginia", Value = "VA"},
+                    new SelectListItem {Text = "Washington", Value = "WA"},
+                    new SelectListItem {Text = "West Virginia", Value = "WV"},
+                    new SelectListItem {Text = "Wisconsin", Value = "WI"},
+                    new SelectListItem {Text = "Wyoming", Value = "WY"}
+
+
+
+                }, "Select State", new { @class = "from-control " })
+                @Html.ValidationMessageFor(model => model.newPatient.State, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.newPatient.CellPhone, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.newPatient.CellPhone, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.CellPhone, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.newPatient.Email, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.newPatient.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.Email, "", new { @class = "text-danger" })
+            </div>
+
+
+
+
+
+          
+
+
+            @foreach (var item in Model.listofCriteria)
+            {
+                <div class="col-md-8">
+
+                    <input type="checkbox" id="@item.Name" onclick="insurancecheck('@item.Name')" />@item.Name
+                </div>
+
+
+                @*if (item.Name == "Housing" | item.Name == "Income")
+                    {
+
+
+                    }
+                    else
+                    {
+                        <div name="@item.Name">
+                            <input type="text" id="Input_@item.Name" name="Insurance">
+                        </div>
+                    }*@
+
+            }
+
+
+
+
+        </div>
+
+
+        <div class="form-group col-md-12 col-md-push-2  ">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+@* ------------------------------------------------------------------------------------------------------------- *@
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
