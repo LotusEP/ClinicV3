@@ -45,7 +45,7 @@ namespace ClinicV2.Controllers
            + "\n" + patient.City + "\n" + patient.State + "\n" + patient.Zip;
 
 
-
+            
             //try
             //{
             //    if (ModelState.IsValid)
