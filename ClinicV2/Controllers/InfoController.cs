@@ -176,6 +176,7 @@ namespace ClinicV2.Controllers
             tModel.listofClinic = clinicModel.GetClinicList();
             tModel.listofCriteria = Criteria.GetReqList("old");
             tModel.listofInsurance = Criteria.GetSpecificCriteira("Insurance");
+            tModel.GuidelineValue = Criteria.GetCriteria("200% Guidelines"); 
             tModel.newPatient = new Patient();
 
 

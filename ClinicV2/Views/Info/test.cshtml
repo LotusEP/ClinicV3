@@ -24,25 +24,27 @@
 
     var referrer = document.referrer;
 
-    
+    var changecounter = 0;
     //document.getElementById("listofInsurance").addEventListener("click", Getnewlist);
     var Requi = "check";
     var list = [];
     var Clinistodisplay = ["inital"];
+    var ClinisNot = ["inital"];
     list = @Html.Raw(Json.Encode(Model.listofClinic));
-    var criteria = ['Income','Insurance','Employeed'];
+    var criteria = ['No','No','No'];
 
-    function ListCriteraCheck(criteriaVar, Value) {
-
+    function ListCriteraCheck(Value) {
+        //alert('Update');
+        
         switch (Value) {
 
-            case '1':
-                     criteria[0] = criteriaVar;
+            case 0:
+                    insurancecheck('Insurance');
                 break;
-            case '2':
-                    criteria[1] = criteriaVar;
+            case 1:
+                    IncomeCheck();
                 break;
-            case '3':
+            case 2:
                     criteria[2] = criteriaVar;
                 break;
             default:
@@ -74,19 +76,22 @@
             case "Insurance":
                 var Requirement = document.getElementById("Insurancelist");
                 Requirement.style.display = "";
+                criteria[0] = "Yes"
                 break;
             case "Income":
                 var Requirement = document.getElementById("PatientIncome");
                 Requirement.style.display = "";
+                criteria[1] = "Yes"
                 break;
             case "InsuranceNo":
                 var Requirement = document.getElementById("Insurancelist");
                 Requirement.style.display = "None";
+                criteria[0] = "No"
                 break;
             case "IncomeNo":
-            case "Income":
                 var Requirement = document.getElementById("PatientIncome");
                 Requirement.style.display = "None";
+                criteria[1] = "No"
                 break;
 
 
@@ -100,8 +105,71 @@
        // alert(list[1].Req[0].Name);
     }
     function checkorder() {
-        displayClinic();
-        insurancecheck('Insurance');
+        changecounter = 0;
+        
+        for (var y = 0; y < criteria.length; y++) {    
+       
+            if (criteria[y] == 'Yes') {
+                changecounter++;
+    
+                ListCriteraCheck(y);
+            }
+
+        }
+
+        displayclinic();
+        
+    }
+    function displayclinic() {
+
+        var displayClin = null;
+        for (var dis = 0; dis < list.length; dis++) {
+    
+            displayClin = document.getElementById(list[dis].Name);
+            displayClin.style.display = "None";
+
+        }
+        for (var dis = 1; dis < Clinistodisplay.length; dis++) {
+     
+            displayClin = document.getElementById(Clinistodisplay[dis]);
+            displayClin.style.display = "";
+
+        }
+
+
+    }
+    function updatingClinictoDisplay(Clinic,Action) {
+        var checkCounter = 0;
+        //alert(Action + ":Upating:" + Clinic)
+        for (var clinicNum = 1; clinicNum < Clinistodisplay.length; clinicNum++) {
+      
+            if (Clinic == Clinistodisplay[clinicNum]) {
+                checkCounter = clinicNum;
+            }      
+        }
+
+
+        if (changecounter > 1 && checkCounter == 0)
+        {
+    
+        }
+        else if (Action == "ADD") {
+            
+            if (checkCounter == 0) {
+
+                Clinistodisplay.push(Clinic);
+            }
+        }
+        
+        else if (Action == "REMOVE" ) {
+
+            if (checkCounter > 0)
+            {
+                Clinistodisplay.splice(checkCounter, 1);
+            }
+         
+        }
+
     }
     function insurancecheck(xas) {
 
@@ -131,83 +199,73 @@
             for (x = 0; x < list.length; x++) {
                 var counter = 0;
                 var y = 0;
-                dis = document.getElementById(list[x].Name);
-                dis.style.display = "none";
+                //dis = document.getElementById(list[x].Name);
+                //dis.style.display = "none";
                 //go through each clinic requirement
                 for (y = 0; y < list[x].Req.length; y++) {
                     var clinicName = list[x].Name;
 
                     //check if the requirement match
-                    if (list[x].Req[y].Name == (xas)) {
+                    if (list[x].Req[y].Name == xas) {
                         //alert("Yes1");
                         // is so check the value
                         var val = list[x].Req[y].Value;
 
                         if (Requirement == val) {
-                            counter = 1;
-                            //alert("Yes2");
-                            for (var t = 0; t < Clinistodisplay.length; t++) {
-                                var counter2 = 0;
-                                if (list[x].Name == Clinistodisplay[t]) {
-
-                                    break;
-                                }
-                                else {
-
-                                    counter2 = 1;
-                                }
-                            }
-                            if (counter2 > 0) {
-
-                                Clinistodisplay.push(list[x].Name);
-                            }
-
+                         
+                            updatingClinictoDisplay(list[x].Name, "ADD");
+                            break;
+                      
                         }
-                        //else {
-                        //    dis = document.getElementById(list[x].Name);
-                        //    dis.style.display = "none";
-                        //}
+                        else {
+
+                            updatingClinictoDisplay(list[x].Name, "REMOVE");
+                            //dis = document.getElementById(list[x].Name);
+                            //dis.style.display = "none";
+                        }
                     }
 
                 }
 
 
+                //reduncy removing
+                //var temp;
+                //if (counter == 0) {
 
-                var temp;
-                if (counter == 0) {
+                //    for (q = 0; q < Clinistodisplay.length; q++) {
+                //   // alert(Clinistodisplay[q] + ";" + clinicName);
 
-                    for (q = 0; q < Clinistodisplay.length; q++) {
-                   // alert(Clinistodisplay[q] + ";" + clinicName);
+                //        if (clinicName == Clinistodisplay[q]) {
 
-                        if (clinicName == Clinistodisplay[q]) {
+                //            Clinistodisplay.splice(q ,1);
+                //            q = 0;
 
-                            Clinistodisplay.splice(q ,1);
-                            q = 0;
+                //        }
 
-                        }
-
-                    }
-                }
+                //    }
+                //}
 
             }
 
         }
-             for (x = 1; x < Clinistodisplay.length; x++)
-             {
-                 dis = document.getElementById(Clinistodisplay[x]);
-                 dis.style.display = "";
-            }
+        //reduncy removing
+            // for (x = 1; x < Clinistodisplay.length; x++)
+            // {
+            //     dis = document.getElementById(Clinistodisplay[x]);
+            //     dis.style.display = "";
+            //}
 
 
     }
-    function displayClinic() {
-
+    function IncomeCheck() {
+        //alert("JI");
         var Income = parseInt(document.getElementById('newPatient_Income').value);
         var Household = parseInt(document.getElementById('newPatient_Household').value);
         var Period = document.getElementById('Period').value;
         var Requiredhouse = 0;
         var val;
         var noMatch = false;
+  
       //  alert(Period);
         switch(Period)
         {
@@ -227,16 +285,17 @@
         }
        //alert(Income);
        // alert(Household);
-
         var dis = null;
         var x = 0;
         //go through the clinics
+
         for (x = 0; x < list.length; x++) {
-            dis = document.getElementById(list[x].Name);
-            dis.style.display = "none";
+            //dis = document.getElementById(list[x].Name);
+            //dis.style.display = "none";
             var y = 0;
            //  alert('pass1:' + x);
             //go through each clinic requirement
+
             for (y =0; y < list[x].Req.length; y++) {
                 //  alert('pass2:' + y);
                 //check if the requirement is income
@@ -249,20 +308,30 @@
                     // alert(Income);
                     var z, w = 0;
                     //get the addition income per household value
+       
                     for (z = 0; z < list.length; z++) {
 
                         for (w = 0; w < list[z].Req.length; w++) {
                             //alert(list[z].Req[w].Name);;
-                            if (list[z].Req[w].Name == ("+IncomePerPerson"))
+                            if (list[z].Req[w].Name == ("+IncomePerPerson")) {
+
                                 Requiredhouse = parseInt(list[z].Req[w].Value);
+                            }
+                            else {
+                                Requiredhouse =  @Html.Raw(Json.Encode(Model.GuidelineValue));
+                            }                              
                             //  alert("Income addition: " + Requiredhouse);
                         }
                     }
+       
                     //increase the total income value
                     if (Household > 1) {
-                        val = val + Requiredhouse;
+                        for (var housesize = 1; housesize < Household; housesize++)
+                        {
+                            val = val + Requiredhouse;
+                        }
 
-                    }
+                    }                 
                     if (Income <= val) {
 
                         //alert('Patient Income:' + Income);
@@ -273,83 +342,35 @@
                         //alert(typeof val + "Type of clinic income");
                         //   alert(typeof list[x].Req[y].Value);
                         // alert('pass4:' + Income + ": ClinicReq: " + list[x].Req[y].Value);
-                        dis = document.getElementById(list[x].Name);
-                        dis.style.display = "";
+                        //alert("add new clinic");
+                        updatingClinictoDisplay(list[x].Name,"ADD");
+                        //dis = document.getElementById(list[x].Name);
+                        //dis.style.display = "";
                     }
                     else {
-                        dis = document.getElementById(list[x].Name);
-                        dis.style.display = "none";
-                    }
+                        alert(list[x].Name);
+                        updatingClinictoDisplay(list[x].Name, "REMOVE");
+
+                        //dis = document.getElementById(list[x].Name);
+                        //dis.style.display = "none";
+                    } 
                 }
                 else {
 
                     noMatch = false;
 
                 }
-
             }
-
-
-        }
-
-
-
-    }
-    function displayClinic2(InsuranceCheck) {
-
-
-
-        if (InsuranceCheck == 'No') {
-            for (x = 0; x < list.length; x++) {
-                dis = document.getElementById(list[x].Name);
-                dis.style.display = "";
-            }
-
-        }
-        else {
-            var dis = null;
-            var x = 0;
-            //go through the clinics
-            for (x = 0; x < list.length; x++) {
-                var y = 0;
-                //alert(list[x].Name);
-                //go through each clinic requirement
-                for (y = 0; y < list[x].Req.length; y++) {
-                    //check if the requirement is income
-                    //alert(list[x].Req[y].Name);
-                    if (list[x].Req[y].Name == ("Insurance")) {
-                     //   alert(list[x].Req[y].Value);
-                        if (list[x].Req[y].Value != ("NoInsurance")) {
-                            //alert(list[x].Name);
-                            dis = document.getElementById(list[x].Name);
-                            dis.style.display = "";
-                            break;
-                        }
-                        else (list[x].Req[y].Name == ("NoInsurance"))
-                        {
-
-                            dis = document.getElementById(list[x].Name);
-                            dis.style.display = "none";
-
-                        }
-                    }
-
-                }
-
-            }
-
         }
 
 
     }
+    
 </script>
 
 @using (Html.BeginForm("Signup", "Info", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-
-
-  
     <h4>Patient</h4>
     <hr>
     <div>
@@ -375,7 +396,7 @@
                 <div id="PatientIncome" style="display:none">
                     <hr />
                 Paid Period:
-                    <select id="Period" class=" form-control col-md-3">
+                    <select id="Period" class=" form-control col-md-3" onchange="checkorder()">
                         <option value="Weekly">Weekly</option>
                         <option value="BikWeekly">Yearly</option>
                         <option value="Monthly">Monthly</option>
@@ -384,11 +405,11 @@
 
             
                 Household size:
-                @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control", @onchange = "checkorder()" } })
                 @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
       
                 Income:
-                @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "checkorder()"} })
+                @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "checkorder()" } })
                 @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
                 </div>
               

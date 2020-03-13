@@ -365,6 +365,41 @@ namespace ClinicV2.Models
             cnn.Close();
             return clinicReq;
         }
+        public static int GetCriteria(string Name)
+        {
+            int value = 0;
+
+
+            string connString;
+            MySqlConnection cnn;
+            //connString = @"Data Source=clinicserver1.database.windows.net;Initial Catalog=Patient;User ID=Lotus;Password=Server1@pass;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+
+            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
+
+            cnn = new MySqlConnection(connString);
+
+            MySqlDataReader rdr = null;
+
+            cnn.Open();
+
+            string sql = "Select Value From CriteriaOption where CriteriaOp_Name ='200% Guidelines' ;";
+                MySqlCommand cmd = new MySqlCommand(sql, cnn);
+                rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+
+                    value = Int32.Parse(rdr.GetValue(0).ToString());
+
+                }
+
+
+            
+            cnn.Close();
+
+            return value;
+
+        }
 
         public static List<string> CriteraiValue()
         {
