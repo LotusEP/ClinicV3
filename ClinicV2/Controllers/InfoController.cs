@@ -11,11 +11,15 @@ using ClinicV2.Models;
 
 namespace ClinicV2.Controllers
 {
+
+    //<a href="https://localhost:44330/Info/test">Medi</a>
     public class InfoController : Controller
     {
         // GET: Info
         public ActionResult Index()
         {
+            String Ref = Request.Headers["Referer"];
+
             return View();
         }
 
@@ -23,6 +27,8 @@ namespace ClinicV2.Controllers
         [HttpGet]
         public ActionResult Signup()
         {
+            String Ref = Request.Headers["Referer"];
+
             List<clinicModel> listofClinic = clinicModel.GetClinicList();
 
 
@@ -33,6 +39,7 @@ namespace ClinicV2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Signup(SignupModel newSignee, string [] clinicName)
         {
+            String Ref = Request.Headers["Referer"];
 
             //foreach (var mail in clinicT)
             //{
@@ -163,6 +170,8 @@ namespace ClinicV2.Controllers
    
         public ActionResult test()
         {
+            String Ref = Request.Headers["Referer"];
+
             SignupModel tModel = new SignupModel();
             tModel.listofClinic = clinicModel.GetClinicList();
             tModel.listofCriteria = Criteria.GetReqList("old");
