@@ -1,56 +1,96 @@
 ﻿@model ClinicV2.Models.SignupModel
 
 @{
+    /**/
+
+
     ViewBag.Title = "SignUp";
     Layout = "~/Views/Shared/_Layout.cshtml";
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css">
 }
 
 <style>
+
+    .test {
+        background-color: red;
+    }
+
+    .test2 {
+        background-color: aqua;
+    }
 </style>
 
 @using (Html.BeginForm("Signup", "Info", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
-    <h4>Patient Sign-up Form</h4>
-    <hr />
 
-    <div class="col-md-12">
-        <div>
-            @Html.Partial("_ClinicPartView", Model.listofClinic)<br />
-
-            
-        </div>
-    </div>
-    
-    <div class="form-group col-md-12 col-md-push-0 ">
-        <div class="col-md-offset-0 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
-
+        HIIIIIII
+    <h4>Patient</h4>
+    <hr>
     <div>
-        Do you have insurance? <br>
-        <input type="radio" name="insurance" value="Yes" onclick="displayClinic2('Yes')" checked> Yes<br>
-        <input type="radio" name="insurance" value="No" onclick="displayClinic2('No')"> No<br>
+        <div class="col-md-3">
+            Do you have insurance? <br>
+            <input type="radio" name="insurance" value="Yes" onclick="Getnewlist('Insurance')" checked> Yes<br>
+            <input type="radio" name="insurance" value="No" onclick="insurancecheck('No')" checked="checked"> No<br>
+            <div class="col-md-10" id="Insurancelist" style="display:none">
+                <label class="control-label"> Insurance</label>
+                @*@Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })*@
+                  @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="col-md-4">
+                Do you have an income? <br />
+                <input type="radio" name="Income" value="Yes" onclick="Getnewlist('Income')" checked> Yes<br>
+                <input type="radio" name="Income" value="No" onclick="insurancecheck('No')" checked="checked"> No<br>
+
+                <div id="PatientIncome" style="display:none">
+                    <select id="Period" class=" form-control col-md-3">
+                        <option value="Weekly">Weekly</option>
+                        <option value="BikWeekly">Yearly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Yearly">Yearly</option>
+                    </select>
+
+                    @*@Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "displayClinic()"} })*@
+                    @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "checkorder()"} })
+                    @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
+                </div>
+              
+            </div>
+        </div>
+
+
     </div>
-    <hr />
 
-    <div @*class="form-horizontal"*@ class="row">
 
+   
+
+    <div class="col-md-12  ">
+        <div>
+            @Html.Partial("_ClinicPartView", Model.listofClinic)
+
+        </div>
+    </div>
+
+
+
+    <div class="row">
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class=" col-md-7">
+
+        <div class="col-md-5 ">
             @*@Html.LabelFor(model => model.newPatient.FName, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label class="control-label"> First Name</label>
                 @Html.EditorFor(model => model.newPatient.FName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.newPatient.FName, "", new { @class = "text-danger" })
             </div>
 
             @*@Html.LabelFor(model => model.newPatient.LName, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <label class="control-label"> Last Name</label>
                 @Html.EditorFor(model => model.newPatient.LName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.newPatient.LName, "", new { @class = "text-danger" })
@@ -58,20 +98,28 @@
 
 
 
-            <div class="col-md-4">
+            <div class="col-md-10">
                 @Html.LabelFor(model => model.newPatient.Street, htmlAttributes: new { @class = "control-label " })
                 @Html.EditorFor(model => model.newPatient.Street, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Street, "", new { @class = "text-danger" })<br /><br />
+                @Html.ValidationMessageFor(model => model.newPatient.Street, "", new { @class = "text-danger" })
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
                 @Html.LabelFor(model => model.newPatient.City, htmlAttributes: new { @class = "control-label " })
                 @Html.EditorFor(model => model.newPatient.City, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.newPatient.City, "", new { @class = "text-danger" })
             </div>
 
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.newPatient.State, htmlAttributes: new { @class = "control-label" })<br />
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.newPatient.Zip, htmlAttributes: new { @class = "control-label " })
+                @Html.EditorFor(model => model.newPatient.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.Zip, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.newPatient.State, htmlAttributes: new { @class = "control-label" })
+                <br />
                 @Html.DropDownListFor(model => model.newPatient.State, new List<SelectListItem> {
 
                     new SelectListItem {Text = "Alabama", Value = "AL"},
@@ -128,14 +176,8 @@
 
 
 
-                }, "", new { @class = "from-control " })
-                @Html.ValidationMessageFor(model => model.newPatient.State, "", new { @class = "text-danger" })<br /><br />
-            </div>
-
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.newPatient.Zip, htmlAttributes: new { @class = "control-label " })
-                @Html.EditorFor(model => model.newPatient.Zip, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Zip, "", new { @class = "text-danger" })<br /><br />
+                }, "Select State", new { @class = "from-control " })
+                @Html.ValidationMessageFor(model => model.newPatient.State, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-6">
@@ -144,82 +186,59 @@
                 @Html.ValidationMessageFor(model => model.newPatient.CellPhone, "", new { @class = "text-danger" })
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-10">
                 @Html.LabelFor(model => model.newPatient.Email, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.newPatient.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Email, "", new { @class = "text-danger" })<br /><br />
+                @Html.ValidationMessageFor(model => model.newPatient.Email, "", new { @class = "text-danger" })
             </div>
 
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.newPatient.Income, htmlAttributes: new { @class = "control-label" })
-                <select id="Period" class=" form-control">
-                    <option value="Weekly">Weekly</option>
-                    <option value="BikWeekly">Yearly</option>
-                    <option value="Monthly">Monthly</option>
-                    <option value="Yearly">Yearly</option>
-                </select>
-            </div>
 
-            <div class="col-md-3">
-                <label class="control-label">Amount</label>
-                @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
-            </div>
 
 
 
             <div class="col-md-3">
                 @Html.LabelFor(model => model.newPatient.Household, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })<br /><br />
+                @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
             </div>
 
-            <div class="col-md-10">
-                <label class="control-label"> Insurance</label><br />
-                @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance))<br /><br />
-            </div>
+
             @foreach (var item in Model.listofCriteria)
             {
                 <div class="col-md-8">
 
-                    <input type="checkbox" id="@item.Name" onclick="insurancecheck('@item.Name')" />@item.Name 
-                    
+                    <input type="checkbox" id="@item.Name" onclick="insurancecheck('@item.Name')" />@item.Name
                 </div>
 
 
                 @*if (item.Name == "Housing" | item.Name == "Income")
-            {
+                    {
 
+
+                    }
+                    else
+                    {
+                        <div name="@item.Name">
+                            <input type="text" id="Input_@item.Name" name="Insurance">
+                        </div>
+                    }*@
 
             }
-            else
-            {
-                <div name="@item.Name">
-                    <input type="text" id="Input_@item.Name" name="Insurance">
-                </div>
-            }*@
-
-            }
 
 
 
 
         </div>
-        <!--<div class="col-md-5">
-        <div>
-            @Html.Partial("_ClinicPartView", Model.listofClinic)
 
-            <p> TESTSETESTS</p>
-        </div>
-    </div>
 
-    <div class="form-group col-md-12 col-md-push-2 ">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+        <div class="form-group col-md-12 col-md-push-2  ">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
         </div>
-    </div>-->
     </div>
 }
+@* ------------------------------------------------------------------------------------------------------------- *@
 
 
 <div>
@@ -227,18 +246,55 @@
 </div>
 
 <script>
+    //document.getElementById("listofInsurance").addEventListener("click", Getnewlist);
     var Requi = "check";
     var list = [];
+    var Clinistodisplay = ["inital"];
     list = @Html.Raw(Json.Encode(Model.listofClinic));
-    function Getnewlist() {
+    var criteria = ['Income','Insurance','Employeed'];
+
+    function ListCriteraCheck(criteriaVar, Value) {
+
+        switch (Value) {
+
+            case '1':
+                     criteria[0] = criteriaVar;
+                break;
+            case '2':
+                    criteria[1] = criteriaVar;
+                break;
+            case '3':
+                    criteria[2] = criteriaVar;
+                break;
+            default:
+        }
+        
+    }
+    function Getnewlist(Question) {
+
+        if (Question == "Insurance")
+        {
+            var Requirement = document.getElementById("Insurancelist");
+
+             Requirement.style.display = "";
+
+        }
+        else if(Question == "Income")
+        {
+            var Requirement = document.getElementById("PatientIncome");
+
+             Requirement.style.display = "";
+        }
 
 
-       alert('test');
 
 
        // alert(list[1].Req[0].Name);
     }
-
+    function checkorder() {
+        displayClinic();
+        insurancecheck('Insurance');
+    }
     function insurancecheck(xas) {
 
         //var xas = 'Input_' + Requi;
@@ -250,9 +306,10 @@
             displayClinic()
         }
         else {
-            if (xas == 'Insurance') {
+            if (xas == "Insurance") {
 
-                var Requirement = document.getElementById('listofInsurance').value;
+                var Requirement = document.getElementById("listofInsurance").value;
+
             }
             else {
                 var Requirement = document.getElementById("Input_" + xas).value;
@@ -261,34 +318,77 @@
             //alert(Requirement);
             var dis = null;
             var x = 0;
+
             //go through the clinics
             for (x = 0; x < list.length; x++) {
+                var counter = 0;
                 var y = 0;
+                dis = document.getElementById(list[x].Name);
+                dis.style.display = "none";
                 //go through each clinic requirement
                 for (y = 0; y < list[x].Req.length; y++) {
+                    var clinicName = list[x].Name;
 
                     //check if the requirement match
                     if (list[x].Req[y].Name == (xas)) {
-
+                        //alert("Yes1");
                         // is so check the value
                         var val = list[x].Req[y].Value;
 
                         if (Requirement == val) {
+                            counter = 1;
+                            //alert("Yes2");
+                            for (var t = 0; t < Clinistodisplay.length; t++) {
+                                var counter2 = 0;
+                                if (list[x].Name == Clinistodisplay[t]) {
 
-                            dis = document.getElementById(list[x].Name);
-                            dis.style.display = "";
+                                    break;
+                                }
+                                else {
+
+                                    counter2 = 1;
+                                }
+                            }
+                            if (counter2 > 0) {
+
+                                Clinistodisplay.push(list[x].Name);
+                            }
+
                         }
-                        else {
-                            dis = document.getElementById(list[x].Name);
-                            dis.style.display = "none";
-                        }
+                        //else {
+                        //    dis = document.getElementById(list[x].Name);
+                        //    dis.style.display = "none";
+                        //}
                     }
 
                 }
 
-            }
-        }
 
+
+                var temp;
+                if (counter == 0) {
+
+                    for (q = 0; q < Clinistodisplay.length; q++) {
+                   // alert(Clinistodisplay[q] + ";" + clinicName);
+
+                        if (clinicName == Clinistodisplay[q]) {
+
+                            Clinistodisplay.splice(q ,1);
+                            q = 0;
+
+                        }
+
+                    }
+                }
+
+            }
+
+        }
+             for (x = 1; x < Clinistodisplay.length; x++)
+             {
+                 dis = document.getElementById(Clinistodisplay[x]);
+                 dis.style.display = "";
+            }
 
 
     }
@@ -323,7 +423,9 @@
         var dis = null;
         var x = 0;
         //go through the clinics
-        for (x =0; x < list.length; x++) {
+        for (x = 0; x < list.length; x++) {
+            dis = document.getElementById(list[x].Name);
+            dis.style.display = "none";
             var y = 0;
            //  alert('pass1:' + x);
             //go through each clinic requirement
@@ -351,9 +453,9 @@
                     //increase the total income value
                     if (Household > 1) {
                         val = val + Requiredhouse;
-                        alert(val);
+               
                     }
-                    if (Income < val) {
+                    if (Income <= val) {
 
                         //alert('Patient Income:' + Income);
                         //alert('the requirement amount:' + val)
@@ -364,7 +466,7 @@
                         //   alert(typeof list[x].Req[y].Value);
                         // alert('pass4:' + Income + ": ClinicReq: " + list[x].Req[y].Value);
                         dis = document.getElementById(list[x].Name);
-                        dis.style.display = "block";
+                        dis.style.display = "";
                     }
                     else {
                         dis = document.getElementById(list[x].Name);
@@ -386,6 +488,8 @@
 
     }
     function displayClinic2(InsuranceCheck) {
+
+
 
         if (InsuranceCheck == 'No') {
             for (x = 0; x < list.length; x++) {

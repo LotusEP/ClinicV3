@@ -9,7 +9,7 @@
 
 
 <body>
-
+    <hr>
     <div>
         @*<input type="checkbox" id="18+" onclick="Getnewlist()">Age <br />
             <input type="checkbox" id="Housing" onclick="Getnewlist()"> Housing<br />
@@ -19,16 +19,16 @@
             <table class="table-bordered">
                 <tr>
 
-                    <th>Clinic Name</th>   
-                    <th>Address</th>    
+                    <th>Clinic Name</th>
+                    <th>Address</th>
                     <th>Email and <br /> Phone Number</th>
                 </tr>
-              
+
                 @foreach (var item in Model)
                 {
-                    
-                    <tr id="@item.Name" >
-                        <td><input type="checkbox" name="clinicName" value="@item.Email"><a href="https://massclinic.org/" target="_blank">@item.Name</a></td>
+
+                    <tr id="@item.Name">
+                        <td><input type="checkbox" name="clinicName" value="@item.Email"> <a href="https://massclinic.org/" target="_blank">@item.Name</a></td>
                         <td><label> @item.Address </label></td>
                         <td><label> @item.PhoneNumber <br /> @item.Email </label></td>
                     </tr>
@@ -37,6 +37,7 @@
 
         </div>
     </div>
+    <hr>
 </body>
 
 
