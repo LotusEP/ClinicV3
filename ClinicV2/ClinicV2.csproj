@@ -153,6 +153,8 @@
     <Compile Include="Models\CreateCriteriaModel.cs" />
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\Criteria.cs" />
+    <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\DataViewModel.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Requirement.cs" />
@@ -315,6 +317,9 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_GoogleAntalytics.cshtml" />
     <Content Include="Views\Info\ConfirmationPage.cshtml" />
+    <Content Include="Views\Info\ViewReq.cshtml" />
+    <Content Include="Views\Info\Testview.cshtml" />
+    <Content Include="Views\Info\_Traffic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

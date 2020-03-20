@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Data.SqlClient;
 using ClinicV2.Models;
+using MySql.Data.MySqlClient;
 
 namespace ClinicV2.Controllers
 {
@@ -39,6 +40,7 @@ namespace ClinicV2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Signup(SignupModel newSignee, string [] clinicName)
         {
+            PageRedirct("Submittion");
             String Ref = Request.Headers["Referer"];
 
             //foreach (var mail in clinicT)
@@ -110,6 +112,7 @@ namespace ClinicV2.Controllers
         [HttpGet]
         public ActionResult listofClinic()
         {
+            PageRedirct("Clinic list");
             List<clinicModel> listofClinic = clinicModel.GetClinicList();
 
 
@@ -170,7 +173,7 @@ namespace ClinicV2.Controllers
    
         public ActionResult test()
         {
-            String Ref = Request.Headers["Referer"];
+            PageRedirct("Signup");
 
             SignupModel tModel = new SignupModel();
             tModel.listofClinic = clinicModel.GetClinicList();
@@ -217,7 +220,47 @@ namespace ClinicV2.Controllers
 
         public ActionResult Testview()
         {
-            return View();
+
+            DataViewModel DataInfo = new DataViewModel();
+            DataInfo.TrafficInfo = DataModel.Source();
+           
+            return View(DataInfo);
+        }
+
+
+        public void PageRedirct(string PageName)
+        {
+            String Ref = "Direct";
+
+            Ref = Request.Headers["Referer"];
+
+
+            DateTime localtime = DateTime.Now;
+
+            string Time = localtime.ToString("dd MMMM yyyy hh:mm:ss tt");
+
+            //----------------------------
+            string connString;
+            MySqlConnection cnn;
+            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
+            cnn = new MySqlConnection(connString);
+
+
+            //check for exisitng criteria
+            string sql;
+
+
+            sql =
+           " Insert Into Traffic (TrafficSource,TimeStamp,Page) Values ('" + Ref + "','" + Time + "','" + PageName + "');";
+
+            MySqlCommand cmm = new MySqlCommand(sql, cnn);
+            cnn.Open();
+            cmm.ExecuteNonQuery();
+
+
+
+            //----------------------------
+
         }
 
     }

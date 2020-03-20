@@ -89,7 +89,7 @@ namespace ClinicV2.Models
             else
             {
                 string sql = "Select ClinicCriteriaID, ClinicCriteria.Clinic_Name, ClinicCriteria.Criteria_Name, CriteriaOption.Value From ClinicCriteria " +
-                              "Join CriteriaOption on CriteriaOption.CriteriaOptionID = ClinicCriteria.Criteria_OptionID;";
+                              "Join CriteriaOption on CriteriaOption.CriteriaOptionID = ClinicCriteria.Criteria_OptionID order by Clinic_Name;";
                 //string sql = "Select Clinic.Name, Criteria.CriteriaName,ClinicCriteriaID, CriteriaOption.Value From ClinicCriteria  " +
                 //            "Join Clinic On Clinic.Name = ClinicCriteria.Clinic_Name "+
                 //            "Join Criteria on Criteria.CriteriaName = ClinicCriteria.Criteria_Name "+

@@ -29,11 +29,12 @@
     var Requi = "check";
     var list = [];
     var Clinistodisplay = ["inital"];
+    var Reset = ["inital"];
     var Employeed = "No";
     var ClinisNot = ["inital"];
     list = @Html.Raw(Json.Encode(Model.listofClinic));
     var criteria = ['No','No','No'];
-
+    
     function ListCriteraCheck(Value) {
         //alert('Update');
         
@@ -91,6 +92,7 @@
        // alert(list[1].Req[0].Name);
     }
     function checkorder() {
+        Clinistodisplay = Reset;
         changecounter = 0;
         
         for (var y = 0; y < criteria.length; y++) {    
@@ -160,7 +162,7 @@
 
     }
     function insurancecheck(xas) {
-
+        var NoReq = "No";
         //var xas = 'Input_' + Requi;
 
         //alert('helloFirst');
@@ -177,6 +179,7 @@
             }
             else {
                 var Requirement = Employeed;
+
             }
 
             //alert(Requirement);
@@ -190,6 +193,7 @@
                 //dis = document.getElementById(list[x].Name);
                 //dis.style.display = "none";
                 //go through each clinic requirement
+                NoReq = "No";
                 for (y = 0; y < list[x].Req.length; y++) {
                     var clinicName = list[x].Name;
 
@@ -202,36 +206,25 @@
                         if (Requirement == val) {
                          
                             updatingClinictoDisplay(list[x].Name, "ADD");
+                            NoReq = "Yes";
                             break;
                       
                         }
-                        else {
-
+                        else if (Requirement != val) {
+                           // alert("REmove");
                             updatingClinictoDisplay(list[x].Name, "REMOVE");
+                            NoReq = "Remove";
+                                             
                             //dis = document.getElementById(list[x].Name);
                             //dis.style.display = "none";
                         }
                     }
 
                 }
-
-
-                //reduncy removing
-                //var temp;
-                //if (counter == 0) {
-
-                //    for (q = 0; q < Clinistodisplay.length; q++) {
-                //   // alert(Clinistodisplay[q] + ";" + clinicName);
-
-                //        if (clinicName == Clinistodisplay[q]) {
-
-                //            Clinistodisplay.splice(q ,1);
-                //            q = 0;
-
-                //        }
-
-                //    }
-                //}
+                //alert(NoReq + ":" + list[x].Name);
+                if (NoReq == "No") {
+                    updatingClinictoDisplay(list[x].Name, "ADD");
+                }
 
             }
 
