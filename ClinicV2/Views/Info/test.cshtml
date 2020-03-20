@@ -29,6 +29,7 @@
     var Requi = "check";
     var list = [];
     var Clinistodisplay = ["inital"];
+    var Employeed = "No";
     var ClinisNot = ["inital"];
     list = @Html.Raw(Json.Encode(Model.listofClinic));
     var criteria = ['No','No','No'];
@@ -45,61 +46,46 @@
                     IncomeCheck();
                 break;
             case 2:
-                    criteria[2] = criteriaVar;
+                insurancecheck('Employeed');
                 break;
             default:
         }
 
     }
     function Getnewlist(Question) {
-
-        //if (Question == "Insurance") {
-        //    var Requirement = document.getElementById("Insurancelist");
-
-        //    Requirement.style.display = "";
-
-        //}
-        //else if (Question == "Income") {
-        //    var Requirement = document.getElementById("PatientIncome");
-
-        //    Requirement.style.display = "";
-        //}
-        //else if (Question == "IncomeNo") {
-        //    var Requirement = document.getElementById("PatientIncome");
-
-        //    Requirement.style.display = "None";
-        //}
-
-
         switch (Question) {
 
             case "Insurance":
                 var Requirement = document.getElementById("Insurancelist");
                 Requirement.style.display = "";
-                criteria[0] = "Yes"
+                criteria[0] = "Yes";
                 break;
             case "Income":
                 var Requirement = document.getElementById("PatientIncome");
                 Requirement.style.display = "";
-                criteria[1] = "Yes"
+                criteria[1] = "Yes";
                 break;
             case "InsuranceNo":
                 var Requirement = document.getElementById("Insurancelist");
                 Requirement.style.display = "None";
-                criteria[0] = "No"
+                criteria[0] = "No";
                 break;
             case "IncomeNo":
                 var Requirement = document.getElementById("PatientIncome");
                 Requirement.style.display = "None";
-                criteria[1] = "No"
+                criteria[1] = "No";
+                break;
+            case "Employeed":
+                criteria[2] = "Yes";
+                Employeed = "Yes";
+;                break;
+            case "EmployeedNo": 
+                criteria[2] = "Yes";
+                Employeed = "No";
                 break;
 
-
-
-
         }
-
-
+        checkorder();
 
 
        // alert(list[1].Req[0].Name);
@@ -110,6 +96,7 @@
         for (var y = 0; y < criteria.length; y++) {    
        
             if (criteria[y] == 'Yes') {
+               // alert("check" + y);
                 changecounter++;
     
                 ListCriteraCheck(y);
@@ -139,6 +126,7 @@
 
     }
     function updatingClinictoDisplay(Clinic,Action) {
+
         var checkCounter = 0;
         //alert(Action + ":Upating:" + Clinic)
         for (var clinicNum = 1; clinicNum < Clinistodisplay.length; clinicNum++) {
@@ -188,7 +176,7 @@
 
             }
             else {
-                var Requirement = document.getElementById("Input_" + xas).value;
+                var Requirement = Employeed;
             }
 
             //alert(Requirement);
@@ -257,13 +245,15 @@
 
 
     }
+
+
     function IncomeCheck() {
         //alert("JI");
         var Income = parseInt(document.getElementById('newPatient_Income').value);
         var Household = parseInt(document.getElementById('newPatient_Household').value);
         var Period = document.getElementById('Period').value;
         var Requiredhouse = 0;
-        var val;
+        var val = 0;
         var noMatch = false;
   
       //  alert(Period);
@@ -293,6 +283,7 @@
             //dis = document.getElementById(list[x].Name);
             //dis.style.display = "none";
             var y = 0;
+            val = 0;
            //  alert('pass1:' + x);
             //go through each clinic requirement
 
@@ -318,7 +309,7 @@
                                 Requiredhouse = parseInt(list[z].Req[w].Value);
                             }
                             else {
-                                Requiredhouse =  @Html.Raw(Json.Encode(Model.GuidelineValue));
+                              Requiredhouse =  @Html.Raw(Json.Encode(Model.GuidelineValue));
                             }                              
                             //  alert("Income addition: " + Requiredhouse);
                         }
@@ -332,7 +323,7 @@
                         }
 
                     }                 
-                    if (Income <= val) {
+                    if (Income <= val || val == 0) {
 
                         //alert('Patient Income:' + Income);
                         //alert('the requirement amount:' + val)
@@ -343,12 +334,14 @@
                         //   alert(typeof list[x].Req[y].Value);
                         // alert('pass4:' + Income + ": ClinicReq: " + list[x].Req[y].Value);
                         //alert("add new clinic");
+            
                         updatingClinictoDisplay(list[x].Name,"ADD");
                         //dis = document.getElementById(list[x].Name);
                         //dis.style.display = "";
                     }
+                    
                     else {
-                        alert(list[x].Name);
+                    
                         updatingClinictoDisplay(list[x].Name, "REMOVE");
 
                         //dis = document.getElementById(list[x].Name);
@@ -356,13 +349,17 @@
                     } 
                 }
                 else {
-
+                
                     noMatch = false;
 
                 }
             }
-        }
 
+            if (val == 0) {
+                updatingClinictoDisplay(list[x].Name, "ADD");
+
+            }
+        }
 
     }
     
@@ -386,7 +383,7 @@
         </div>
 
         <div class="col-md-5">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 Do you have an income? <br />
                 <input type="radio" name="Income" value="Yes" onclick="Getnewlist('Income')" checked> Yes<br>
                 <input type="radio" name="Income" value="No" onclick="Getnewlist('IncomeNo')" checked="checked"> No<br>
@@ -415,7 +412,12 @@
               
             </div>
         </div>
-
+        
+        <div class="col-md-4">
+            Are you employeed? <br />
+            <input type="radio" name="Employ" value="Yes" onclick="Getnewlist('Employeed')" checked> Yes<br>
+            <input type="radio" name="Employ" value="No" onclick="Getnewlist('EmployeedNo')" checked="checked"> No<br >
+        </div>
 
     </div>
 
