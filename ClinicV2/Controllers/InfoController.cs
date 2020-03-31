@@ -159,6 +159,7 @@ namespace ClinicV2.Controllers
             NewCriteria.listofCriteria = Criteria.GetReqList("-10");
             NewCriteria.CriteriaOption = Criteria.CriteraiValue();
             NewCriteria.Criteria = new Criteria();
+            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
             return View(NewCriteria);
         }
         [HttpPost]
@@ -215,7 +216,11 @@ namespace ClinicV2.Controllers
 
         public ActionResult CreateReq()
         {
-            return View();
+            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
+            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
+            NewCriteria.Criteria = new Criteria();
+            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
+            return View(NewCriteria);
         }
 
         public ActionResult Testview()

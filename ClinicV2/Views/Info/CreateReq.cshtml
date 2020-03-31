@@ -1,4 +1,4 @@
-﻿@model ClinicV2.Models.Criteria
+﻿@model ClinicV2.Models.CreateCriteriaModel
 
 @{
     ViewBag.Title = "CreateReq";
@@ -8,10 +8,10 @@
 <h2>CreateReq</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Criteria</h4>
         <hr />
@@ -19,18 +19,16 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            <div class="col-md-12">
+                Criteria @Html.DropDownListFor(model => model.Criteria.Name, new SelectList(Model.CriteriaOption), "Select Criteria", new { @class = "from-control ", @onchange = "test()" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Criteria.Value, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Criteria.Value, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Criteria.Value, "", new { @class = "text-danger" })
             </div>
         </div>
 

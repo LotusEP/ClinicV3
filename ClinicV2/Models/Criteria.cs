@@ -431,11 +431,39 @@ namespace ClinicV2.Models
 
         }
 
-        public static List<string> GetCriteria()
+        public static List<Criteria> GetCriteriaValue()
         {
             string[,] list = new string[,] { };
-            List<string> ls = new List<string>();
+            List<Criteria> ls = new List<Criteria>();
 
+
+            string connString;
+            MySqlDataReader rdr = null;
+            MySqlConnection cnn;
+            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
+            cnn = new MySqlConnection(connString);
+
+
+
+            string sql;
+            sql = "Select * from CriteriaOption;";
+            MySqlCommand cmd = new MySqlCommand(sql, cnn);
+            cnn.Open();
+            rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                ls.Add(new Criteria
+                {
+                    CriteriaID = Convert.ToInt32(rdr.GetValue(0).ToString()),
+                    Name = rdr.GetValue(1).ToString(),
+                    Value = rdr.GetValue(2).ToString()
+
+
+
+            }
+                );
+            }
+            cnn.Close();
 
 
 
