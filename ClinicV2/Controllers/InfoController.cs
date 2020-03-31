@@ -233,8 +233,7 @@ namespace ClinicV2.Controllers
             String Ref = "Direct";
 
             Ref = Request.Headers["Referer"];
-
-
+          
             DateTime localtime = DateTime.Now;
 
             string Time = localtime.ToString("dd MMMM yyyy hh:mm:ss tt");

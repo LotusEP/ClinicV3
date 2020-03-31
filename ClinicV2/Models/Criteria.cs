@@ -86,6 +86,7 @@ namespace ClinicV2.Models
 
 
             }
+         
             else
             {
                 string sql = "Select ClinicCriteriaID, ClinicCriteria.Clinic_Name, ClinicCriteria.Criteria_Name, CriteriaOption.Value From ClinicCriteria " +
@@ -428,6 +429,18 @@ namespace ClinicV2.Models
 
             return ls;
 
+        }
+
+        public static List<string> GetCriteria()
+        {
+            string[,] list = new string[,] { };
+            List<string> ls = new List<string>();
+
+
+
+
+
+            return ls;
         }
         public static List<string> GetSpecificCriteira(string specValueNeed)
         {
