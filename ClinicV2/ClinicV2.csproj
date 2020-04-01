@@ -321,6 +321,7 @@
     <Content Include="Views\Info\Testview.cshtml" />
     <Content Include="Views\Info\_Traffic.cshtml" />
     <Content Include="Views\Shared\_layout2.cshtml" />
+    <Content Include="Views\Info\AboutPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

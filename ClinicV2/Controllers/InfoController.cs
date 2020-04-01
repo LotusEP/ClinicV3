@@ -127,8 +127,12 @@ namespace ClinicV2.Controllers
             return RedirectToAction("listofCLinic");
 
         }
-                      
-   
+
+        public ActionResult AboutPage()
+        {
+
+            return View();
+        }
       
 
         [HttpGet]
