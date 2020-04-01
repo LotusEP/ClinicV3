@@ -165,11 +165,16 @@ namespace ClinicV2.Controllers
         [HttpPost]
         public ActionResult ViewReq(CreateCriteriaModel req)
         {
-
  
-            ViewBag.ExistMess = Criteria.AddCriteria(req.Criteria);
-            
-            return RedirectToAction("ViewReq");
+            ViewBag.ExistMess = Criteria.AddCriteria(req.Criteria,"ClinicCriteria");
+            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
+            NewCriteria.listofClinic = clinicModel.GetClinicList();
+            NewCriteria.listofCriteria = Criteria.GetReqList("-10");
+            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
+            NewCriteria.Criteria = new Criteria();
+            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
+            return View(NewCriteria);
+
         }
    
         public ActionResult test()
@@ -186,34 +191,43 @@ namespace ClinicV2.Controllers
 
             return View(tModel);
         }
-        [HttpGet]
-        public ActionResult EditCriteria(int id)
-        {
+        //[HttpGet]
+        //public ActionResult EditCriteria(int id)
+        //{
 
-            Criteria criteria = new Criteria();
-            criteria = Criteria.GetCriteria(id);
+        //    Criteria criteria = new Criteria();
+        //    criteria = Criteria.GetCriteria(id);
             
 
-            return View(criteria);
-        }
-        [HttpPost]
-        public ActionResult EditCriteria(Criteria req)
-        {
+        //    return View(criteria);
+        //}
+        //[HttpPost]
+        //public ActionResult EditCriteria(Criteria req)
+        //{
 
-            Criteria.AddCriteria(req);
+        //    Criteria.AddCriteria(req);
 
-            return RedirectToAction("ViewReq");
-        }
+        //    return RedirectToAction("ViewReq");
+        //}
         [HttpGet]
         public ActionResult DeleteCriteria(int id)
         {
-            Criteria req = new Criteria();
-            req = Criteria.GetCriteria(id);
-            Criteria.DeleteCriteria(req);
+   
+            Criteria.DeleteCriteria(id,"ClinicCriteria");
 
             return RedirectToAction("ViewReq");
         }
 
+        [HttpGet]
+        public ActionResult DeleteCriteriaComplete(int id)
+        {
+          
+            Criteria.DeleteCriteriaComplete(id);
+
+            return RedirectToAction("ViewReq");
+        }
+
+        [HttpGet]
         public ActionResult CreateReq()
         {
             CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
@@ -222,7 +236,16 @@ namespace ClinicV2.Controllers
             NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
             return View(NewCriteria);
         }
-
+        [HttpPost]
+        public ActionResult CreateReq(CreateCriteriaModel req)
+        {
+            ViewBag.ExistMess = Criteria.AddCriteria(req.Criteria, "CriteriaOption");
+            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
+            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
+            NewCriteria.Criteria = new Criteria();
+            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
+            return View(NewCriteria);
+        }
         public ActionResult Testview()
         {
 
@@ -266,6 +289,20 @@ namespace ClinicV2.Controllers
             //----------------------------
 
         }
+
+
+        public ActionResult AdminOptions()
+        {
+            ViewBag.Message = "Admin Options page.";
+            return View();
+        }
+
+        public ActionResult Logout()
+        {
+            ViewBag.Message = "Logout";
+            return RedirectToAction("Index", "Info");
+        }
+
 
     }
 }
