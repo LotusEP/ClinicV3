@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "listofClinic";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 
 <h2>listofClinic</h2>
@@ -48,9 +48,11 @@
             @Html.DisplayFor(modelItem => item.AddrName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @* @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+        @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+        @Html.ActionLink("Delete", "Delete", new { id=item.ID })*@
+
+            @Html.ActionLink("Delete", "DeleteClinic", new { name = item.Name})
         </td>
     </tr>
 }

@@ -1,0 +1,81 @@
+﻿@model ClinicV2.Models.CreateCriteriaModel
+@{
+    ViewBag.Title = "CreateReq";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<h2>CreateReq</h2>
+<script>
+
+    var q = @Html.Raw(Json.Encode(Model.listofCriteriaValue));
+
+ 
+
+    function test() {
+
+
+
+        var Criteria = document.getElementById("Criteria_Name").value;
+        var Criterialist = document.getElementById("Criteria_Value");
+        while (Criterialist.length > 1) {
+            Criterialist.remove(Criterialist.length - 1);
+        }
+
+        for (var counter = 0; counter < q.length; counter++) {
+            if (q[counter].Name == Criteria) {
+                var option = document.createElement("option");
+                var stringOp = q[counter].Value;
+                 option.text = stringOp;
+                Criterialist.add(option);
+            }
+
+            //alert(q[counter].Name);
+        }
+    }
+
+</script>
+
+<body onload="test()">
+    <h3 style="color:green">
+        @ViewBag.ExistMess
+    </h3>
+    <div>
+        @using (Html.BeginForm("ViewReq", "Info", FormMethod.Post))
+        {
+
+
+            <div class="col-md-12" id="DropCriteriaName">
+                Clinic
+                <div>
+                    @Html.DropDownListFor(model => model.Criteria.clinicName, new SelectList(Model.listofClinic, "Name", "Name"))
+                </div>
+                <div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-12">
+                Criteria @Html.DropDownListFor(model => model.Criteria.Name, new SelectList(Model.CriteriaOption), "Select Criteria", new { @class = "from-control ", @onchange = "test()" })
+            </div>
+            <div class="col-md-12">
+                Value  @*@Html.EditorFor(model => model.Criteria.Value, new { htmlAttributes = new { @class = "form-control" } })*@
+
+                @Html.DropDownListFor(model => model.Criteria.Value, new List<SelectListItem>
+                   {
+
+                   }, "Select Criteria", new { @class = "from-control " })
+            </div>
+
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        }
+    </div>
+    <div>
+        @Html.Partial("_GetRequirement", Model.listofCriteria)
+    </div>
+
+
+</body>

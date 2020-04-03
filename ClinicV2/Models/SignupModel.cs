@@ -10,8 +10,9 @@ namespace ClinicV2.Models
     {
         public List<clinicModel> listofClinic { get; set; }
         public Patient newPatient { get; set; }
+        public List<Criteria> listofCriteria { get; set; }
+        public List<String> listofInsurance { get; set; }
+        public int GuidelineValue { get; set; }
 
-
-       
     }
 }

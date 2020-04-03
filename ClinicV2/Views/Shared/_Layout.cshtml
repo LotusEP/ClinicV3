@@ -6,6 +6,8 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    @Html.Partial("_GoogleAntalytics");
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -23,13 +25,12 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Info")</li>
                     <li>@Html.ActionLink("Signup", "test", "Info")</li>
-                    <li>@Html.ActionLink("Requirement", "CreateReq", "Info")</li>
-                    <li>@Html.ActionLink("Clinic", "listofClinic", "Info")</li>
+                    <li>@Html.ActionLink("About", "AboutPage", "Info")</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container">
         @RenderBody()
         <hr />
         <footer>
