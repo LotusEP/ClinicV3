@@ -34,10 +34,10 @@
     var ClinisNot = ["inital"];
     list = @Html.Raw(Json.Encode(Model.listofClinic));
     var criteria = ['No','No','No'];
-    
+
     function ListCriteraCheck(Value) {
         //alert('Update');
-        
+
         switch (Value) {
 
             case 0:
@@ -80,7 +80,7 @@
                 criteria[2] = "Yes";
                 Employeed = "Yes";
 ;                break;
-            case "EmployeedNo": 
+            case "EmployeedNo":
                 criteria[2] = "Yes";
                 Employeed = "No";
                 break;
@@ -94,32 +94,32 @@
     function checkorder() {
         Clinistodisplay = Reset;
         changecounter = 0;
-        
-        for (var y = 0; y < criteria.length; y++) {    
-       
+
+        for (var y = 0; y < criteria.length; y++) {
+
             if (criteria[y] == 'Yes') {
                // alert("check" + y);
                 changecounter++;
-    
+
                 ListCriteraCheck(y);
             }
 
         }
 
         displayclinic();
-        
+
     }
     function displayclinic() {
 
         var displayClin = null;
         for (var dis = 0; dis < list.length; dis++) {
-    
+
             displayClin = document.getElementById(list[dis].Name);
             displayClin.style.display = "None";
 
         }
         for (var dis = 1; dis < Clinistodisplay.length; dis++) {
-     
+
             displayClin = document.getElementById(Clinistodisplay[dis]);
             displayClin.style.display = "";
 
@@ -132,32 +132,32 @@
         var checkCounter = 0;
         //alert(Action + ":Upating:" + Clinic)
         for (var clinicNum = 1; clinicNum < Clinistodisplay.length; clinicNum++) {
-      
+
             if (Clinic == Clinistodisplay[clinicNum]) {
                 checkCounter = clinicNum;
-            }      
+            }
         }
 
 
         if (changecounter > 1 && checkCounter == 0)
         {
-    
+
         }
         else if (Action == "ADD") {
-            
+
             if (checkCounter == 0) {
 
                 Clinistodisplay.push(Clinic);
             }
         }
-        
+
         else if (Action == "REMOVE" ) {
 
             if (checkCounter > 0)
             {
                 Clinistodisplay.splice(checkCounter, 1);
             }
-         
+
         }
 
     }
@@ -204,17 +204,17 @@
                         var val = list[x].Req[y].Value;
 
                         if (Requirement == val) {
-                         
+
                             updatingClinictoDisplay(list[x].Name, "ADD");
                             NoReq = "Yes";
                             break;
-                      
+
                         }
                         else if (Requirement != val) {
                            // alert("REmove");
                             updatingClinictoDisplay(list[x].Name, "REMOVE");
                             NoReq = "Remove";
-                                             
+
                             //dis = document.getElementById(list[x].Name);
                             //dis.style.display = "none";
                         }
@@ -248,7 +248,7 @@
         var Requiredhouse = 0;
         var val = 0;
         var noMatch = false;
-  
+
       //  alert(Period);
         switch(Period)
         {
@@ -292,7 +292,7 @@
                     // alert(Income);
                     var z, w = 0;
                     //get the addition income per household value
-       
+
                     for (z = 0; z < list.length; z++) {
 
                         for (w = 0; w < list[z].Req.length; w++) {
@@ -303,11 +303,11 @@
                             }
                             else {
                               Requiredhouse =  @Html.Raw(Json.Encode(Model.GuidelineValue));
-                            }                              
+                            }
                             //  alert("Income addition: " + Requiredhouse);
                         }
                     }
-       
+
                     //increase the total income value
                     if (Household > 1) {
                         for (var housesize = 1; housesize < Household; housesize++)
@@ -315,7 +315,7 @@
                             val = val + Requiredhouse;
                         }
 
-                    }                 
+                    }
                     if (Income <= val || val == 0) {
 
                         //alert('Patient Income:' + Income);
@@ -327,22 +327,22 @@
                         //   alert(typeof list[x].Req[y].Value);
                         // alert('pass4:' + Income + ": ClinicReq: " + list[x].Req[y].Value);
                         //alert("add new clinic");
-            
+
                         updatingClinictoDisplay(list[x].Name,"ADD");
                         //dis = document.getElementById(list[x].Name);
                         //dis.style.display = "";
                     }
-                    
+
                     else {
-                    
+
                         updatingClinictoDisplay(list[x].Name, "REMOVE");
 
                         //dis = document.getElementById(list[x].Name);
                         //dis.style.display = "none";
-                    } 
+                    }
                 }
                 else {
-                
+
                     noMatch = false;
 
                 }
@@ -355,7 +355,7 @@
         }
 
     }
-    
+
 </script>
 
 @using (Html.BeginForm("Signup", "Info", FormMethod.Post))
@@ -371,7 +371,7 @@
             <div class="col-md-10" id="Insurancelist" style="display:none">
                 <label class="control-label"> Insurance</label>
                 @*@Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })*@
-                  @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
+                @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
             </div>
         </div>
 
@@ -382,10 +382,10 @@
                 <input type="radio" name="Income" value="No" onclick="Getnewlist('IncomeNo')" checked="checked"> No<br>
 
 
-                
+
                 <div id="PatientIncome" style="display:none">
                     <hr />
-                Paid Period:
+                    Paid Period:
                     <select id="Period" class=" form-control col-md-3" onchange="checkorder()">
                         <option value="Weekly">Weekly</option>
                         <option value="BikWeekly">Yearly</option>
@@ -393,29 +393,29 @@
                         <option value="Yearly">Yearly</option>
                     </select>
 
-            
-                Household size:
-                @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control", @onchange = "checkorder()" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
-      
-                Income:
-                @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "checkorder()" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
+
+                    Household size:
+                    @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control", @onchange = "checkorder()" } })
+                    @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
+
+                    Income:
+                    @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00", @onchange = "checkorder()" } })
+                    @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
                 </div>
-              
+
             </div>
         </div>
-        
+
         <div class="col-md-4">
             Are you employeed? <br />
             <input type="radio" name="Employ" value="Yes" onclick="Getnewlist('Employeed')" checked> Yes<br>
-            <input type="radio" name="Employ" value="No" onclick="Getnewlist('EmployeedNo')" checked="checked"> No<br >
+            <input type="radio" name="Employ" value="No" onclick="Getnewlist('EmployeedNo')" checked="checked"> No<br>
         </div>
 
     </div>
 
 
-   
+
 
     <div class="col-md-12  ">
         <div>
@@ -423,16 +423,162 @@
 
         </div>
     </div>
+    <div id="map">
+
+    </div>
+    <div class="col-md-12" >
+        <script src="~/Scripts/CustScript/MapScript.js"></script>
+        <script >
+            var map;
+            var markers = [];
+            var markersCoord = [];
+            var Patientcounter = false;
+            var PatientCoord = [];
+            var markersToShow = [];
+            function initMap() {
+                var option = {
+                    zoom: 10,
+                    center: { lat: 30.3322, lng: -81.6557 }
+                }
+                var geocoder = new google.maps.Geocoder();
+               map = new google.maps.Map(document.getElementById('map'), option);
+                var address = '355 monument Rd Apt 15F Jacksonville FL 32225';
+                //var customMarker;
+                //geocoder.geocode({'address': address }, function (results, status) {
+                //    if (status == google.maps.GeocoderStatus.OK) {
+                //        map.setCenter(results[0].geometry.location);
+                //        if (customerMarker) customerMarker.setMap(null);
+                //        customerMarker = new google.maps.Marker({
+                //            map: map,
+                //            position: results[0].geometry.location
+                //        });
+                //        closest = findClosestN(results[0].geometry.location, 10);
+                //        // get driving distance
+                //        closest = closest.splice(0, 3);
+                //        calculateDistances(results[0].geometry.location, closest, 3);
+                //    } else {
+                //        alert('Geocode was not successful for the following reason: ' + status);
+                //    }
+                //});
+                var addLookUp = document.getElementById('newPatient_Zip');
+
+                map.addListener('onchange')
+                
+                
+            }
+            function AddMarker(coord) {
+                //alert('addmakrer');
+                temp = coord;
+
+                var id = coord.coord.lat;
+                var tem = coord.coord.lng;
+
+                if (Patientcounter == true) {
+                    var tempArray = [];
+                    PatientCoord = tempArray;
+                    PatientCoord.push(id);
+                    PatientCoord.push(tem);
+                }
+                var marker = new google.maps.Marker({
+                    id: id,
+                    position: coord.coord,
+                    map: map,
+                    icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+                });
+                var exist = false;
+                if (markers.length == 0) {
+                    exist = false;
+                }
+                else {
+                    for (var counter = 0; counter < marker.length; counter++) {
+                        if (markers[counter].id == coord.coord.lat) {
+                            exist = true;
+                        }
+
+                    }
+                }
+          
+
+                if (exist == false) {
+                    markers.push(marker);
+                    var coor = [coord.coord.lat, coord.coord.lng];
+                    markersCoord.push(coor);
+                }
+             
+
+            }
+            function RemoveMarker(coord) {
+                marker = coord
+                for (var i = 0; i < markers.length; i++) {
+                    if (markers[i].id == marker.coord.lat) {
+                        markers[i].setMap(null);
+                    }
+                }
+      
+            }
 
 
+            function patientClinic(val1, val2) {
+                Patientcounter = true;
+                geocode(val1, val2);
+                Patientcounter = false;
+                showClosetClinic();
+
+            }
+
+            function showClosetClinic() {
+                var difDistance;
+                //alert("1");
+                for (var i = 0; i < markers.length; i++) {
+                    var remove = false;
+                    //alert("hi");
+
+                    markersToShow.length
+                    //if (markerstoshow.length < 6 || markersToShow.length == 0) {
+                    //    alert("base 6");
+                    //    difdistance = distance(patientcoord[0], patientcoord[1], markerscoord[i][0], markerscoord[i][1]);
+                    //    markerstoshow.push([marker[i].id, difdistance]);
+                    //}
+                    //else if (markerstoshow.length > 5) {
+                    //    alert("base 7");
+                    //    difdistance = distance(patientcoord[0], patientcoord[1], markerscoord[i][0], markerscoord[i][1]);
+                    //    for (var counteri = 0; counteri < markerstoshow.length; counteri++) {
+                    //        if (markerstoshow[counteri][1] > difdistance) {
+                    //            markerstoshow[counteri][0] = markers[i].id;
+                    //            markerstoshow[counteri][1] = difdistance;
+                    //        }
+                    //    }
+                        
+                    //}
+                }
+
+            }
+            function testy() {
+             
+               
+                if (document.getElementById('Volunteers in Medicine').checked == true) {
+                    alert('hi');
+                }
+                else {
+                    alert('goodbye');
+                }
+            }
+
+
+            
+        </script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmfeWr8pGc9LSDA5BCgCfvj0i3pqoE_cA&callback=initMap"
+                async defer></script>
+    </div>
 
     <div class="row">
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="col-md-5 ">
+        <div class="col-md-10 ">
             @*@Html.LabelFor(model => model.newPatient.FName, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <label class="control-label"> First Name</label>
                 @Html.EditorFor(model => model.newPatient.FirstName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.newPatient.FirstName, "", new { @class = "text-danger" })
@@ -447,7 +593,7 @@
 
 
 
-            <div class="col-md-10">
+            <div class="col-md-5">
                 @Html.LabelFor(model => model.newPatient.Street, htmlAttributes: new { @class = "control-label " })
                 @Html.EditorFor(model => model.newPatient.Street, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.newPatient.Street, "", new { @class = "text-danger" })
@@ -461,12 +607,12 @@
 
             <div class="col-md-2">
                 @Html.LabelFor(model => model.newPatient.Zip, htmlAttributes: new { @class = "control-label " })
-                @Html.EditorFor(model => model.newPatient.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.newPatient.Zip, new { htmlAttributes = new { @class = "form-control", @onchange = "patientClinic('Empty','Empty')" } })
                 @Html.ValidationMessageFor(model => model.newPatient.Zip, "", new { @class = "text-danger" })
             </div>
 
 
-            <div class="col-md-8">
+            <div class="col-md-5">
                 @Html.LabelFor(model => model.newPatient.State, htmlAttributes: new { @class = "control-label" })
                 <br />
                 @Html.DropDownListFor(model => model.newPatient.State, new List<SelectListItem> {
@@ -545,7 +691,7 @@
 
 
 
-          
+
 
 
             @foreach (var item in Model.listofCriteria)

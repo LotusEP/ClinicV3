@@ -4,11 +4,21 @@
     ViewBag.Title = "GetRequirement";
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css">
 }
+    <head>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <style>
+        #map {
+        height:400px;
+        width:100%;
+        }
 
+    </style>
 
 
 
 <body>
+    <script src="~/Scripts/CustScript/MapScript.js"></script>
     <hr>
     <div>
         @*<input type="checkbox" id="18+" onclick="Getnewlist()">Age <br />
@@ -21,16 +31,20 @@
 
                     <th>Clinic Name</th>
                     <th>Address</th>
-                    <th>Email and <br /> Phone Number</th>
+                    <th>Website</th>
+                    <th>Phonenumber</th>
+                    <th>Distance</th>
                 </tr>
 
                 @foreach (var item in Model)
                 {
 
                     <tr id="@item.Name">
-                        <td><input type="checkbox" name="clinicName" value="@item.Email"> <a href="https://massclinic.org/" target="_blank">@item.Name</a></td>
+                        <td><input type="checkbox" name="clinicName" id="ID_@item.Name" value="@item.Email" onclick="geocode('@item.Address','ID_@item.Name')"> @item.Name</td>
                         <td><label> @item.Address </label></td>
-                        <td><label> @item.PhoneNumber <br /> @item.Email </label></td>
+                        <td><a href="http://@item.Email" target="_blank">@item.Email</a></td>
+                        <td><label> @item.PhoneNumber </label></td>
+                        <td id="Distance_@item.Name"></td>
                     </tr>
                 }
             </table>
@@ -38,6 +52,8 @@
         </div>
     </div>
     <hr>
+
+
 </body>
 
 
