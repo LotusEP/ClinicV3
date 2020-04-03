@@ -112,15 +112,27 @@
     function displayclinic() {
 
         var displayClin = null;
+
         for (var dis = 0; dis < list.length; dis++) {
 
             displayClin = document.getElementById(list[dis].Name);
+            var uncheckCounter = true;
+            for (var q = 0; q < Clinistodisplay.length; q++) {
+                if (list[dis].Name == Clinistodisplay[q]) {
+                    uncheckCounter = false;
+                }
+            }
+            if (uncheckCounter == true) {
+                var Uncheck = document.getElementById("ID_" + list[dis].Name);
+                Uncheck.checked = false;
+            }
             displayClin.style.display = "None";
 
         }
         for (var dis = 1; dis < Clinistodisplay.length; dis++) {
 
             displayClin = document.getElementById(Clinistodisplay[dis]);
+            
             displayClin.style.display = "";
 
         }
