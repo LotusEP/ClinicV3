@@ -1,56 +1,94 @@
-﻿@model ClinicV2.Models.Criteria
+﻿@model ClinicV2.Models.CreateCriteriaModel
 
 @{
     ViewBag.Title = "CreateReq";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 
 <h2>CreateReq</h2>
 
+<body>
+    @ViewBag.ExistMess
+    @using (Html.BeginForm("CreateReq", "Info", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Criteria</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.clinicName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.clinicName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.clinicName, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <h4>Criteria</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    Criteria
+                    <div >
+                        @Html.DropDownListFor(model => model.Criteria.Name, new SelectList(Model.CriteriaOption), "Select Criteria", new { @class = "from-control " })
+                    </div>
+                    <div >
+                        @Html.EditorFor(model => model.Criteria.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                   
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Criteria.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Criteria.Value, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Criteria.Value, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    }
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <div>
+        <table class="table" id="clinicReqTable">
+            <tr>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
+                <th>
+                    Criteria Name
+                </th>
+                <th>
+                    Criteria Value
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.listofCriteriaValue)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "DeleteCriteriaComplete", new { id = item.CriteriaID })
+                    </td>
+                </tr>
+            }
+
+        </table>
+
     </div>
-}
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+
+</body>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

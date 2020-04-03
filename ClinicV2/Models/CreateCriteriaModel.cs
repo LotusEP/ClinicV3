@@ -12,7 +12,7 @@ namespace ClinicV2.Models
         public List<Criteria> listofCriteria { get; set; }
         public List<string> CriteriaOption { get; set; }
         public Criteria Criteria { get; set; }
-
+        public List<Criteria> listofCriteriaValue { get; set; }
 
         
 

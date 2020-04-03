@@ -65,12 +65,7 @@ namespace ClinicV2.Controllers
             }
 
             
-            public ActionResult AdminOptions()
-            {
-                ViewBag.Message = "Admin Options page.";
-                return View();
-            }
-
+        
             public ActionResult AdminLogin()
             {
                
@@ -80,12 +75,6 @@ namespace ClinicV2.Controllers
             return View(); 
 
             }
-
-        public ActionResult Logout()
-        {
-            ViewBag.Message = "Logout";
-            return RedirectToAction("Index","Info");
-        }
 
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         //    public IActionResult Error()

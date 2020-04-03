@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,15 +11,22 @@ namespace ClinicV2.Models
 {
     public class clinicModel
     {
+        public int ClinicID { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Email { get; set; }
-
+        [Required]
         public string PhoneNumber { get; set; }
-
+        [Required]
         public string Street { get; set; }
+        [Required]
         public string City { get; set; }
+        [Required]
         public string zip { get; set; }
+        [Required]
         public string state { get; set; }
+        [Required]
         public string Address { get; set; }
 
         //public int Age { get; set; }
@@ -60,12 +68,13 @@ namespace ClinicV2.Models
             {
                 listofClinic.Add(new clinicModel
                 {
-                    Name = rdr.GetValue(0).ToString(),
+                    ClinicID = Int32.Parse(rdr.GetValue(0).ToString()),
+                    Name = rdr.GetValue(1).ToString(),
                    
-                    Email = rdr.GetValue(1).ToString(),
-                    PhoneNumber = rdr.GetValue(2).ToString(),
-                    Address = rdr.GetValue(3).ToString() + rdr.GetValue(4).ToString() + rdr.GetValue(5).ToString() + rdr.GetValue(6).ToString(),
-                    AddrName = rdr.GetValue(7).ToString(),
+                    Email = rdr.GetValue(2).ToString(),
+                    PhoneNumber = rdr.GetValue(3).ToString(),
+                    Address = rdr.GetValue(4).ToString() + rdr.GetValue(5).ToString() + rdr.GetValue(6).ToString() + rdr.GetValue(7).ToString(),
+                    AddrName = rdr.GetValue(8).ToString(),
                     Req = new List<Criteria>()
 
 
@@ -76,7 +85,7 @@ namespace ClinicV2.Models
 
             foreach (clinicModel CMD in listofClinic)
             {
-                CMD.Req = Criteria.GetReqList(CMD.Name);
+                CMD.Req = Criteria.GetReqList(CMD.ClinicID.ToString());
             }
 
 
@@ -129,18 +138,33 @@ namespace ClinicV2.Models
 
             MySqlCommand comm;
 
-            string sql;
+            string sql ="Empty";
             //sql= "IF EXISTS(SELECT * FROM Req WHERE ReqName="+req.Name+") Update Req"
             //sql = "Insert Into Req Values(@Aug1,@Aug2,@State,@ReqName)";
-            sql = "Insert Into Clinic (Name,Email,PhoneNumber,Street,City,State,Zip,NameAbbrev) Values('"+
+            if (newClinic.AddrName != null)
+            {
+                sql = "Insert Into Clinic (Name,Email,PhoneNumber,Street,City,State,Zip,NameAbbrev) Values('" +
                 newClinic.Name.ToString() +
                 "','" + newClinic.Email.ToString() +
                 "','" + newClinic.PhoneNumber.ToString() +
                 "','" + newClinic.Street.ToString() +
                 "','" + newClinic.City.ToString() +
                 "','" + newClinic.state.ToString() +
-                "','" + Int32.Parse(newClinic.zip) +      
+                "','" + Int32.Parse(newClinic.zip) +
                 "','" + newClinic.AddrName.ToString() + "')";
+            }
+            else
+            {
+                sql = "Insert Into Clinic (Name,Email,PhoneNumber,Street,City,State,Zip) Values('" +
+                newClinic.Name.ToString() +
+                "','" + newClinic.Email.ToString() +
+                "','" + newClinic.PhoneNumber.ToString() +
+                "','" + newClinic.Street.ToString() +
+                "','" + newClinic.City.ToString() +
+                "','" + newClinic.state.ToString() +
+                "','" + Int32.Parse(newClinic.zip) + "')";
+            }
+           
             comm = new MySqlCommand(sql, cnn);
 
             MySqlCommand cmm = new MySqlCommand(sql, cnn);

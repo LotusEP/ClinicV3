@@ -20,19 +20,354 @@
     }
 </style>
 
+<script>
+
+    var referrer = document.referrer;
+
+    var changecounter = 0;
+    //document.getElementById("listofInsurance").addEventListener("click", Getnewlist);
+    var Requi = "check";
+    var list = [];
+    var Clinistodisplay = ["inital"];
+    var Reset = ["inital"];
+    var Employeed = "No";
+    var ClinisNot = ["inital"];
+    list = @Html.Raw(Json.Encode(Model.listofClinic));
+    var criteria = ['No','No','No'];
+    
+    function ListCriteraCheck(Value) {
+        //alert('Update');
+        
+        switch (Value) {
+
+            case 0:
+                    insurancecheck('Insurance');
+                break;
+            case 1:
+                    IncomeCheck();
+                break;
+            case 2:
+                insurancecheck('Employeed');
+                break;
+            default:
+        }
+
+    }
+    function Getnewlist(Question) {
+        switch (Question) {
+
+            case "Insurance":
+                var Requirement = document.getElementById("Insurancelist");
+                Requirement.style.display = "";
+                criteria[0] = "Yes";
+                break;
+            case "Income":
+                var Requirement = document.getElementById("PatientIncome");
+                Requirement.style.display = "";
+                criteria[1] = "Yes";
+                break;
+            case "InsuranceNo":
+                var Requirement = document.getElementById("Insurancelist");
+                Requirement.style.display = "None";
+                criteria[0] = "No";
+                break;
+            case "IncomeNo":
+                var Requirement = document.getElementById("PatientIncome");
+                Requirement.style.display = "None";
+                criteria[1] = "No";
+                break;
+            case "Employeed":
+                criteria[2] = "Yes";
+                Employeed = "Yes";
+;                break;
+            case "EmployeedNo": 
+                criteria[2] = "Yes";
+                Employeed = "No";
+                break;
+
+        }
+        checkorder();
+
+
+       // alert(list[1].Req[0].Name);
+    }
+    function checkorder() {
+        Clinistodisplay = Reset;
+        changecounter = 0;
+        
+        for (var y = 0; y < criteria.length; y++) {    
+       
+            if (criteria[y] == 'Yes') {
+               // alert("check" + y);
+                changecounter++;
+    
+                ListCriteraCheck(y);
+            }
+
+        }
+
+        displayclinic();
+        
+    }
+    function displayclinic() {
+
+        var displayClin = null;
+        for (var dis = 0; dis < list.length; dis++) {
+    
+            displayClin = document.getElementById(list[dis].Name);
+            displayClin.style.display = "None";
+
+        }
+        for (var dis = 1; dis < Clinistodisplay.length; dis++) {
+     
+            displayClin = document.getElementById(Clinistodisplay[dis]);
+            displayClin.style.display = "";
+
+        }
+
+
+    }
+    function updatingClinictoDisplay(Clinic,Action) {
+
+        var checkCounter = 0;
+        //alert(Action + ":Upating:" + Clinic)
+        for (var clinicNum = 1; clinicNum < Clinistodisplay.length; clinicNum++) {
+      
+            if (Clinic == Clinistodisplay[clinicNum]) {
+                checkCounter = clinicNum;
+            }      
+        }
+
+
+        if (changecounter > 1 && checkCounter == 0)
+        {
+    
+        }
+        else if (Action == "ADD") {
+            
+            if (checkCounter == 0) {
+
+                Clinistodisplay.push(Clinic);
+            }
+        }
+        
+        else if (Action == "REMOVE" ) {
+
+            if (checkCounter > 0)
+            {
+                Clinistodisplay.splice(checkCounter, 1);
+            }
+         
+        }
+
+    }
+    function insurancecheck(xas) {
+        var NoReq = "No";
+        //var xas = 'Input_' + Requi;
+
+        //alert('helloFirst');
+        //alert(xas);
+        if (xas == "Income") {
+           // alert('hellsFrst');
+            displayClinic()
+        }
+        else {
+            if (xas == "Insurance") {
+
+                var Requirement = document.getElementById("listofInsurance").value;
+
+            }
+            else {
+                var Requirement = Employeed;
+
+            }
+
+            //alert(Requirement);
+            var dis = null;
+            var x = 0;
+
+            //go through the clinics
+            for (x = 0; x < list.length; x++) {
+                var counter = 0;
+                var y = 0;
+                //dis = document.getElementById(list[x].Name);
+                //dis.style.display = "none";
+                //go through each clinic requirement
+                NoReq = "No";
+                for (y = 0; y < list[x].Req.length; y++) {
+                    var clinicName = list[x].Name;
+
+                    //check if the requirement match
+                    if (list[x].Req[y].Name == xas) {
+                        //alert("Yes1");
+                        // is so check the value
+                        var val = list[x].Req[y].Value;
+
+                        if (Requirement == val) {
+                         
+                            updatingClinictoDisplay(list[x].Name, "ADD");
+                            NoReq = "Yes";
+                            break;
+                      
+                        }
+                        else if (Requirement != val) {
+                           // alert("REmove");
+                            updatingClinictoDisplay(list[x].Name, "REMOVE");
+                            NoReq = "Remove";
+                                             
+                            //dis = document.getElementById(list[x].Name);
+                            //dis.style.display = "none";
+                        }
+                    }
+
+                }
+                //alert(NoReq + ":" + list[x].Name);
+                if (NoReq == "No") {
+                    updatingClinictoDisplay(list[x].Name, "ADD");
+                }
+
+            }
+
+        }
+        //reduncy removing
+            // for (x = 1; x < Clinistodisplay.length; x++)
+            // {
+            //     dis = document.getElementById(Clinistodisplay[x]);
+            //     dis.style.display = "";
+            //}
+
+
+    }
+
+
+    function IncomeCheck() {
+        //alert("JI");
+        var Income = parseInt(document.getElementById('newPatient_Income').value);
+        var Household = parseInt(document.getElementById('newPatient_Household').value);
+        var Period = document.getElementById('Period').value;
+        var Requiredhouse = 0;
+        var val = 0;
+        var noMatch = false;
+  
+      //  alert(Period);
+        switch(Period)
+        {
+            case "Weekly":
+            Income = Income * 4;
+            break;
+            case "Biweekly":
+                Income = Income * 2;
+            break;
+            case "Monthly":
+                Income = Income;
+            break;
+            case "Yearly":
+                Income = Income / 12;
+            break;
+
+        }
+       //alert(Income);
+       // alert(Household);
+        var dis = null;
+        var x = 0;
+        //go through the clinics
+
+        for (x = 0; x < list.length; x++) {
+            //dis = document.getElementById(list[x].Name);
+            //dis.style.display = "none";
+            var y = 0;
+            val = 0;
+           //  alert('pass1:' + x);
+            //go through each clinic requirement
+
+            for (y =0; y < list[x].Req.length; y++) {
+                //  alert('pass2:' + y);
+                //check if the requirement is income
+                if (list[x].Req[y].Name == ("Income")) {
+                    noMatch = true;
+                    //   alert('pass3');
+                    // get that income requirement value
+                    val = parseInt(list[x].Req[y].Value);
+                    // alert(val + "Income For clinic");
+                    // alert(Income);
+                    var z, w = 0;
+                    //get the addition income per household value
+       
+                    for (z = 0; z < list.length; z++) {
+
+                        for (w = 0; w < list[z].Req.length; w++) {
+                            //alert(list[z].Req[w].Name);;
+                            if (list[z].Req[w].Name == ("+IncomePerPerson")) {
+
+                                Requiredhouse = parseInt(list[z].Req[w].Value);
+                            }
+                            else {
+                              Requiredhouse =  @Html.Raw(Json.Encode(Model.GuidelineValue));
+                            }                              
+                            //  alert("Income addition: " + Requiredhouse);
+                        }
+                    }
+       
+                    //increase the total income value
+                    if (Household > 1) {
+                        for (var housesize = 1; housesize < Household; housesize++)
+                        {
+                            val = val + Requiredhouse;
+                        }
+
+                    }                 
+                    if (Income <= val || val == 0) {
+
+                        //alert('Patient Income:' + Income);
+                        //alert('the requirement amount:' + val)
+                        // alert("yes");
+                        // alert(typeof Income + "Type for income input");
+
+                        //alert(typeof val + "Type of clinic income");
+                        //   alert(typeof list[x].Req[y].Value);
+                        // alert('pass4:' + Income + ": ClinicReq: " + list[x].Req[y].Value);
+                        //alert("add new clinic");
+            
+                        updatingClinictoDisplay(list[x].Name,"ADD");
+                        //dis = document.getElementById(list[x].Name);
+                        //dis.style.display = "";
+                    }
+                    
+                    else {
+                    
+                        updatingClinictoDisplay(list[x].Name, "REMOVE");
+
+                        //dis = document.getElementById(list[x].Name);
+                        //dis.style.display = "none";
+                    } 
+                }
+                else {
+                
+                    noMatch = false;
+
+                }
+            }
+
+            if (val == 0) {
+                updatingClinictoDisplay(list[x].Name, "ADD");
+
+            }
+        }
+
+    }
+    
+</script>
+
 @using (Html.BeginForm("Signup", "Info", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-
-
-        HIIIIIII
     <h4>Patient</h4>
     <hr>
     <div>
         <div class="col-md-3">
             Do you have insurance? <br>
             <input type="radio" name="insurance" value="Yes" onclick="Getnewlist('Insurance')" checked> Yes<br>
-            <input type="radio" name="insurance" value="No" onclick="insurancecheck('No')" checked="checked"> No<br>
+            <input type="radio" name="insurance" value="No" onclick="Getnewlist('InsuranceNo')" checked="checked"> No<br>
             <div class="col-md-10" id="Insurancelist" style="display:none">
                 <label class="control-label"> Insurance</label>
                 @*@Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })*@
@@ -41,27 +376,41 @@
         </div>
 
         <div class="col-md-5">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 Do you have an income? <br />
                 <input type="radio" name="Income" value="Yes" onclick="Getnewlist('Income')" checked> Yes<br>
-                <input type="radio" name="Income" value="No" onclick="insurancecheck('No')" checked="checked"> No<br>
+                <input type="radio" name="Income" value="No" onclick="Getnewlist('IncomeNo')" checked="checked"> No<br>
 
+
+                
                 <div id="PatientIncome" style="display:none">
-                    <select id="Period" class=" form-control col-md-3">
+                    <hr />
+                Paid Period:
+                    <select id="Period" class=" form-control col-md-3" onchange="checkorder()">
                         <option value="Weekly">Weekly</option>
                         <option value="BikWeekly">Yearly</option>
                         <option value="Monthly">Monthly</option>
                         <option value="Yearly">Yearly</option>
                     </select>
 
-                    @*@Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "displayClinic()"} })*@
-                    @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "checkorder()"} })
-                    @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
+            
+                Household size:
+                @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control", @onchange = "checkorder()" } })
+                @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
+      
+                Income:
+                @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00" , @onchange = "checkorder()" } })
+                @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
                 </div>
               
             </div>
         </div>
-
+        
+        <div class="col-md-4">
+            Are you employeed? <br />
+            <input type="radio" name="Employ" value="Yes" onclick="Getnewlist('Employeed')" checked> Yes<br>
+            <input type="radio" name="Employ" value="No" onclick="Getnewlist('EmployeedNo')" checked="checked"> No<br >
+        </div>
 
     </div>
 
@@ -85,15 +434,15 @@
             @*@Html.LabelFor(model => model.newPatient.FName, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <div class="col-md-6">
                 <label class="control-label"> First Name</label>
-                @Html.EditorFor(model => model.newPatient.FName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.FName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.newPatient.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.FirstName, "", new { @class = "text-danger" })
             </div>
 
             @*@Html.LabelFor(model => model.newPatient.LName, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <div class="col-md-5">
                 <label class="control-label"> Last Name</label>
-                @Html.EditorFor(model => model.newPatient.LName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.LName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.newPatient.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newPatient.LastName, "", new { @class = "text-danger" })
             </div>
 
 
@@ -196,11 +545,7 @@
 
 
 
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.newPatient.Household, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
-            </div>
+          
 
 
             @foreach (var item in Model.listofCriteria)
@@ -245,296 +590,7 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
-<script>
-    //document.getElementById("listofInsurance").addEventListener("click", Getnewlist);
-    var Requi = "check";
-    var list = [];
-    var Clinistodisplay = ["inital"];
-    list = @Html.Raw(Json.Encode(Model.listofClinic));
-    var criteria = ['Income','Insurance','Employeed'];
 
-    function ListCriteraCheck(criteriaVar, Value) {
-
-        switch (Value) {
-
-            case '1':
-                     criteria[0] = criteriaVar;
-                break;
-            case '2':
-                    criteria[1] = criteriaVar;
-                break;
-            case '3':
-                    criteria[2] = criteriaVar;
-                break;
-            default:
-        }
-        
-    }
-    function Getnewlist(Question) {
-
-        if (Question == "Insurance")
-        {
-            var Requirement = document.getElementById("Insurancelist");
-
-             Requirement.style.display = "";
-
-        }
-        else if(Question == "Income")
-        {
-            var Requirement = document.getElementById("PatientIncome");
-
-             Requirement.style.display = "";
-        }
-
-
-
-
-       // alert(list[1].Req[0].Name);
-    }
-    function checkorder() {
-        displayClinic();
-        insurancecheck('Insurance');
-    }
-    function insurancecheck(xas) {
-
-        //var xas = 'Input_' + Requi;
-
-        //alert('helloFirst');
-        //alert(xas);
-        if (xas == "Income") {
-           // alert('hellsFrst');
-            displayClinic()
-        }
-        else {
-            if (xas == "Insurance") {
-
-                var Requirement = document.getElementById("listofInsurance").value;
-
-            }
-            else {
-                var Requirement = document.getElementById("Input_" + xas).value;
-            }
-
-            //alert(Requirement);
-            var dis = null;
-            var x = 0;
-
-            //go through the clinics
-            for (x = 0; x < list.length; x++) {
-                var counter = 0;
-                var y = 0;
-                dis = document.getElementById(list[x].Name);
-                dis.style.display = "none";
-                //go through each clinic requirement
-                for (y = 0; y < list[x].Req.length; y++) {
-                    var clinicName = list[x].Name;
-
-                    //check if the requirement match
-                    if (list[x].Req[y].Name == (xas)) {
-                        //alert("Yes1");
-                        // is so check the value
-                        var val = list[x].Req[y].Value;
-
-                        if (Requirement == val) {
-                            counter = 1;
-                            //alert("Yes2");
-                            for (var t = 0; t < Clinistodisplay.length; t++) {
-                                var counter2 = 0;
-                                if (list[x].Name == Clinistodisplay[t]) {
-
-                                    break;
-                                }
-                                else {
-
-                                    counter2 = 1;
-                                }
-                            }
-                            if (counter2 > 0) {
-
-                                Clinistodisplay.push(list[x].Name);
-                            }
-
-                        }
-                        //else {
-                        //    dis = document.getElementById(list[x].Name);
-                        //    dis.style.display = "none";
-                        //}
-                    }
-
-                }
-
-
-
-                var temp;
-                if (counter == 0) {
-
-                    for (q = 0; q < Clinistodisplay.length; q++) {
-                   // alert(Clinistodisplay[q] + ";" + clinicName);
-
-                        if (clinicName == Clinistodisplay[q]) {
-
-                            Clinistodisplay.splice(q ,1);
-                            q = 0;
-
-                        }
-
-                    }
-                }
-
-            }
-
-        }
-             for (x = 1; x < Clinistodisplay.length; x++)
-             {
-                 dis = document.getElementById(Clinistodisplay[x]);
-                 dis.style.display = "";
-            }
-
-
-    }
-    function displayClinic() {
-
-        var Income = parseInt(document.getElementById('newPatient_Income').value);
-        var Household = parseInt(document.getElementById('newPatient_Household').value);
-        var Period = document.getElementById('Period').value;
-        var Requiredhouse = 0;
-        var val;
-        var noMatch = false;
-      //  alert(Period);
-        switch(Period)
-        {
-            case "Weekly":
-            Income = Income * 4;
-            break;
-            case "Biweekly":
-                Income = Income * 2;
-            break;
-            case "Monthly":
-                Income = Income;
-            break;
-            case "Yearly":
-                Income = Income / 12;
-            break;
-
-        }
-       //alert(Income);
-       // alert(Household);
-
-        var dis = null;
-        var x = 0;
-        //go through the clinics
-        for (x = 0; x < list.length; x++) {
-            dis = document.getElementById(list[x].Name);
-            dis.style.display = "none";
-            var y = 0;
-           //  alert('pass1:' + x);
-            //go through each clinic requirement
-            for (y =0; y < list[x].Req.length; y++) {
-                //  alert('pass2:' + y);
-                //check if the requirement is income
-                if (list[x].Req[y].Name == ("Income")) {
-                    noMatch = true;
-                    //   alert('pass3');
-                    // get that income requirement value
-                    val = parseInt(list[x].Req[y].Value);
-                    // alert(val + "Income For clinic");
-                    // alert(Income);
-                    var z, w = 0;
-                    //get the addition income per household value
-                    for (z = 0; z < list.length; z++) {
-
-                        for (w = 0; w < list[z].Req.length; w++) {
-                            //alert(list[z].Req[w].Name);;
-                            if (list[z].Req[w].Name == ("+IncomePerPerson"))
-                                Requiredhouse = parseInt(list[z].Req[w].Value);
-                            //  alert("Income addition: " + Requiredhouse);
-                        }
-                    }
-                    //increase the total income value
-                    if (Household > 1) {
-                        val = val + Requiredhouse;
-               
-                    }
-                    if (Income <= val) {
-
-                        //alert('Patient Income:' + Income);
-                        //alert('the requirement amount:' + val)
-                        // alert("yes");
-                        // alert(typeof Income + "Type for income input");
-
-                        //alert(typeof val + "Type of clinic income");
-                        //   alert(typeof list[x].Req[y].Value);
-                        // alert('pass4:' + Income + ": ClinicReq: " + list[x].Req[y].Value);
-                        dis = document.getElementById(list[x].Name);
-                        dis.style.display = "";
-                    }
-                    else {
-                        dis = document.getElementById(list[x].Name);
-                        dis.style.display = "none";
-                    }
-                }
-                else {
-
-                    noMatch = false;
-
-                }
-
-            }
-
-
-        }
-
-
-
-    }
-    function displayClinic2(InsuranceCheck) {
-
-
-
-        if (InsuranceCheck == 'No') {
-            for (x = 0; x < list.length; x++) {
-                dis = document.getElementById(list[x].Name);
-                dis.style.display = "";
-            }
-
-        }
-        else {
-            var dis = null;
-            var x = 0;
-            //go through the clinics
-            for (x = 0; x < list.length; x++) {
-                var y = 0;
-                //alert(list[x].Name);
-                //go through each clinic requirement
-                for (y = 0; y < list[x].Req.length; y++) {
-                    //check if the requirement is income
-                    //alert(list[x].Req[y].Name);
-                    if (list[x].Req[y].Name == ("Insurance")) {
-                     //   alert(list[x].Req[y].Value);
-                        if (list[x].Req[y].Value != ("NoInsurance")) {
-                            //alert(list[x].Name);
-                            dis = document.getElementById(list[x].Name);
-                            dis.style.display = "";
-                            break;
-                        }
-                        else (list[x].Req[y].Name == ("NoInsurance"))
-                        {
-
-                            dis = document.getElementById(list[x].Name);
-                            dis.style.display = "none";
-
-                        }
-                    }
-
-                }
-
-            }
-
-        }
-
-
-    }
-</script>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

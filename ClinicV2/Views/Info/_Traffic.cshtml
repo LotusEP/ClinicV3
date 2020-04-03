@@ -1,0 +1,34 @@
+﻿@model IEnumerable<ClinicV2.Models.DataModel>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+           Origin Website
+        </th>
+        <th>
+            Number of Redirect
+        </th>
+        <th>
+            Page Visit
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumDataValue)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataValue)
+        </td>
+
+    </tr>
+}
+
+</table>

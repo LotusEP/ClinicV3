@@ -153,6 +153,8 @@
     <Compile Include="Models\CreateCriteriaModel.cs" />
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\Criteria.cs" />
+    <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\DataViewModel.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Requirement.cs" />
@@ -170,12 +172,12 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
     <None Include="Properties\PublishProfiles\ClinicV220191210082525 - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -290,7 +292,6 @@
     <Content Include="Views\Info\_testSign.cshtml" />
     <Content Include="Views\Info\_testView.cshtml" />
     <Content Include="Views\Info\test.cshtml" />
-    <Content Include="Views\Info\Signup.cshtml" />
     <Content Include="Views\Info\_ClinicPartView.cshtml" />
     <Content Include="Views\Info\listofClinic.cshtml" />
     <Content Include="Views\Info\ClinicAdd.cshtml" />
@@ -302,7 +303,7 @@
     <Content Include="Views\AdminOptions\DeleteClinics.cshtml" />
     <Content Include="Views\AdminOptions\EditClinics.cshtml" />
     <Content Include="Views\AdminOptions\ViewDemographics.cshtml" />
-    <Content Include="Views\AdminOptions\AdminOptions.cshtml" />
+    <Content Include="Views\Info\AdminOptions.cshtml" />
     <Content Include="Views\AdminOptions\Logout.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
@@ -316,6 +317,11 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_GoogleAntalytics.cshtml" />
     <Content Include="Views\Info\ConfirmationPage.cshtml" />
+    <Content Include="Views\Info\ViewReq.cshtml" />
+    <Content Include="Views\Info\Testview.cshtml" />
+    <Content Include="Views\Info\_Traffic.cshtml" />
+    <Content Include="Views\Shared\_layout2.cshtml" />
+    <Content Include="Views\Info\AboutPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

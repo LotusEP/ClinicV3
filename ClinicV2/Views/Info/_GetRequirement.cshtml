@@ -1,39 +1,69 @@
 ﻿@model IEnumerable<ClinicV2.Models.Criteria>
 
-<p>
-    @Html.ActionLink("Create New", "CreateReq","Info")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.clinicName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Value)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.clinicName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Value)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "EditCriteria", new { id=item.CriteriaID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CriteriaID }) |
-            @Html.ActionLink("Delete", "DeleteCriteria", new { id=item.CriteriaID })
-        </td>
-    </tr>
-}
+<div class="col-md-12">
+    <p>
+        @Html.ActionLink("Create New", "CreateReq", "Info")
+    </p>
 
-</table>
+    <input type="text" id="myInput" onkeyup="searchByClinic()" placeholder="Search for names.." title="Type in a name">
+    <table class="table" id="clinicReqTable">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.clinicName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.clinicName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value)
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "DeleteCriteria", new { id = item.CriteriaID })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+<script>
+
+    function searchByClinic() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("clinicReqTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+
+>

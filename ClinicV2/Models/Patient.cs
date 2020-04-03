@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,15 +9,22 @@ namespace ClinicV2.Models
 {
     public class Patient
     {
-        public string FName { get; set; }
-        public string LName { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        [Required]
         public string Street { get; set; }
+        [Required]
         public string CellPhone { get; set; }
+        [Required]
         public string City { get; set; }
+        [Required]
         public string Zip { get; set; }
+        [Required]
         public string State { get; set; }
+        [Required]
         public string Email { get; set; }
-
         public int Income { get; set; }
         public int Household { get; set; }
         
@@ -34,8 +42,8 @@ namespace ClinicV2.Models
             //sql= "IF EXISTS(SELECT * FROM Req WHERE ReqName="+req.Name+") Update Req"
             //sql = "Insert Into Req Values(@Aug1,@Aug2,@State,@ReqName)";
             sql = "Insert Into PatientDB (FirstName,LastName,Street,CIty,Zip,State,Email,PhoneNumber) Values('" + 
-                patient.FName.ToString() + 
-                "','" + patient.LName.ToString() +
+                patient.FirstName.ToString() + 
+                "','" + patient.LastName.ToString() +
                 "','" + patient.Street.ToString() +
                 "','" + patient.City.ToString() +
                 "','" + patient.Zip.ToString() +
