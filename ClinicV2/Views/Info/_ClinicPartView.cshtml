@@ -40,8 +40,8 @@
                 {
 
                     <tr id="@item.Name">
-                        <td><input type="checkbox" name="clinicName" id="ID_@item.Name" value="@item.Email" onclick="geocode('@item.Address','ID_@item.Name')"> @item.Name</td>
-                        <td><label> @item.Address </label></td>
+                        <td><input type="checkbox" name="clinicName" id="ID_@item.Name" value="@item.Email" onclick="geocode('@item.Address','ID_@item.Name','fromList')"> @item.Name</td>
+                        <td><label id="@item.Address"> @item.Address </label></td>
                         <td><a href="http://@item.Email" target="_blank">@item.Email</a></td>
                         <td><label> @item.PhoneNumber </label></td>
                         <td id="Distance_@item.Name"></td>

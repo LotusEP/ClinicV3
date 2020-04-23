@@ -323,6 +323,7 @@
     <Content Include="Views\Info\_Traffic.cshtml" />
     <Content Include="Views\Shared\_layout2.cshtml" />
     <Content Include="Views\Info\AboutPage.cshtml" />
+    <Content Include="Views\Shared\AuthorizeFailed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

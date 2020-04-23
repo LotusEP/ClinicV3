@@ -21,9 +21,9 @@
 </style>
 
 <script>
-
+    
     var referrer = document.referrer;
-
+    var uLat = null, uLng = null;
     var changecounter = 0;
     //document.getElementById("listofInsurance").addEventListener("click", Getnewlist);
     var Requi = "check";
@@ -34,7 +34,26 @@
     var ClinisNot = ["inital"];
     list = @Html.Raw(Json.Encode(Model.listofClinic));
     var criteria = ['No','No','No'];
+    function getParam() {
+        const queryString = window.location.search;
+        console.log(queryString);
+        const urlParams = new URLSearchParams(queryString);
+        const clinicIntial = urlParams.get('clinicID');
+        console.log(clinicIntial);
+        for (var i = 0; i < list.length; i++) {
+    
+            console.log(list[i].ClinicID)
+            if (list[i].ClinicID == clinicIntial) {
+             
+                document.getElementById("ID_" + list[i].Name).checked = true;
 
+                geocode(list[i].Address, "ID_" + list[i].Name, 'NotFromlist');
+            }
+        }
+  
+    }
+
+    //go through each criteria function
     function ListCriteraCheck(Value) {
         //alert('Update');
 
@@ -53,6 +72,7 @@
         }
 
     }
+    //hide or show the criteria
     function Getnewlist(Question) {
         switch (Question) {
 
@@ -91,44 +111,55 @@
 
        // alert(list[1].Req[0].Name);
     }
+    //main function in which the list of clinic is display
     function checkorder() {
+        //get the inital stage
         Clinistodisplay = Reset;
         changecounter = 0;
-
+        //see which criteria to check
         for (var y = 0; y < criteria.length; y++) {
 
             if (criteria[y] == 'Yes') {
                // alert("check" + y);
                 changecounter++;
-
+                //go through checking the criteria
                 ListCriteraCheck(y);
             }
 
         }
-
+        //display the clinic
         displayclinic();
 
     }
+    //display the list of clinic
     function displayclinic() {
-
+        //set the clinic to display
         var displayClin = null;
-
+        //go through the list
         for (var dis = 0; dis < list.length; dis++) {
-
+            //get the list in the view
             displayClin = document.getElementById(list[dis].Name);
+            //reset check box
             var uncheckCounter = true;
+            //check which to uncheck
             for (var q = 0; q < Clinistodisplay.length; q++) {
                 if (list[dis].Name == Clinistodisplay[q]) {
                     uncheckCounter = false;
                 }
             }
+            //uncheck all the display that are not mean to display
             if (uncheckCounter == true) {
                 var Uncheck = document.getElementById("ID_" + list[dis].Name);
                 Uncheck.checked = false;
+
+                geocode(list[dis].Address, "ID_" + list[dis].Name,'NotFromlist');
+
             }
+            //hide all the clinic
             displayClin.style.display = "None";
 
         }
+        //display the clinic that meet criteria
         for (var dis = 1; dis < Clinistodisplay.length; dis++) {
 
             displayClin = document.getElementById(Clinistodisplay[dis]);
@@ -139,6 +170,7 @@
 
 
     }
+    //update the list of clinic to display
     function updatingClinictoDisplay(Clinic,Action) {
 
         var checkCounter = 0;
@@ -150,21 +182,22 @@
             }
         }
 
-
+        //check if the clinic exist 
         if (changecounter > 1 && checkCounter == 0)
         {
-
+            //dumb code to prevent duplicaiton
         }
+        //if user want to add clinic
         else if (Action == "ADD") {
-
+            //if clinic doesnt exist in list add the clinic
             if (checkCounter == 0) {
 
                 Clinistodisplay.push(Clinic);
             }
         }
-
+        //user want to remove clinic
         else if (Action == "REMOVE" ) {
-
+            // check if clinic exist and if so remove
             if (checkCounter > 0)
             {
                 Clinistodisplay.splice(checkCounter, 1);
@@ -369,384 +402,384 @@
     }
 
 </script>
+<body onload="getParam()">
 
-@using (Html.BeginForm("Signup", "Info", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <h4>Patient</h4>
-    <hr>
-    <div>
-        <div class="col-md-3">
-            Do you have insurance? <br>
-            <input type="radio" name="insurance" value="Yes" onclick="Getnewlist('Insurance')" checked> Yes<br>
-            <input type="radio" name="insurance" value="No" onclick="Getnewlist('InsuranceNo')" checked="checked"> No<br>
-            <div class="col-md-10" id="Insurancelist" style="display:none">
-                <label class="control-label"> Insurance</label>
-                @*@Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })*@
-                @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
-            </div>
-        </div>
-
-        <div class="col-md-5">
-            <div class="col-md-5">
-                Do you have an income? <br />
-                <input type="radio" name="Income" value="Yes" onclick="Getnewlist('Income')" checked> Yes<br>
-                <input type="radio" name="Income" value="No" onclick="Getnewlist('IncomeNo')" checked="checked"> No<br>
-
-
-
-                <div id="PatientIncome" style="display:none">
-                    <hr />
-                    Paid Period:
-                    <select id="Period" class=" form-control col-md-3" onchange="checkorder()">
-                        <option value="Weekly">Weekly</option>
-                        <option value="BikWeekly">Yearly</option>
-                        <option value="Monthly">Monthly</option>
-                        <option value="Yearly">Yearly</option>
-                    </select>
-
-
-                    Household size:
-                    @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control", @onchange = "checkorder()" } })
-                    @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
-
-                    Income:
-                    @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00", @onchange = "checkorder()" } })
-                    @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
-                </div>
-
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            Are you employeed? <br />
-            <input type="radio" name="Employ" value="Yes" onclick="Getnewlist('Employeed')" checked> Yes<br>
-            <input type="radio" name="Employ" value="No" onclick="Getnewlist('EmployeedNo')" checked="checked"> No<br>
-        </div>
-
-    </div>
-
-
-
-
-    <div class="col-md-12  ">
+    @using (Html.BeginForm("Signup", "Info", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Patient</h4>
+        <hr>
         <div>
-            @Html.Partial("_ClinicPartView", Model.listofClinic)
-
-        </div>
-    </div>
-    <div id="map">
-
-    </div>
-    <div class="col-md-12" >
-        <script src="~/Scripts/CustScript/MapScript.js"></script>
-        <script >
-            var map;
-            var markers = [];
-            var markersCoord = [];
-            var Patientcounter = false;
-            var PatientCoord = [];
-            var markersToShow = [];
-            function initMap() {
-                var option = {
-                    zoom: 10,
-                    center: { lat: 30.3322, lng: -81.6557 }
-                }
-                var geocoder = new google.maps.Geocoder();
-               map = new google.maps.Map(document.getElementById('map'), option);
-                var address = '355 monument Rd Apt 15F Jacksonville FL 32225';
-                //var customMarker;
-                //geocoder.geocode({'address': address }, function (results, status) {
-                //    if (status == google.maps.GeocoderStatus.OK) {
-                //        map.setCenter(results[0].geometry.location);
-                //        if (customerMarker) customerMarker.setMap(null);
-                //        customerMarker = new google.maps.Marker({
-                //            map: map,
-                //            position: results[0].geometry.location
-                //        });
-                //        closest = findClosestN(results[0].geometry.location, 10);
-                //        // get driving distance
-                //        closest = closest.splice(0, 3);
-                //        calculateDistances(results[0].geometry.location, closest, 3);
-                //    } else {
-                //        alert('Geocode was not successful for the following reason: ' + status);
-                //    }
-                //});
-                var addLookUp = document.getElementById('newPatient_Zip');
-
-                map.addListener('onchange')
-                
-                
-            }
-            function AddMarker(coord) {
-                //alert('addmakrer');
-                temp = coord;
-
-                var id = coord.coord.lat;
-                var tem = coord.coord.lng;
-
-                if (Patientcounter == true) {
-                    var tempArray = [];
-                    PatientCoord = tempArray;
-                    PatientCoord.push(id);
-                    PatientCoord.push(tem);
-                }
-                var marker = new google.maps.Marker({
-                    id: id,
-                    position: coord.coord,
-                    map: map,
-                    icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-                });
-                var exist = false;
-                if (markers.length == 0) {
-                    exist = false;
-                }
-                else {
-                    for (var counter = 0; counter < marker.length; counter++) {
-                        if (markers[counter].id == coord.coord.lat) {
-                            exist = true;
-                        }
-
-                    }
-                }
-          
-
-                if (exist == false) {
-                    markers.push(marker);
-                    var coor = [coord.coord.lat, coord.coord.lng];
-                    markersCoord.push(coor);
-                }
-             
-
-            }
-            function RemoveMarker(coord) {
-                marker = coord
-                for (var i = 0; i < markers.length; i++) {
-                    if (markers[i].id == marker.coord.lat) {
-                        markers[i].setMap(null);
-                    }
-                }
-      
-            }
-
-
-            function patientClinic(val1, val2) {
-                Patientcounter = true;
-                geocode(val1, val2);
-                Patientcounter = false;
-                showClosetClinic();
-
-            }
-
-            function showClosetClinic() {
-                var difDistance;
-                //alert("1");
-                for (var i = 0; i < markers.length; i++) {
-                    var remove = false;
-                    //alert("hi");
-
-                    markersToShow.length
-                    //if (markerstoshow.length < 6 || markersToShow.length == 0) {
-                    //    alert("base 6");
-                    //    difdistance = distance(patientcoord[0], patientcoord[1], markerscoord[i][0], markerscoord[i][1]);
-                    //    markerstoshow.push([marker[i].id, difdistance]);
-                    //}
-                    //else if (markerstoshow.length > 5) {
-                    //    alert("base 7");
-                    //    difdistance = distance(patientcoord[0], patientcoord[1], markerscoord[i][0], markerscoord[i][1]);
-                    //    for (var counteri = 0; counteri < markerstoshow.length; counteri++) {
-                    //        if (markerstoshow[counteri][1] > difdistance) {
-                    //            markerstoshow[counteri][0] = markers[i].id;
-                    //            markerstoshow[counteri][1] = difdistance;
-                    //        }
-                    //    }
-                        
-                    //}
-                }
-
-            }
-            function testy() {
-             
-               
-                if (document.getElementById('Volunteers in Medicine').checked == true) {
-                    alert('hi');
-                }
-                else {
-                    alert('goodbye');
-                }
-            }
-
-
-            
-        </script>
-
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmfeWr8pGc9LSDA5BCgCfvj0i3pqoE_cA&callback=initMap"
-                async defer></script>
-    </div>
-
-    <div class="row">
-
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="col-md-10 ">
-            @*@Html.LabelFor(model => model.newPatient.FName, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <div class="col-md-5">
-                <label class="control-label"> First Name</label>
-                @Html.EditorFor(model => model.newPatient.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.FirstName, "", new { @class = "text-danger" })
+            <div class="col-md-3">
+                Do you have insurance? <br>
+                <input type="radio" name="insurance" value="Yes" onclick="Getnewlist('Insurance')" checked> Yes<br>
+                <input type="radio" name="insurance" value="No" onclick="Getnewlist('InsuranceNo')" checked="checked"> No<br>
+                <div class="col-md-10" id="Insurancelist" style="display:none">
+                    <label class="control-label"> Insurance</label>
+                    @*@Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })*@
+                    @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
+                </div>
             </div>
 
-            @*@Html.LabelFor(model => model.newPatient.LName, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <div class="col-md-5">
-                <label class="control-label"> Last Name</label>
-                @Html.EditorFor(model => model.newPatient.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.LastName, "", new { @class = "text-danger" })
-            </div>
+                <div class="col-md-5">
+                    Do you have an income? <br />
+                    <input type="radio" name="Income" value="Yes" onclick="Getnewlist('Income')" checked> Yes<br>
+                    <input type="radio" name="Income" value="No" onclick="Getnewlist('IncomeNo')" checked="checked"> No<br>
 
 
 
-            <div class="col-md-5">
-                @Html.LabelFor(model => model.newPatient.Street, htmlAttributes: new { @class = "control-label " })
-                @Html.EditorFor(model => model.newPatient.Street, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Street, "", new { @class = "text-danger" })
+                    <div id="PatientIncome" style="display:none">
+                        <hr />
+                        Paid Period:
+                        <select id="Period" class=" form-control col-md-3" onchange="checkorder()">
+                            <option value="Weekly">Weekly</option>
+                            <option value="BikWeekly">Yearly</option>
+                            <option value="Monthly">Monthly</option>
+                            <option value="Yearly">Yearly</option>
+                        </select>
+
+
+                        Household size:
+                        @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control", @onchange = "checkorder()" } })
+                        @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
+
+                        Income:
+                        @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00", @onchange = "checkorder()" } })
+                        @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
             </div>
 
             <div class="col-md-4">
-                @Html.LabelFor(model => model.newPatient.City, htmlAttributes: new { @class = "control-label " })
-                @Html.EditorFor(model => model.newPatient.City, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.City, "", new { @class = "text-danger" })
+                Are you employeed? <br />
+                <input type="radio" name="Employ" value="Yes" onclick="Getnewlist('Employeed')" checked> Yes<br>
+                <input type="radio" name="Employ" value="No" onclick="Getnewlist('EmployeedNo')" checked="checked"> No<br>
             </div>
 
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.newPatient.Zip, htmlAttributes: new { @class = "control-label " })
-                @Html.EditorFor(model => model.newPatient.Zip, new { htmlAttributes = new { @class = "form-control", @onchange = "patientClinic('Empty','Empty')" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Zip, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-12  ">
+            <div>
+                @Html.Partial("_ClinicPartView", Model.listofClinic)
+
             </div>
+        </div>
+        <div id="map">
+
+        </div>
+        <div class="col-md-12">
+            <script src="~/Scripts/CustScript/MapScript.js"></script>
+            <script>
+                var map;
+                var markers = [];
+                var markersCoord = [];
+                var Patientcounter = false;
+                var PatientCoord = [];
+                var markersToShow = [];
+                function initMap() {
+                    var option = {
+                        zoom: 10,
+                        center: { lat: 30.3322, lng: -81.6557 }
+                    }
+                    var geocoder = new google.maps.Geocoder();
+                    map = new google.maps.Map(document.getElementById('map'), option);
+                    var address = '355 monument Rd Apt 15F Jacksonville FL 32225';
+                    //var customMarker;
+                    //geocoder.geocode({'address': address }, function (results, status) {
+                    //    if (status == google.maps.GeocoderStatus.OK) {
+                    //        map.setCenter(results[0].geometry.location);
+                    //        if (customerMarker) customerMarker.setMap(null);
+                    //        customerMarker = new google.maps.Marker({
+                    //            map: map,
+                    //            position: results[0].geometry.location
+                    //        });
+                    //        closest = findClosestN(results[0].geometry.location, 10);
+                    //        // get driving distance
+                    //        closest = closest.splice(0, 3);
+                    //        calculateDistances(results[0].geometry.location, closest, 3);
+                    //    } else {
+                    //        alert('Geocode was not successful for the following reason: ' + status);
+                    //    }
+                    //});
+                    var addLookUp = document.getElementById('newPatient_Zip');
+
+                    map.addListener('onchange')
 
 
-            <div class="col-md-5">
-                @Html.LabelFor(model => model.newPatient.State, htmlAttributes: new { @class = "control-label" })
-                <br />
-                @Html.DropDownListFor(model => model.newPatient.State, new List<SelectListItem> {
+                }
+                function AddMarker(coord) {
+                    //alert('addmakrer');
+                    temp = coord;
 
-                    new SelectListItem {Text = "Alabama", Value = "AL"},
-                    new SelectListItem {Text = "Alaska", Value = "AK"},
-                    new SelectListItem {Text = "Arizona", Value = "AZ"},
-                    new SelectListItem {Text = "Arkansas", Value = "AR"},
-                    new SelectListItem {Text = "California", Value = "CA"},
-                    new SelectListItem {Text = "Colorado", Value = "CO"},
-                    new SelectListItem {Text = "Connecticut", Value = "CT"},
-                    new SelectListItem {Text = "District of Columbia", Value = "DC"},
-                    new SelectListItem {Text = "Delaware", Value = "DE"},
-                    new SelectListItem {Text = "Florida", Value = "FL"},
-                    new SelectListItem {Text = "Georgia", Value = "GA"},
-                    new SelectListItem {Text = "Hawaii", Value = "HI"},
-                    new SelectListItem {Text = "Idaho", Value = "ID"},
-                    new SelectListItem {Text = "Illinois", Value = "IL"},
-                    new SelectListItem {Text = "Indiana", Value = "IN"},
-                    new SelectListItem {Text = "Iowa", Value = "IA"},
-                    new SelectListItem {Text = "Kansas", Value = "KS"},
-                    new SelectListItem {Text = "Kentucky", Value = "KY"},
-                    new SelectListItem {Text = "Louisiana", Value = "LA"},
-                    new SelectListItem {Text = "Maine", Value = "ME"},
-                    new SelectListItem {Text = "Maryland", Value = "MD"},
-                    new SelectListItem {Text = "Massachusetts", Value = "MA"},
-                    new SelectListItem {Text = "Michigan", Value = "MI"},
-                    new SelectListItem {Text = "Minnesota", Value = "MN"},
-                    new SelectListItem {Text = "Mississippi", Value = "MS"},
-                    new SelectListItem {Text = "Missouri", Value = "MO"},
-                    new SelectListItem {Text = "Montana", Value = "MT"},
-                    new SelectListItem {Text = "Nebraska", Value = "NE"},
-                    new SelectListItem {Text = "Nevada", Value = "NV"},
-                    new SelectListItem {Text = "New Hampshire", Value = "NH"},
-                    new SelectListItem {Text = "New Jersey", Value = "NJ"},
-                    new SelectListItem {Text = "New Mexico", Value = "NM"},
-                    new SelectListItem {Text = "New York", Value = "NY"},
-                    new SelectListItem {Text = "North Carolina", Value = "NC"},
-                    new SelectListItem {Text = "North Dakota", Value = "ND"},
-                    new SelectListItem {Text = "Ohio", Value = "OH"},
-                    new SelectListItem {Text = "Oklahoma", Value = "OK"},
-                    new SelectListItem {Text = "Oregon", Value = "OR"},
-                    new SelectListItem {Text = "Pennsylvania", Value = "PA"},
-                    new SelectListItem {Text = "Rhode Island", Value = "RI"},
-                    new SelectListItem {Text = "South Carolina", Value = "SC"},
-                    new SelectListItem {Text = "South Dakota", Value = "SD"},
-                    new SelectListItem {Text = "Tennessee", Value = "TN"},
-                    new SelectListItem {Text = "Texas", Value = "TX"},
-                    new SelectListItem {Text = "Utah", Value = "UT"},
-                    new SelectListItem {Text = "Vermont", Value = "VT"},
-                    new SelectListItem {Text = "Virginia", Value = "VA"},
-                    new SelectListItem {Text = "Washington", Value = "WA"},
-                    new SelectListItem {Text = "West Virginia", Value = "WV"},
-                    new SelectListItem {Text = "Wisconsin", Value = "WI"},
-                    new SelectListItem {Text = "Wyoming", Value = "WY"}
+                    var id = coord.coord.lat;
+                    var tem = coord.coord.lng;
+
+                    if (Patientcounter == true) {
+                        var tempArray = [];
+                        PatientCoord = tempArray;
+                        PatientCoord.push(id);
+                        PatientCoord.push(tem);
+                    }
+                    var marker = new google.maps.Marker({
+                        id: id,
+                        position: coord.coord,
+                        map: map,
+                        icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+                    });
+                    var exist = false;
+                    if (markers.length == 0) {
+                        exist = false;
+                    }
+                    else {
+                        for (var counter = 0; counter < marker.length; counter++) {
+                            if (markers[counter].id == coord.coord.lat) {
+                                exist = true;
+                            }
+
+                        }
+                    }
 
 
-
-                }, "Select State", new { @class = "from-control " })
-                @Html.ValidationMessageFor(model => model.newPatient.State, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-6">
-                @Html.LabelFor(model => model.newPatient.CellPhone, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.newPatient.CellPhone, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.CellPhone, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-10">
-                @Html.LabelFor(model => model.newPatient.Email, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.newPatient.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.newPatient.Email, "", new { @class = "text-danger" })
-            </div>
+                    if (exist == false) {
+                        markers.push(marker);
+                        var coor = [coord.coord.lat, coord.coord.lng];
+                        markersCoord.push(coor);
+                    }
 
 
+                }
+                function RemoveMarker(coord) {
+                    marker = coord
+                    for (var i = 0; i < markers.length; i++) {
+                        if (markers[i].id == marker.coord.lat) {
+                            markers[i].setMap(null);
+                        }
+                    }
+
+                }
+
+
+                function patientClinic(val1, val2) {
+                    Patientcounter = true;
+                    geocode(val1, val2);
+                    Patientcounter = false;
+                    showClosetClinic();
+
+                }
+
+                function showClosetClinic() {
+                    var difDistance = 0;
+                    //alert("1");
+                    for (var i = 0; i < markers.length; i++) {
+                        var remove = false;
+                        //alert("hi");
+
+                        alert(markersToShow.length);
+                        if (markersToShow.length < 6 || markersToShow.length == 0) {
+                            //alert("base 6");
+                            difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
+                            markersToShow.push([markers[i].id, difDistance]);
+                        }
+                        else if (markerstoshow.length > 5) {
+                            //alert("base 7");
+                            difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
+                            for (var counteri = 0; counteri < markerstoshow.length; counteri++) {
+                                if (markersToShow[counteri][1] > difDistance) {
+                                    markersToShow[counteri][0] = markers[i].id;
+                                    markersToShow[counteri][1] = difDistance;
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+                function testy() {
+
+
+                    if (document.getElementById('Volunteers in Medicine').checked == true) {
+                        alert('hi');
+                    }
+                    else {
+                        alert('goodbye');
+                    }
+                }
 
 
 
+            </script>
 
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmfeWr8pGc9LSDA5BCgCfvj0i3pqoE_cA&callback=initMap"
+                    async defer></script>
+        </div>
 
+        <div class="row">
 
-            @foreach (var item in Model.listofCriteria)
-            {
-                <div class="col-md-8">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                    <input type="checkbox" id="@item.Name" onclick="insurancecheck('@item.Name')" />@item.Name
+            <div class="col-md-10 ">
+                @*@Html.LabelFor(model => model.newPatient.FName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <div class="col-md-5">
+                    <label class="control-label"> First Name</label>
+                    @Html.EditorFor(model => model.newPatient.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.newPatient.FirstName, "", new { @class = "text-danger" })
+                </div>
+
+                @*@Html.LabelFor(model => model.newPatient.LName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <div class="col-md-5">
+                    <label class="control-label"> Last Name</label>
+                    @Html.EditorFor(model => model.newPatient.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.newPatient.LastName, "", new { @class = "text-danger" })
                 </div>
 
 
-                @*if (item.Name == "Housing" | item.Name == "Income")
-                    {
+
+                <div class="col-md-5">
+                    @Html.LabelFor(model => model.newPatient.Street, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.newPatient.Street, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.newPatient.Street, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.newPatient.City, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.newPatient.City, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.newPatient.City, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.newPatient.Zip, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.newPatient.Zip, new { htmlAttributes = new { @class = "form-control", @onchange = "patientClinic('Empty','Empty','Empty')" } })
+                    @Html.ValidationMessageFor(model => model.newPatient.Zip, "", new { @class = "text-danger" })
+                </div>
 
 
-                    }
-                    else
-                    {
-                        <div name="@item.Name">
-                            <input type="text" id="Input_@item.Name" name="Insurance">
-                        </div>
-                    }*@
+                <div class="col-md-5">
+                    @Html.LabelFor(model => model.newPatient.State, htmlAttributes: new { @class = "control-label" })
+                    <br />
+                    @Html.DropDownListFor(model => model.newPatient.State, new List<SelectListItem> {
 
-            }
+                        new SelectListItem {Text = "Alabama", Value = "AL"},
+                        new SelectListItem {Text = "Alaska", Value = "AK"},
+                        new SelectListItem {Text = "Arizona", Value = "AZ"},
+                        new SelectListItem {Text = "Arkansas", Value = "AR"},
+                        new SelectListItem {Text = "California", Value = "CA"},
+                        new SelectListItem {Text = "Colorado", Value = "CO"},
+                        new SelectListItem {Text = "Connecticut", Value = "CT"},
+                        new SelectListItem {Text = "District of Columbia", Value = "DC"},
+                        new SelectListItem {Text = "Delaware", Value = "DE"},
+                        new SelectListItem {Text = "Florida", Value = "FL"},
+                        new SelectListItem {Text = "Georgia", Value = "GA"},
+                        new SelectListItem {Text = "Hawaii", Value = "HI"},
+                        new SelectListItem {Text = "Idaho", Value = "ID"},
+                        new SelectListItem {Text = "Illinois", Value = "IL"},
+                        new SelectListItem {Text = "Indiana", Value = "IN"},
+                        new SelectListItem {Text = "Iowa", Value = "IA"},
+                        new SelectListItem {Text = "Kansas", Value = "KS"},
+                        new SelectListItem {Text = "Kentucky", Value = "KY"},
+                        new SelectListItem {Text = "Louisiana", Value = "LA"},
+                        new SelectListItem {Text = "Maine", Value = "ME"},
+                        new SelectListItem {Text = "Maryland", Value = "MD"},
+                        new SelectListItem {Text = "Massachusetts", Value = "MA"},
+                        new SelectListItem {Text = "Michigan", Value = "MI"},
+                        new SelectListItem {Text = "Minnesota", Value = "MN"},
+                        new SelectListItem {Text = "Mississippi", Value = "MS"},
+                        new SelectListItem {Text = "Missouri", Value = "MO"},
+                        new SelectListItem {Text = "Montana", Value = "MT"},
+                        new SelectListItem {Text = "Nebraska", Value = "NE"},
+                        new SelectListItem {Text = "Nevada", Value = "NV"},
+                        new SelectListItem {Text = "New Hampshire", Value = "NH"},
+                        new SelectListItem {Text = "New Jersey", Value = "NJ"},
+                        new SelectListItem {Text = "New Mexico", Value = "NM"},
+                        new SelectListItem {Text = "New York", Value = "NY"},
+                        new SelectListItem {Text = "North Carolina", Value = "NC"},
+                        new SelectListItem {Text = "North Dakota", Value = "ND"},
+                        new SelectListItem {Text = "Ohio", Value = "OH"},
+                        new SelectListItem {Text = "Oklahoma", Value = "OK"},
+                        new SelectListItem {Text = "Oregon", Value = "OR"},
+                        new SelectListItem {Text = "Pennsylvania", Value = "PA"},
+                        new SelectListItem {Text = "Rhode Island", Value = "RI"},
+                        new SelectListItem {Text = "South Carolina", Value = "SC"},
+                        new SelectListItem {Text = "South Dakota", Value = "SD"},
+                        new SelectListItem {Text = "Tennessee", Value = "TN"},
+                        new SelectListItem {Text = "Texas", Value = "TX"},
+                        new SelectListItem {Text = "Utah", Value = "UT"},
+                        new SelectListItem {Text = "Vermont", Value = "VT"},
+                        new SelectListItem {Text = "Virginia", Value = "VA"},
+                        new SelectListItem {Text = "Washington", Value = "WA"},
+                        new SelectListItem {Text = "West Virginia", Value = "WV"},
+                        new SelectListItem {Text = "Wisconsin", Value = "WI"},
+                        new SelectListItem {Text = "Wyoming", Value = "WY"}
+
+
+
+                    }, "Select State", new { @class = "from-control " })
+                    @Html.ValidationMessageFor(model => model.newPatient.State, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    @Html.LabelFor(model => model.newPatient.CellPhone, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.newPatient.CellPhone, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.newPatient.CellPhone, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-10">
+                    @Html.LabelFor(model => model.newPatient.Email, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.newPatient.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.newPatient.Email, "", new { @class = "text-danger" })
+                </div>
 
 
 
 
-        </div>
 
 
-        <div class="form-group col-md-12 col-md-push-2  ">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+
+
+                @foreach (var item in Model.listofCriteria)
+                {
+                    <div class="col-md-8">
+
+                        <input type="checkbox" id="@item.Name" onclick="insurancecheck('@item.Name')" />@item.Name
+                    </div>
+
+
+                    @*if (item.Name == "Housing" | item.Name == "Income")
+                        {
+
+
+                        }
+                        else
+                        {
+                            <div name="@item.Name">
+                                <input type="text" id="Input_@item.Name" name="Insurance">
+                            </div>
+                        }*@
+
+                }
+
+
+
+
+            </div>
+
+
+            <div class="form-group col-md-12 col-md-push-2  ">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
             </div>
         </div>
+    }
+    @* ------------------------------------------------------------------------------------------------------------- *@
+
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
     </div>
-}
-@* ------------------------------------------------------------------------------------------------------------- *@
 
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+</body>
 
 
 @section Scripts {

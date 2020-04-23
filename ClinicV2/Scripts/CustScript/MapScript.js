@@ -5,12 +5,12 @@ function test() {
     }
 }
 function Marker(addLookup, idName) {
-    alert("step1");
+    //alert("step1");
     if (document.getElementById(idName).checked == true) {
-        alert("step2");
+        //alert("step2");
         var temp = geocode(addLookup);
-        alert(temp);
-        alert("stepExist");
+        //alert(temp);
+        //alert("stepExist");
         AddMarker(temp);
     }
     else {
@@ -20,11 +20,12 @@ function Marker(addLookup, idName) {
 }
 
 
-function geocode(addLookup,idName) {
+function geocode(addLookup,idName,mess) {
     var location;
     var coord;
     var lat, lng;
-    //alert("step3");
+    console.log(idName + " " + addLookup);
+    //determine what address to look up
     if (addLookup == 'Empty') {
         
          var zip = document.getElementById('newPatient_Zip').value;
@@ -42,28 +43,37 @@ function geocode(addLookup,idName) {
 
         location = addLookup;
     }
-
+    //check if there is a location
     if (location != null) {
-        //alert("step4");
+       //get teh location
         axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
             params: {
                 address: location,
                 key: 'AIzaSyDmfeWr8pGc9LSDA5BCgCfvj0i3pqoE_cA'
             }
         })
+            //get the lat and lng
             .then(function (response) {
                 //alert("step5");
                  lat = response.data.results[0].geometry.location.lat;
                 lng = response.data.results[0].geometry.location.lng;
                 //alert(typeof lat);
+                //if is the user automatically add it
                 if (addLookup == 'Empty') {
+                    var tempLng, tempLat;
+                    if (uLng != null || uLat != null) {
+                        RemoveMarker({ coord: { lat: uLat, lng: uLng } });
+                    }
+                   
                     AddMarker({ coord: { lat: lat, lng: lng } });
+                    uLng = lng;
+                    uLat = lat;
                 }
                 else {
+                    //check to see add or remove marker
                     if (document.getElementById(idName).checked == true) {
 
                         AddMarker({ coord: { lat: lat, lng: lng } });
-                    
                     }
                     else {
             
@@ -76,9 +86,9 @@ function geocode(addLookup,idName) {
                 //    coordi: { lat: lat, lng: lng }
                 //};
                 //console.log(coordi);
-               
-               console.log(response);
-                console.log(response.data.results[0].formatted_address);
+
+               //console.log(response);
+                //console.log(response.data.results[0].formatted_address);
                 return coord;
             })
             .catch(function (error) {
