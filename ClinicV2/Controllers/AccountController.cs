@@ -10,9 +10,12 @@ namespace ClinicV2.Controllers
     {
         public ActionResult Login()
         {
-            if (Session["AdminIsLoggin"] != null)
+           
+            if (Session["AdminIsLogin"] != null)
             {
-                return RedirectToAction("AdminOptions", "Info");
+                HttpCookie cookie = Request.Cookies["userInfo"];
+
+                return RedirectToAction("AdminOptions", "AdminOptions");
             }
             else
             {
@@ -26,7 +29,10 @@ namespace ClinicV2.Controllers
             if (username == "admin" && password == "password")
             {
                 Session["AdminIsLogin"] = true;
-                return RedirectToAction("AdminOptions", "Info");
+                DateTime dateStamp = DateTime.Now;
+                HttpCookie cookie = new HttpCookie("userInfo",username);
+                Response.Cookies.Add(cookie);
+                return RedirectToAction("AdminOptions", "AdminOptions");
             }
 
             ViewBag.Error = "Wrong username/password";

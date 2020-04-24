@@ -1,7 +1,7 @@
 ﻿
 function test() {
     for (var i = 0; i < markers.length; i++) {
-        alert('hi');
+       // alert('hi');
     }
 }
 function Marker(addLookup, idName) {
@@ -24,7 +24,7 @@ function geocode(addLookup,idName,mess) {
     var location;
     var coord;
     var lat, lng;
-    console.log(idName + " " + addLookup);
+    //console.log(idName + " " + addLookup);
     //determine what address to look up
     if (addLookup == 'Empty') {
         
@@ -61,23 +61,29 @@ function geocode(addLookup,idName,mess) {
                 //if is the user automatically add it
                 if (addLookup == 'Empty') {
                     var tempLng, tempLat;
+                 //   console.log("ulat before:" + uLat);
                     if (uLng != null || uLat != null) {
-                        RemoveMarker({ coord: { lat: uLat, lng: uLng } });
+                    //    console.log("Not NUll");
+                        RemoveMarker({ coord: { lat: uLat, lng: uLng } }, addLookup);
                     }
-                   
-                    AddMarker({ coord: { lat: lat, lng: lng } });
+
+               
+                    AddMarker({ coord: { lat: lat, lng: lng } }, addLookup);
+              
                     uLng = lng;
                     uLat = lat;
+                  //  console.log("ulat after:" + uLat);
                 }
                 else {
+                
                     //check to see add or remove marker
                     if (document.getElementById(idName).checked == true) {
 
-                        AddMarker({ coord: { lat: lat, lng: lng } });
+                        AddMarker({ coord: { lat: lat, lng: lng } }, addLookup);
                     }
                     else {
             
-                        RemoveMarker({ coord: { lat: lat, lng: lng } });
+                        RemoveMarker({ coord: { lat: lat, lng: lng } }, addLookup);
                     }
                 }
            

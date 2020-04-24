@@ -22,7 +22,12 @@ namespace ClinicV2.Models
             NumDataValue = Value;
             DataValue = sValue;
         }
-
+        public DataModel(string Name, int Value)
+        {
+            DateName = Name;
+            NumDataValue = Value;
+          
+        }
         public static List<DataModel> Source()
         {
 
@@ -33,7 +38,7 @@ namespace ClinicV2.Models
             {
                 if (TrafficInfo.Count == 0)
                 {
-                    TrafficInfo.Add(new DataModel(ArraySets[0].DateName, 1, ArraySets[0].DataValue));
+                    TrafficInfo.Add(new DataModel(ArraySets[0].DateName, 1));
 
                 }
                 else
@@ -41,7 +46,7 @@ namespace ClinicV2.Models
                     int addCounter = 0;
                     for (int y = 0; y < TrafficInfo.Count; y++)
                     {
-                        if (ArraySets[x].DateName == TrafficInfo[y].DateName && ArraySets[x].DataValue == TrafficInfo[y].DataValue)
+                        if (ArraySets[x].DateName == TrafficInfo[y].DateName)
                         {
                             TrafficInfo[y].NumDataValue += 1;
                             addCounter = 1;
@@ -80,7 +85,7 @@ namespace ClinicV2.Models
 
             cnn.Open();
 
-                string sql = "Select * from Traffic";
+                string sql = "Select * from DestinationSource";
 
                 MySqlCommand cmd = new MySqlCommand(sql, cnn);
                 rdr = cmd.ExecuteReader();
@@ -90,9 +95,8 @@ namespace ClinicV2.Models
                     TrafficInfo.Add(new DataModel
                     {
                         DateName = rdr.GetValue(1).ToString(),
-                        DataValue = rdr.GetValue(3).ToString()
+                        DataValue = rdr.GetValue(2).ToString()
                         
-    
 
                     });
                 }

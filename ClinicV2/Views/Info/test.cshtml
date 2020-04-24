@@ -18,6 +18,10 @@
     .test2 {
         background-color: aqua;
     }
+
+    #map {
+        height:100%;
+    }
 </style>
 
 <script>
@@ -36,13 +40,13 @@
     var criteria = ['No','No','No'];
     function getParam() {
         const queryString = window.location.search;
-        console.log(queryString);
+        //console.log(queryString);
         const urlParams = new URLSearchParams(queryString);
         const clinicIntial = urlParams.get('clinicID');
-        console.log(clinicIntial);
+     //   console.log(clinicIntial);
         for (var i = 0; i < list.length; i++) {
     
-            console.log(list[i].ClinicID)
+            //console.log(list[i].ClinicID)
             if (list[i].ClinicID == clinicIntial) {
              
                 document.getElementById("ID_" + list[i].Name).checked = true;
@@ -466,18 +470,29 @@
 
             </div>
         </div>
-        <div id="map">
+        <div id="map" class="col-md-6">
 
         </div>
+        <div class="col-md-4">
+            <h4>Legend</h4>
+            <ul>
+                <li style="font-weight: bold"><img src="~/ArtAssest/Health.png" /> Clinic</li>
+                <li style="font-weight: bold"><img src="~/ArtAssest/Home.png" /> Your Home Address</li>
+            </ul>
+        </div>
+
         <div class="col-md-12">
+            <hr />
             <script src="~/Scripts/CustScript/MapScript.js"></script>
             <script>
                 var map;
+                var patientMarker = [];
                 var markers = [];
                 var markersCoord = [];
                 var Patientcounter = false;
                 var PatientCoord = [];
                 var markersToShow = [];
+                var clinicName = [];
                 function initMap() {
                     var option = {
                         zoom: 10,
@@ -509,33 +524,62 @@
 
 
                 }
-                function AddMarker(coord) {
+                function AddMarker(coord, mess) {
                     //alert('addmakrer');
                     temp = coord;
 
                     var id = coord.coord.lat;
                     var tem = coord.coord.lng;
-
+                  //  alert(Patientcounter);
                     if (Patientcounter == true) {
                         var tempArray = [];
                         PatientCoord = tempArray;
                         PatientCoord.push(id);
                         PatientCoord.push(tem);
                     }
+                    var iconBase =
+                        'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
+
+                    var iconLocation = "";
+
+                    if (mess == "Empty") {
+                        iconLocation = '/ArtAssest/Home.png';
+                    }
+                    else {
+                        iconLocation = '/ArtAssest/Health.png'
+                    }
                     var marker = new google.maps.Marker({
                         id: id,
                         position: coord.coord,
                         map: map,
-                        icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+
+                        icon: iconLocation
+                        //icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
                     });
+
+                   // alert(mess);
                     var exist = false;
-                    if (markers.length == 0) {
+                  
+                    if (mess == "Empty")
+                    {
+                        //alert("Empty");
+                        var tempArray = [];
+                        patientMarker = tempArray;                 
+                        patientMarker.push(marker);
+                        exist = true;
+                    } else if (markers.length == 0) {
+                        //  alert("No coord");
                         exist = false;
                     }
                     else {
                         for (var counter = 0; counter < marker.length; counter++) {
                             if (markers[counter].id == coord.coord.lat) {
                                 exist = true;
+                           //     alert("true");
+                            }
+                            else {
+                           //     alert("false");
+                                exist = false;
                             }
 
                         }
@@ -543,15 +587,23 @@
 
 
                     if (exist == false) {
+                        //alert("HI");
                         markers.push(marker);
                         var coor = [coord.coord.lat, coord.coord.lng];
                         markersCoord.push(coor);
+                        clinicName.push([mess,coor]);
                     }
 
 
                 }
-                function RemoveMarker(coord) {
-                    marker = coord
+                function RemoveMarker(coord,mess) {
+                  //  console.log("Remove");
+                    marker = coord;
+                   // console.log(marker);
+                    if (mess == "Empty") {
+                        patientMarker[0].setMap(null);
+
+                    }
                     for (var i = 0; i < markers.length; i++) {
                         if (markers[i].id == marker.coord.lat) {
                             markers[i].setMap(null);
@@ -561,41 +613,107 @@
                 }
 
 
-                function patientClinic(val1, val2) {
-                    Patientcounter = true;
-                    geocode(val1, val2);
-                    Patientcounter = false;
-                    showClosetClinic();
+               async function patientClinic(val1, val2) {
+                   Patientcounter = true;
+                   await geocode(val1, val2);
+                
+        
+                        
+                    
+                //   console.log(PatientCoord);
+                   setTimeout(function () {
+                       showClosetClinic();
+                       Patientcounter = false; 
+                   }, 1000);
+                             
 
                 }
 
                 function showClosetClinic() {
                     var difDistance = 0;
-                    //alert("1");
-                    for (var i = 0; i < markers.length; i++) {
+                   // console.log("1");
+
+                   
+                   for (var i = 0; i < markers.length; i++) {
                         var remove = false;
                         //alert("hi");
 
-                        alert(markersToShow.length);
-                        if (markersToShow.length < 6 || markersToShow.length == 0) {
-                            //alert("base 6");
-                            difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
-                            markersToShow.push([markers[i].id, difDistance]);
-                        }
-                        else if (markerstoshow.length > 5) {
-                            //alert("base 7");
-                            difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
-                            for (var counteri = 0; counteri < markerstoshow.length; counteri++) {
-                                if (markersToShow[counteri][1] > difDistance) {
-                                    markersToShow[counteri][0] = markers[i].id;
-                                    markersToShow[counteri][1] = difDistance;
+                       //alert(markersToShow.length);
+                       if (markersToShow.length == 0) {
+                        //   console.log("first M:" +markersCoord[0][0]);
+                           difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
+
+                           markersToShow.push([markersCoord[i][0], difDistance]);   
+
+                       }
+                       else if (markersToShow.length < 6) {
+                           //console.log("base 9");
+                          // for (var q = 0; q < markersCoord.length; q++) {         
+                               //console.log("base 8");
+                               var addCheck = true;
+                               for (var t = 0; t < markersToShow.length; t++) {
+                                   //console.log("base 7");
+                                 //  console.log(markersCoord[i][0] + ":" + markersToShow[t][0]);
+                                   if (markersCoord[i][0] == markersToShow[t][0]) {
+                                      // console.log(markersCoord[q][0] + ":" + markersToShow[t][0]);
+                                       addCheck = false;
+                                   }
+                   
+
+                               }
+                               if (addCheck != false) {
+                                   difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
+      
+                                //   console.log(difDistance);
+                                   markersToShow.push([markersCoord[i][0], difDistance]);
+                               }
+
+                             
+
+                       }
+                       //else if (markerstoshow.length > 5) {
+                       //     //alert("base 7");
+                       //     difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
+                       //     for (var counteri = 0; counteri < markerstoshow.length; counteri++) {
+                       //         if (markersToShow[counteri][1] > difDistance) {
+                       //             markersToShow[counteri][0] = markers[i].id;
+                       //             markersToShow[counteri][1] = difDistance;
+                       //         }
+                       //     }
+
+                       // }
+                       }
+                    //console.log("Test");
+                    for (var u = 0; u < markersToShow.length; u++) {
+                        console.log("Test");
+                        for (var v = 0; v < clinicName.length; v++) {
+                            console.log("Test1");
+                            if (markersToShow[u][0] == clinicName[v][1][0]) {
+                                console.log("Test2");
+                                for (var z = 0; z < list.length; z++) {
+                                    console.log("Test3");
+                                    console.log(clinicName[v][0]);
+                                    if (clinicName[v][0] == list[z].Address) {
+                                        var distanceChange = document.getElementById(list[z].Name).cells;
+
+                                        var numFormat = markersToShow[u][1];
+                                       
+                                        distanceChange[4].innerHTML = numFormat.toFixed(2) + "miles";
+
+                                        }
+                                    }
+
                                 }
                             }
 
-                        }
+                         }
                     }
 
+                for (var xx = 0; xx < 5; xx++) {
+                    console.log(xx);
                 }
+
+                
                 function testy() {
 
 
@@ -614,8 +732,10 @@
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmfeWr8pGc9LSDA5BCgCfvj0i3pqoE_cA&callback=initMap"
                     async defer></script>
         </div>
+      
         <form class="form-horizontal">
-            <div class="row" >
+           
+            <div class="row">
 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -731,12 +851,12 @@
                     </div>
 
 
-                    @foreach (var item in Model.listofCriteria)
+                    @*@foreach (var item in Model.listofCriteria)
                     {
                         <div class="col-md-8">
 
                             <input type="checkbox" id="@item.Name" onclick="insurancecheck('@item.Name')" />@item.Name
-                        </div>
+                        </div>*@
 
 
                         @*if (item.Name == "Housing" | item.Name == "Income")
@@ -751,7 +871,7 @@
                         </div>
                     }*@
 
-                    }
+                    
 
 
 
@@ -766,7 +886,7 @@
                 </div>
             </div>
         </form>
-       
+
     }
     @* ------------------------------------------------------------------------------------------------------------- *@
 

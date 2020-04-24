@@ -26,9 +26,24 @@
                     <li>@Html.ActionLink("Home", "Index", "Info")</li>
                     <li>@Html.ActionLink("Signup", "test", "Info")</li>
                     <li>@Html.ActionLink("About", "AboutPage", "Info")</li>
-                    <li>@Html.ActionLink("Login", "Login", "Account")</li>
+
                 </ul>
-            </div>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Session["AdminIsLogin"] != null)
+                    {
+
+                        <li>@Html.ActionLink("Requirement", "ViewReq", "AdminOptions")</li>
+                        <li>@Html.ActionLink("Clinic", "listofClinic", "AdminOptions")</li>
+                        <li>@Html.ActionLink("Traffic Info", "TestView", "AdminOptions")</li>
+                        <li>@Html.ActionLink("AdminOption", "AdminOptions", "AdminOptions")</li>
+                        <li class="btn-danger navbar-right">@Html.ActionLink("Logout", "Logout", "Account")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "Account")</li>
+                    }
+                </ul>
+                </div>
         </div>
     </div>
     <div class="container">

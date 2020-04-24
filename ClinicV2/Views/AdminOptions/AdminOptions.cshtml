@@ -1,0 +1,31 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Welcome to Admin Options";
+}
+
+<center><h2>@ViewBag.Title</h2></center>
+
+<p>Please select an option.</p>
+
+
+
+<form method="post">
+
+    <center><input type="button" value="Clinic Management" class="btn btn-primary" onclick="window.location.href = '@Url.Action("listofClinic", "AdminOptions")';" /></center>
+    <p><br /></p>
+
+
+    <center><input type="button" value="Criteria Management" class="btn btn-primary" onclick="window.location.href = '@Url.Action("ViewReq", "AdminOptions")';" /></center>
+    <p><br /></p>
+
+
+    <center><input type="button" value="Traffic Info" class="btn btn-primary" onclick="window.location.href = '@Url.Action( "TestView", "AdminOptions")';" /></center>
+    <p><br /></p>
+
+    <input type='button' class="btn btn-danger" value="Logout" onclick="window.location.href ='@Url.Action("Logout", "Account")';" />
+</form>
+<br /><br />

@@ -164,6 +164,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ArtAssest\Health.png" />
+    <Content Include="ArtAssest\Home.png" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -290,24 +292,18 @@
     <Content Include="Views\Info\EmailRequest.cshtml" />
     <Content Include="Views\Info\xxGetRequirement.cshtml" />
     <Content Include="Views\Info\Index.cshtml" />
-    <Content Include="Views\Info\PatientSignUp.cshtml" />
     <Content Include="Views\Info\xSignup.cshtml" />
     <Content Include="Views\Info\_testSign.cshtml" />
     <Content Include="Views\Info\_testView.cshtml" />
     <Content Include="Views\Info\test.cshtml" />
     <Content Include="Views\Info\_ClinicPartView.cshtml" />
-    <Content Include="Views\Info\listofClinic.cshtml" />
-    <Content Include="Views\Info\ClinicAdd.cshtml" />
-    <Content Include="Views\Info\CreateReq.cshtml" />
-    <Content Include="Views\Info\EditCriteria.cshtml" />
-    <Content Include="Views\Info\_GetRequirement.cshtml" />
-    <Content Include="Views\AdminOptions\AddClinic.cshtml" />
-    <Content Include="Views\AdminOptions\ClinicAdded.cshtml" />
-    <Content Include="Views\AdminOptions\DeleteClinics.cshtml" />
+    <Content Include="Views\AdminOptions\listofClinic.cshtml" />
+    <Content Include="Views\AdminOptions\ClinicAdd.cshtml" />
+    <Content Include="Views\AdminOptions\CreateReq.cshtml" />
+    <Content Include="Views\AdminOptions\EditCriteria.cshtml" />
+    <Content Include="Views\AdminOptions\_GetRequirement.cshtml" />
     <Content Include="Views\AdminOptions\EditClinics.cshtml" />
-    <Content Include="Views\AdminOptions\ViewDemographics.cshtml" />
-    <Content Include="Views\Info\AdminOptions.cshtml" />
-    <Content Include="Views\AdminOptions\Logout.cshtml" />
+    <Content Include="Views\AdminOptions\AdminOptions.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper.js.flow" />
@@ -320,9 +316,9 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_GoogleAntalytics.cshtml" />
     <Content Include="Views\Info\ConfirmationPage.cshtml" />
-    <Content Include="Views\Info\ViewReq.cshtml" />
-    <Content Include="Views\Info\Testview.cshtml" />
-    <Content Include="Views\Info\_Traffic.cshtml" />
+    <Content Include="Views\AdminOptions\ViewReq.cshtml" />
+    <Content Include="Views\AdminOptions\Testview.cshtml" />
+    <Content Include="Views\AdminOptions\_Traffic.cshtml" />
     <Content Include="Views\Shared\_layout2.cshtml" />
     <Content Include="Views\Info\AboutPage.cshtml" />
     <Content Include="Views\Shared\AuthorizeFailed.cshtml" />
