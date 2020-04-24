@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Login</h2>
+
+
+
+<p><br /></p>
+<p class="">Enter your username and password to login.</p>
+<p><br /></p>
+
+<br /><br />
+
+<body>
+    <div class="container" >
+        <div>
+            <form class="form-horizontal" role="form" method='post'>
+                <label><strong><p class="">Username:</p></strong> <input type='text' name='username' required></label><br /><br />
+                <label><strong><p class="">Password:</p></strong> <input type='password' name='password' required></label><br /><br />
+                
+                <button class="btn  btn-primary " type="submit">Sign In</button>
+
+            </form>
+        </div>
+    </div>
+</body>

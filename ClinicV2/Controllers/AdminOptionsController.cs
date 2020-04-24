@@ -14,6 +14,7 @@ using System.Activities;
 
 namespace ClinicV2.Controllers
 {
+    [Filters.AuthorizeAdmin]
     public class AdminOptionsController : Controller
     {
         public ActionResult Index()

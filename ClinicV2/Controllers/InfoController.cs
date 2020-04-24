@@ -108,7 +108,7 @@ namespace ClinicV2.Controllers
             //return RedirectToAction("test");
 
         }
-
+        [Filters.AuthorizeAdmin]
         [HttpGet]
         public ActionResult listofClinic()
         {
@@ -119,7 +119,7 @@ namespace ClinicV2.Controllers
             ViewBag.Collection = listofClinic;
             return View(listofClinic);
         }
-
+        [Filters.AuthorizeAdmin]
         public ActionResult DeleteClinic(string name)
         {
             clinicModel.deleteClinic(name);
@@ -133,19 +133,21 @@ namespace ClinicV2.Controllers
 
             return View();
         }
-      
 
+        [Filters.AuthorizeAdmin]
         [HttpGet]
         public ActionResult ClinicAdd()
         {
             return View();
         }
+        [Filters.AuthorizeAdmin]
         [HttpPost]
         public ActionResult ClinicAdd(clinicModel clinic)
         {
             clinicModel.CreateClinic(clinic);
             return RedirectToAction("listofCLinic");
         }
+        [Filters.AuthorizeAdmin]
         [HttpGet]
         public ActionResult GetRequirement()
         {
@@ -153,7 +155,7 @@ namespace ClinicV2.Controllers
        
             return View(Req);
         }
-
+        [Filters.AuthorizeAdmin]
         [HttpGet]
         public ActionResult ViewReq()
         {
@@ -166,6 +168,7 @@ namespace ClinicV2.Controllers
             NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
             return View(NewCriteria);
         }
+        [Filters.AuthorizeAdmin]
         [HttpPost]
         public ActionResult ViewReq(CreateCriteriaModel req)
         {
@@ -201,7 +204,7 @@ namespace ClinicV2.Controllers
 
         //    Criteria criteria = new Criteria();
         //    criteria = Criteria.GetCriteria(id);
-            
+
 
         //    return View(criteria);
         //}
@@ -213,6 +216,7 @@ namespace ClinicV2.Controllers
 
         //    return RedirectToAction("ViewReq");
         //}
+        [Filters.AuthorizeAdmin]
         [HttpGet]
         public ActionResult DeleteCriteria(int id)
         {
@@ -221,7 +225,7 @@ namespace ClinicV2.Controllers
 
             return RedirectToAction("ViewReq");
         }
-
+        [Filters.AuthorizeAdmin]
         [HttpGet]
         public ActionResult DeleteCriteriaComplete(int id)
         {
@@ -230,7 +234,7 @@ namespace ClinicV2.Controllers
 
             return RedirectToAction("ViewReq");
         }
-
+        [Filters.AuthorizeAdmin]
         [HttpGet]
         public ActionResult CreateReq()
         {
@@ -240,6 +244,7 @@ namespace ClinicV2.Controllers
             NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
             return View(NewCriteria);
         }
+        [Filters.AuthorizeAdmin]
         [HttpPost]
         public ActionResult CreateReq(CreateCriteriaModel req)
         {
@@ -294,7 +299,7 @@ namespace ClinicV2.Controllers
 
         }
 
-
+        [Filters.AuthorizeAdmin]
         public ActionResult AdminOptions()
         {
             ViewBag.Message = "Admin Options page.";

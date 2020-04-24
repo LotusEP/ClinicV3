@@ -4,7 +4,7 @@
 }
 
 @{
-    ViewData["Title"] = "Admin Options";
+    ViewData["Title"] = "Welcome to Admin Options";
 }
 
 <center><h2>@ViewBag.Title</h2></center>
@@ -26,6 +26,6 @@
     <center><input type="button" value="Traffic Info" class="btn btn-primary" onclick="window.location.href = '@Url.Action( "TestView", "Info")';" /></center>
     <p><br /></p>
 
-    <input type='button' class="btn btn-primary" value="Logout" onclick="window.location.href ='@Url.Action("Logout", "Home")';" />
+    <input type='button' class="btn btn-danger" value="Logout" onclick="window.location.href ='@Url.Action("Logout", "Account")';" />
 </form>
 <br /><br />
