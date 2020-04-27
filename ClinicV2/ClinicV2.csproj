@@ -151,6 +151,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\clinicModel.cs" />
     <Compile Include="Models\CreateCriteriaModel.cs" />
     <Compile Include="Models\Credentials.cs" />
@@ -166,6 +167,7 @@
   <ItemGroup>
     <Content Include="ArtAssest\Health.png" />
     <Content Include="ArtAssest\Home.png" />
+    <Content Include="ArtAssest\medical_medicine_cardiogram_heart_health_heart_care-512.png" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -288,21 +290,14 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Info\xxxClinicAdd.cshtml" />
     <Content Include="Views\Info\EmailRequest.cshtml" />
-    <Content Include="Views\Info\xxGetRequirement.cshtml" />
     <Content Include="Views\Info\Index.cshtml" />
-    <Content Include="Views\Info\xSignup.cshtml" />
-    <Content Include="Views\Info\_testSign.cshtml" />
-    <Content Include="Views\Info\_testView.cshtml" />
     <Content Include="Views\Info\test.cshtml" />
     <Content Include="Views\Info\_ClinicPartView.cshtml" />
     <Content Include="Views\AdminOptions\listofClinic.cshtml" />
     <Content Include="Views\AdminOptions\ClinicAdd.cshtml" />
     <Content Include="Views\AdminOptions\CreateReq.cshtml" />
-    <Content Include="Views\AdminOptions\EditCriteria.cshtml" />
     <Content Include="Views\AdminOptions\_GetRequirement.cshtml" />
-    <Content Include="Views\AdminOptions\EditClinics.cshtml" />
     <Content Include="Views\AdminOptions\AdminOptions.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
@@ -314,15 +309,16 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Shared\_GoogleAntalytics.cshtml" />
     <Content Include="Views\Info\ConfirmationPage.cshtml" />
     <Content Include="Views\AdminOptions\ViewReq.cshtml" />
     <Content Include="Views\AdminOptions\Testview.cshtml" />
     <Content Include="Views\AdminOptions\_Traffic.cshtml" />
-    <Content Include="Views\Shared\_layout2.cshtml" />
     <Content Include="Views\Info\AboutPage.cshtml" />
     <Content Include="Views\Shared\AuthorizeFailed.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\AdminOptions\EditClinic.cshtml" />
+    <Content Include="Views\AdminOptions\EditReq.cshtml" />
+    <Content Include="Views\Account\CreatAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

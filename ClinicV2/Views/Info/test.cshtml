@@ -29,7 +29,6 @@
     var referrer = document.referrer;
     var uLat = null, uLng = null;
     var changecounter = 0;
-    //document.getElementById("listofInsurance").addEventListener("click", Getnewlist);
     var Requi = "check";
     var list = [];
     var Clinistodisplay = ["inital"];
@@ -56,11 +55,8 @@
         }
   
     }
-
     //go through each criteria function
     function ListCriteraCheck(Value) {
-        //alert('Update');
-
         switch (Value) {
 
             case 0:
@@ -151,6 +147,8 @@
                     uncheckCounter = false;
                 }
             }
+            //clear the Distance row after clinic is remove
+            showClosetClinic()
             //uncheck all the display that are not mean to display
             if (uncheckCounter == true) {
                 var Uncheck = document.getElementById("ID_" + list[dis].Name);
@@ -178,7 +176,6 @@
     function updatingClinictoDisplay(Clinic,Action) {
 
         var checkCounter = 0;
-        //alert(Action + ":Upating:" + Clinic)
         for (var clinicNum = 1; clinicNum < Clinistodisplay.length; clinicNum++) {
 
             if (Clinic == Clinistodisplay[clinicNum]) {
@@ -287,10 +284,7 @@
 
 
     }
-
-
     function IncomeCheck() {
-        //alert("JI");
         var Income = parseInt(document.getElementById('newPatient_Income').value);
         var Household = parseInt(document.getElementById('newPatient_Household').value);
         var Period = document.getElementById('Period').value;
@@ -298,7 +292,6 @@
         var val = 0;
         var noMatch = false;
 
-      //  alert(Period);
         switch(Period)
         {
             case "Weekly":
@@ -315,37 +308,24 @@
             break;
 
         }
-       //alert(Income);
-       // alert(Household);
         var dis = null;
         var x = 0;
         //go through the clinics
-
-        for (x = 0; x < list.length; x++) {
-            //dis = document.getElementById(list[x].Name);
-            //dis.style.display = "none";
+        for (x = 0; x < list.length; x++) {;
             var y = 0;
             val = 0;
-           //  alert('pass1:' + x);
             //go through each clinic requirement
-
             for (y =0; y < list[x].Req.length; y++) {
-                //  alert('pass2:' + y);
                 //check if the requirement is income
                 if (list[x].Req[y].Name == ("Income")) {
                     noMatch = true;
-                    //   alert('pass3');
                     // get that income requirement value
                     val = parseInt(list[x].Req[y].Value);
-                    // alert(val + "Income For clinic");
-                    // alert(Income);
                     var z, w = 0;
                     //get the addition income per household value
-
                     for (z = 0; z < list.length; z++) {
 
                         for (w = 0; w < list[z].Req.length; w++) {
-                            //alert(list[z].Req[w].Name);;
                             if (list[z].Req[w].Name == ("+IncomePerPerson")) {
 
                                 Requiredhouse = parseInt(list[z].Req[w].Value);
@@ -353,7 +333,6 @@
                             else {
                               Requiredhouse =  @Html.Raw(Json.Encode(Model.GuidelineValue));
                             }
-                            //  alert("Income addition: " + Requiredhouse);
                         }
                     }
 
@@ -366,28 +345,12 @@
 
                     }
                     if (Income <= val || val == 0) {
-
-                        //alert('Patient Income:' + Income);
-                        //alert('the requirement amount:' + val)
-                        // alert("yes");
-                        // alert(typeof Income + "Type for income input");
-
-                        //alert(typeof val + "Type of clinic income");
-                        //   alert(typeof list[x].Req[y].Value);
-                        // alert('pass4:' + Income + ": ClinicReq: " + list[x].Req[y].Value);
-                        //alert("add new clinic");
-
                         updatingClinictoDisplay(list[x].Name,"ADD");
-                        //dis = document.getElementById(list[x].Name);
-                        //dis.style.display = "";
                     }
 
                     else {
 
                         updatingClinictoDisplay(list[x].Name, "REMOVE");
-
-                        //dis = document.getElementById(list[x].Name);
-                        //dis.style.display = "none";
                     }
                 }
                 else {
@@ -493,6 +456,7 @@
                 var PatientCoord = [];
                 var markersToShow = [];
                 var clinicName = [];
+                //init the google map
                 function initMap() {
                     var option = {
                         zoom: 10,
@@ -500,127 +464,110 @@
                     }
                     var geocoder = new google.maps.Geocoder();
                     map = new google.maps.Map(document.getElementById('map'), option);
-                    var address = '355 monument Rd Apt 15F Jacksonville FL 32225';
-                    //var customMarker;
-                    //geocoder.geocode({'address': address }, function (results, status) {
-                    //    if (status == google.maps.GeocoderStatus.OK) {
-                    //        map.setCenter(results[0].geometry.location);
-                    //        if (customerMarker) customerMarker.setMap(null);
-                    //        customerMarker = new google.maps.Marker({
-                    //            map: map,
-                    //            position: results[0].geometry.location
-                    //        });
-                    //        closest = findClosestN(results[0].geometry.location, 10);
-                    //        // get driving distance
-                    //        closest = closest.splice(0, 3);
-                    //        calculateDistances(results[0].geometry.location, closest, 3);
-                    //    } else {
-                    //        alert('Geocode was not successful for the following reason: ' + status);
-                    //    }
-                    //});
-                    var addLookUp = document.getElementById('newPatient_Zip');
-
                     map.addListener('onchange')
 
-
                 }
+                //add marker to the map
                 function AddMarker(coord, mess) {
-                    //alert('addmakrer');
+                    //assign the geocode info
                     temp = coord;
-
+                    //set the id as the lat 
                     var id = coord.coord.lat;
                     var tem = coord.coord.lng;
-                  //  alert(Patientcounter);
+                    //determine whether if is a new patient address
                     if (Patientcounter == true) {
+                        //store the new patient address
                         var tempArray = [];
                         PatientCoord = tempArray;
                         PatientCoord.push(id);
                         PatientCoord.push(tem);
                     }
-                    var iconBase =
-                        'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
-
+                  
+                    //get the marker image
                     var iconLocation = "";
-
+                    //determine the marker image
                     if (mess == "Empty") {
                         iconLocation = '/ArtAssest/Home.png';
                     }
                     else {
                         iconLocation = '/ArtAssest/Health.png'
                     }
+                    //create the marker
                     var marker = new google.maps.Marker({
                         id: id,
                         position: coord.coord,
                         map: map,
-
                         icon: iconLocation
-                        //icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
                     });
 
-                   // alert(mess);
+                      
                     var exist = false;
-                  
+                    //storing patient geocode info
                     if (mess == "Empty")
                     {
-                        //alert("Empty");
                         var tempArray = [];
                         patientMarker = tempArray;                 
                         patientMarker.push(marker);
                         exist = true;
                     } else if (markers.length == 0) {
-                        //  alert("No coord");
                         exist = false;
                     }
                     else {
-                        for (var counter = 0; counter < marker.length; counter++) {
+                        //determine if the geocode already being store or not
+                        for (var counter = 0; counter < markers.length; counter++) {
                             if (markers[counter].id == coord.coord.lat) {
-                                exist = true;
-                           //     alert("true");
+                                exist = true;      
                             }
                             else {
-                           //     alert("false");
                                 exist = false;
                             }
 
                         }
                     }
 
-
+                    //pushing the geocode for distance calculation
                     if (exist == false) {
-                        //alert("HI");
                         markers.push(marker);
                         var coor = [coord.coord.lat, coord.coord.lng];
                         markersCoord.push(coor);
                         clinicName.push([mess,coor]);
                     }
-
-
+     
                 }
-                function RemoveMarker(coord,mess) {
-                  //  console.log("Remove");
+                //remove the old marker info
+                function RemoveMarker(coord, mess) {
                     marker = coord;
-                   // console.log(marker);
+                    //determine if is the patient or the clinic marker
                     if (mess == "Empty") {
                         patientMarker[0].setMap(null);
 
                     }
+                    //remove the marker
                     for (var i = 0; i < markers.length; i++) {
                         if (markers[i].id == marker.coord.lat) {
                             markers[i].setMap(null);
                         }
                     }
+                  
+                    //clear the marker info 
+                    for (var counter = 0; counter < markers.length; counter++) {
+  
+                        if (markers[counter].id == marker.coord.lat) {
+                            markers.splice(counter, 1);
+                            markersToShow.splice(counter, 1);
+                            clinicName.splice(counter, 1);
+                            markersCoord.splice(counter,1);
+                        }
+                    }
 
                 }
-
-
-               async function patientClinic(val1, val2) {
-                   Patientcounter = true;
+                //patient code to calculate distance
+                async function patientClinic(val1, val2) {
+                    //new patient
+                    Patientcounter = true;
+                    //get the geocode for patient
                    await geocode(val1, val2);
-                
-        
-                        
-                    
-                //   console.log(PatientCoord);
+                    //delay to wait for geocode to finish than calcualte distance
                    setTimeout(function () {
                        showClosetClinic();
                        Patientcounter = false; 
@@ -629,75 +576,51 @@
 
                 }
 
+                //calculate the distance of desire clinic
                 function showClosetClinic() {
                     var difDistance = 0;
-                   // console.log("1");
-
-                   
-                   for (var i = 0; i < markers.length; i++) {
-                        var remove = false;
-                        //alert("hi");
-
-                       //alert(markersToShow.length);
-                       if (markersToShow.length == 0) {
-                        //   console.log("first M:" +markersCoord[0][0]);
-                           difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
-
+                    for (var i = 0; i < markers.length; i++) {
+                        //get the distance
+                        difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
+                        //assign the first distance
+                       if (markersToShow.length == 0) {                   
                            markersToShow.push([markersCoord[i][0], difDistance]);   
 
                        }
+                        //assign the rest of the distance up to 6
                        else if (markersToShow.length < 6) {
-                           //console.log("base 9");
-                          // for (var q = 0; q < markersCoord.length; q++) {         
-                               //console.log("base 8");
-                               var addCheck = true;
-                               for (var t = 0; t < markersToShow.length; t++) {
-                                   //console.log("base 7");
-                                 //  console.log(markersCoord[i][0] + ":" + markersToShow[t][0]);
-                                   if (markersCoord[i][0] == markersToShow[t][0]) {
-                                      // console.log(markersCoord[q][0] + ":" + markersToShow[t][0]);
-                                       addCheck = false;
-                                   }
-                   
+                            var addCheck = false;
+                           for (var t = 0; t < markersToShow.length; t++) {         
+                               if (markersCoord[i][0] == markersToShow[t][0]) {
+                                    addCheck = true;
+                                    if (difDistance != markersToShow[i][1]) {                                   
+                                        markersToShow[i][1] = difDistance;                                      
+                                    }
+                                }
 
-                               }
-                               if (addCheck != false) {
-                                   difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
-      
-                                //   console.log(difDistance);
-                                   markersToShow.push([markersCoord[i][0], difDistance]);
-                               }
-
-                             
-
+                           }
+                           //if is a new clinic add it to marker
+                           if (addCheck == false) {          
+                               markersToShow.push([markersCoord[i][0], difDistance]);
+                           }
+                         
+                          }
                        }
-                       //else if (markerstoshow.length > 5) {
-                       //     //alert("base 7");
-                       //     difDistance = distance(PatientCoord[0], PatientCoord[1], markersCoord[i][0], markersCoord[i][1]);
-                       //     for (var counteri = 0; counteri < markerstoshow.length; counteri++) {
-                       //         if (markersToShow[counteri][1] > difDistance) {
-                       //             markersToShow[counteri][0] = markers[i].id;
-                       //             markersToShow[counteri][1] = difDistance;
-                       //         }
-                       //     }
+                    //clear old distance info
+                    var tableOfClinic = document.getElementById('list_Of_Clinic');
 
-                       // }
-                       }
-                    //console.log("Test");
+                    for (var u = 1; u < tableOfClinic.rows.length; u++) {
+                        tableOfClinic.rows[u].cells[4].innerHTML = "";
+
+                    }
+                    //add new distance info to table
                     for (var u = 0; u < markersToShow.length; u++) {
-                        console.log("Test");
                         for (var v = 0; v < clinicName.length; v++) {
-                            console.log("Test1");
                             if (markersToShow[u][0] == clinicName[v][1][0]) {
-                                console.log("Test2");
                                 for (var z = 0; z < list.length; z++) {
-                                    console.log("Test3");
-                                    console.log(clinicName[v][0]);
                                     if (clinicName[v][0] == list[z].Address) {
                                         var distanceChange = document.getElementById(list[z].Name).cells;
-
-                                        var numFormat = markersToShow[u][1];
-                                       
+                                        var numFormat = markersToShow[u][1];          
                                         distanceChange[4].innerHTML = numFormat.toFixed(2) + "miles";
 
                                         }
@@ -708,23 +631,6 @@
 
                          }
                     }
-
-                for (var xx = 0; xx < 5; xx++) {
-                    console.log(xx);
-                }
-
-                
-                function testy() {
-
-
-                    if (document.getElementById('Volunteers in Medicine').checked == true) {
-                        alert('hi');
-                    }
-                    else {
-                        alert('goodbye');
-                    }
-                }
-
 
 
             </script>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClinicV2.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -26,7 +27,9 @@ namespace ClinicV2.Controllers
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
-            if (username == "admin" && password == "password")
+            Account newAccount = new Account(username, password);
+            bool checkCounter = Account.login(newAccount);
+            if (checkCounter != false)
             {
                 Session["AdminIsLogin"] = true;
                 DateTime dateStamp = DateTime.Now;
@@ -43,6 +46,18 @@ namespace ClinicV2.Controllers
         {
             Session["AdminIsLogin"] = null;
             return RedirectToAction("Login", "Account");
+        }
+
+        public ActionResult CreatAccount()
+        {
+        
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreatAccount(Account account)
+        {
+            Account.Create(account);
+            return View();
         }
     }
 }

@@ -36,23 +36,25 @@ namespace ClinicV2.Models
             connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
             cnn = new MySqlConnection(connString);
 
-            MySqlCommand comm;
-
             string sql;
             //sql= "IF EXISTS(SELECT * FROM Req WHERE ReqName="+req.Name+") Update Req"
             //sql = "Insert Into Req Values(@Aug1,@Aug2,@State,@ReqName)";
-            sql = "Insert Into PatientDB (FirstName,LastName,Street,CIty,Zip,State,Email,PhoneNumber) Values('" + 
-                patient.FirstName.ToString() + 
-                "','" + patient.LastName.ToString() +
-                "','" + patient.Street.ToString() +
-                "','" + patient.City.ToString() +
-                "','" + patient.Zip.ToString() +
-                "','" + patient.State.ToString() +
-                "','" + patient.Email.ToString() +
-                "','" + patient.CellPhone.ToString() + "')";
-            comm = new MySqlCommand(sql, cnn);
+            sql = "Insert Into PatientDB (FirstName,LastName,Street,CIty,Zip,State,Email,PhoneNumber) Values(@FirstName,@LastName" +
+                "@Street,@City,@State,@Email,@Cell";
+           
+
 
             MySqlCommand cmm = new MySqlCommand(sql, cnn);
+
+            cmm.Parameters.AddWithValue("@FirstName", patient.FirstName.ToString());
+            cmm.Parameters.AddWithValue("@LastName", patient.LastName.ToString());
+            cmm.Parameters.AddWithValue("@Street",patient.Street.ToString());
+            cmm.Parameters.AddWithValue("@City",patient.City.ToString());
+            cmm.Parameters.AddWithValue("@Zip",patient.Zip.ToString());
+            cmm.Parameters.AddWithValue("@State",patient.State.ToString());
+            cmm.Parameters.AddWithValue("@Email",patient.Email.ToString());
+            cmm.Parameters.AddWithValue("@Cell",patient.CellPhone.ToString());
+            
             cnn.Open();
             cmm.ExecuteNonQuery();
             cnn.Close();

@@ -20,9 +20,9 @@ namespace ClinicV2.Controllers
 
         public ActionResult DeleteClinic(string name)
         {
-            clinicModel.deleteClinic(name);
+            clinicModel.DeleteClinic(name);
 
-            return RedirectToAction("listofCLinic");
+            return RedirectToAction("listofClinic");
 
         }
 
@@ -36,9 +36,22 @@ namespace ClinicV2.Controllers
         public ActionResult ClinicAdd(clinicModel clinic)
         {
             clinicModel.CreateClinic(clinic);
-            return RedirectToAction("listofCLinic");
+            return RedirectToAction("listofClinic");
         }
- 
+        [HttpGet]
+        public ActionResult EditClinic(int id)
+        {
+            clinicModel clinic = clinicModel.GetClinic(id);
+            return View(clinic);
+        }
+
+        [HttpPost]
+        public ActionResult EditClinic(clinicModel clinic)
+        {
+            clinicModel.EditClinic(clinic);
+            ViewBag.editMess = "Success";
+            return View();
+        }
         [HttpGet]
         public ActionResult GetRequirement()
         {
@@ -113,6 +126,20 @@ namespace ClinicV2.Controllers
             NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
             return View(NewCriteria);
         }
+        [HttpGet]
+        public ActionResult EditReq(int ID)
+        {
+            Criteria updateCriteria = Criteria.GetInCriteria(ID);
+            return View(updateCriteria);
+        }
+        [HttpPost]
+        public ActionResult EditReq(Criteria criteria)
+        {
+        
+            Criteria.EditCriteria(criteria);
+                ViewBag.editMess = "Success";
+            return View();
+        }
            
 
         public ActionResult AdminOptions()
@@ -125,8 +152,6 @@ namespace ClinicV2.Controllers
         public ActionResult AdminLogin()
             {
                
-
-            //Connection to database (Login credentials retrieval at a later date)
              
             return View(); 
 
@@ -154,16 +179,6 @@ namespace ClinicV2.Controllers
             return View(DataInfo);
         }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //    public IActionResult Error()
-        //    {
-        //        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //    }
-
-        //[responsecache(duration = 0, location = responsecachelocation.none, nostore = true)]
-        //public iactionresult error()
-        //{
-        //    return view(new errorviewmodel { requestid = activity.current?.id ?? httpcontext.traceidentifier });
-        //}
+      
     }
 }

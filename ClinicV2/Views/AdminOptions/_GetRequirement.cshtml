@@ -3,7 +3,7 @@
 
 <div class="col-md-12">
     <p>
-        @Html.ActionLink("Create New", "CreateReq", "Info")
+        @Html.ActionLink("Create New", "CreateReq", "AdminOptions")
     </p>
 
     <input type="text" id="myInput" onkeyup="searchByClinic()" placeholder="Search for names.." title="Type in a name">
@@ -33,7 +33,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Value)
                 </td>
-                <td>
+                <td>              
                     @Html.ActionLink("Delete", "DeleteCriteria", new { id = item.CriteriaID })
                 </td>
             </tr>
