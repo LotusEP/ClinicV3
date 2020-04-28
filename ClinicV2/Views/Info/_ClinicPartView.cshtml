@@ -26,24 +26,20 @@
             <table class="table table-striped table-hover table-bordered" id="list_Of_Clinic" >
                 <tr>
 
-                    <th>Clinic Name</th>
-                    <th>Address</th>
-                    <th>Website</th>
-                    <th>Phonenumber</th>
-                    <th>Email</th>
-                    <th>Distance</th>
+                    <th scope="col">Clinic Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Phonenumber</th>
+                    <th scope="col">Distance</th>
                 </tr>
 
                 @foreach (var item in Model)
                 {
 
                 <tr id="@item.Name">
-                    <td><input type="checkbox" name="clinicName" id="ID_@item.Name" value="@item.Email" onclick="geocode('@item.Address','ID_@item.Name','fromList')"> @item.Name</td>
-                    <td><label id="@item.Address"> @item.Address </label></td>
-                    <td><a href="http://@item.Website" target="_blank">@item.Website</a></td>
-                    <td><label> @item.PhoneNumber </label></td>
-                    <td><label> @item.Email </label></td>
-                    <td id="Distance_@item.Name"></td>
+                    <td scope="row"><input type="checkbox" name="clinicName" id="ID_@item.Name" value="@item.Email" onclick="geocode('@item.Address','ID_@item.Name','fromList')"> <a href="http://@item.Website" target="_blank">@item.Name</a></td>
+                    <td scope="row"> @item.Address </td>     
+                    <td scope="row"> @item.PhoneNumber</td>
+                    <td id="Distance_@item.Name" scope="row"></td>
                 </tr>
                 }
             </table>

@@ -69,7 +69,7 @@ namespace ClinicV2.Models
                    
                     Email = rdr.GetValue(2).ToString(),
                     PhoneNumber = rdr.GetValue(3).ToString(),
-                    Address = rdr.GetValue(4).ToString() + rdr.GetValue(5).ToString() + rdr.GetValue(6).ToString() + rdr.GetValue(7).ToString(),
+                    Address = rdr.GetValue(4).ToString() + " "+ rdr.GetValue(5).ToString() + " " + rdr.GetValue(6).ToString() + " " + rdr.GetValue(7).ToString(),
                     AddrName = rdr.GetValue(8).ToString(),
                     Website = rdr.GetValue(9).ToString(),
                     Req = new List<Criteria>()

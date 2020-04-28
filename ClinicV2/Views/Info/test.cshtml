@@ -601,7 +601,7 @@
                     var tableOfClinic = document.getElementById('list_Of_Clinic');
 
                     for (var u = 1; u < tableOfClinic.rows.length; u++) {
-                        tableOfClinic.rows[u].cells[4].innerHTML = "";
+                        tableOfClinic.rows[u].cells[5].innerHTML = "";
 
                     }
                     //add new distance info to table
@@ -612,7 +612,7 @@
                                     if (clinicName[v][0] == list[z].Address) {
                                         var distanceChange = document.getElementById(list[z].Name).cells;
                                         var numFormat = markersToShow[u][1];          
-                                        distanceChange[4].innerHTML = numFormat.toFixed(2) + "miles";
+                                        distanceChange[5].innerHTML = numFormat.toFixed(2) + "miles";
 
                                         }
                                     }
