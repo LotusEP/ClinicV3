@@ -228,7 +228,7 @@
 
             }
 
-            //alert(Requirement);
+    
             var dis = null;
             var x = 0;
 
@@ -236,8 +236,7 @@
             for (x = 0; x < list.length; x++) {
                 var counter = 0;
                 var y = 0;
-                //dis = document.getElementById(list[x].Name);
-                //dis.style.display = "none";
+
                 //go through each clinic requirement
                 NoReq = "No";
                 for (y = 0; y < list[x].Req.length; y++) {
@@ -245,7 +244,7 @@
 
                     //check if the requirement match
                     if (list[x].Req[y].Name == xas) {
-                        //alert("Yes1");
+
                         // is so check the value
                         var val = list[x].Req[y].Value;
 
@@ -257,17 +256,14 @@
 
                         }
                         else if (Requirement != val) {
-                           // alert("REmove");
                             updatingClinictoDisplay(list[x].Name, "REMOVE");
                             NoReq = "Remove";
 
-                            //dis = document.getElementById(list[x].Name);
-                            //dis.style.display = "none";
                         }
                     }
 
                 }
-                //alert(NoReq + ":" + list[x].Name);
+
                 if (NoReq == "No") {
                     updatingClinictoDisplay(list[x].Name, "ADD");
                 }
@@ -275,12 +271,7 @@
             }
 
         }
-        //reduncy removing
-            // for (x = 1; x < Clinistodisplay.length; x++)
-            // {
-            //     dis = document.getElementById(Clinistodisplay[x]);
-            //     dis.style.display = "";
-            //}
+
 
 
     }

@@ -18,9 +18,9 @@ namespace ClinicV2.Controllers
     public class AdminOptionsController : Controller
     {
 
-        public ActionResult DeleteClinic(string name)
+        public ActionResult DeleteClinic(int ID)
         {
-            clinicModel.DeleteClinic(name);
+            clinicModel.DeleteClinic(ID);
 
             return RedirectToAction("listofClinic");
 

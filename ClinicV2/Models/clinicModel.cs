@@ -14,7 +14,7 @@ namespace ClinicV2.Models
         public int ClinicID { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
+
         public string Email { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
@@ -28,13 +28,9 @@ namespace ClinicV2.Models
         public string state { get; set; }
         [Required]
         public string Address { get; set; }
+        [Required]
+        public string Website { get; set; }
 
-        //public int Age { get; set; }
-
-        //public int Income { get; set; }
-        //public Boolean Insurance { get; set; }
-
-        //public string Housing { get; set; }
 
    
 
@@ -75,6 +71,7 @@ namespace ClinicV2.Models
                     PhoneNumber = rdr.GetValue(3).ToString(),
                     Address = rdr.GetValue(4).ToString() + rdr.GetValue(5).ToString() + rdr.GetValue(6).ToString() + rdr.GetValue(7).ToString(),
                     AddrName = rdr.GetValue(8).ToString(),
+                    Website = rdr.GetValue(9).ToString(),
                     Req = new List<Criteria>()
 
 
@@ -104,43 +101,51 @@ namespace ClinicV2.Models
             connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
             cnn = new MySqlConnection(connString);
 
-     
 
+      
             string sql ="Empty";
-           
-            if (newClinic.AddrName != null)
+            string sqlp1 = "Insert Into Clinic (Name,PhoneNumber,Street,City,State,Zip,Website";
+            string sqlp2 =") Values(@Name, @PhoneNumber, @Street, @City, @State, @Zip, @Website";
+            if (newClinic.AddrName == null)
             {
-                sql = "Insert Into Clinic (Name,Email,PhoneNumber,Street,City,State,Zip,NameAbbrev) Values(@Name,@Email,@PhoneNumber,@Street,@City,@State,@Zip,@AddrrName)";
-            
-            }
-            else
-            {
-                sql = "Insert Into Clinic (Name,Email,PhoneNumber,Street,City,State,Zip) Values(@Name,@Email,@PhoneNumber,@Street,@City,@State,@Zip)";
+                sqlp1 += ",NameAbbrev";
+                sqlp2 += ",@AddrrName";
 
             }
-           
+            if (newClinic.Email == null)
+            {
+                sqlp1 += ",Email";
+                sqlp2 += ",@Email";
+            }
 
+            sql = sqlp1 + sqlp2 + ")";
 
             MySqlCommand cmm = new MySqlCommand(sql, cnn);
             cmm.Parameters.AddWithValue("@Name", newClinic.Name.ToString());
-            cmm.Parameters.AddWithValue("@Email", newClinic.Email.ToString());
             cmm.Parameters.AddWithValue("@PhoneNumber", newClinic.PhoneNumber.ToString());
             cmm.Parameters.AddWithValue("@Street", newClinic.Street.ToString());
             cmm.Parameters.AddWithValue("@City", newClinic.City.ToString());
             cmm.Parameters.AddWithValue("@State", newClinic.state.ToString());
             cmm.Parameters.AddWithValue("@Zip", Int32.Parse(newClinic.zip));
-
-            if (newClinic.AddrName != null)
+            cmm.Parameters.AddWithValue("@Website", newClinic.Website.ToString());
+            if (newClinic.AddrName == null)
             {
-                cmm.Parameters.AddWithValue("@AddrrName", newClinic.AddrName.ToString());
+                newClinic.AddrName = " ";
+                  cmm.Parameters.AddWithValue("@AddrrName", newClinic.AddrName.ToString());
             }
-                cnn.Open();
+            if (newClinic.Email == null)
+            {
+                newClinic.Email = " ";
+                cmm.Parameters.AddWithValue("@Email", newClinic.Email.ToString());
+            }
+
+            cnn.Open();
             cmm.ExecuteNonQuery();
             cnn.Close();
 
         }
 
-        public static void DeleteClinic(string name)
+        public static void DeleteClinic(int ID)
         {
             string connString;
             MySqlConnection cnn;
@@ -150,11 +155,11 @@ namespace ClinicV2.Models
 
 
             string sql;
-            sql = "Delete From Clinic Where Name =@Name;";
+            sql = "Delete From Clinic Where ClinicID =@ID;";
             MySqlCommand cmm = new MySqlCommand(sql, cnn);
-
-            cmm.Parameters.AddWithValue("@Name", name);
             cmm = new MySqlCommand(sql, cnn);
+            cmm.Parameters.AddWithValue("@ID", ID);
+           
             cnn.Open();
             cmm.ExecuteNonQuery();
             cnn.Close();
@@ -192,7 +197,8 @@ namespace ClinicV2.Models
                 clinic.state = rdr.GetValue(6).ToString();
                 clinic.zip = rdr.GetValue(7).ToString();
                 clinic.AddrName = rdr.GetValue(8).ToString();
- 
+                clinic.Website = rdr.GetValue(9).ToString();
+
             }
 
 
@@ -209,24 +215,49 @@ namespace ClinicV2.Models
 
             cnn = new MySqlConnection(connString);
 
-            MySqlDataReader rdr = null;
+
 
             cnn.Open();
-            string sql = "UPDATE Clinic Set Name=@Name, Email=@Email, PhoneNumber=@PhoneNumber, " + 
-                 "Street=@Street, City=@City, State=@State, Zip=@Zip ,NameAbbrev=@AddrrName Where ClinicID= @ID";
+            string sql = "UPDATE Clinic Set Name=@Name, PhoneNumber=@PhoneNumber, " +
+                 "Street=@Street, City=@City, State=@State, Zip=@Zip , Website=@Website";
 
+            if (Clinic.Email == null)
+            {
+                Clinic.Email = "None";
+                sql += " ,Email=@Email";
+            }
+
+            if (Clinic.AddrName == null)
+            {
+                Clinic.AddrName = "None";
+                sql += "  ,NameAbbrev=@AddrrName";
+     
+            }
+            sql += " Where ClinicID= @ID";
             MySqlCommand cmd = new MySqlCommand(sql, cnn);
            
- 
+            
             cmd.Parameters.AddWithValue("@ID", Clinic.ClinicID);
             cmd.Parameters.AddWithValue("@Name", Clinic.Name.ToString());
-            cmd.Parameters.AddWithValue("@Email", Clinic.Email.ToString());
             cmd.Parameters.AddWithValue("@PhoneNumber", Clinic.PhoneNumber.ToString());
             cmd.Parameters.AddWithValue("@Street", Clinic.Street.ToString());
             cmd.Parameters.AddWithValue("@City", Clinic.City.ToString());
             cmd.Parameters.AddWithValue("@State", Clinic.state.ToString());
             cmd.Parameters.AddWithValue("@Zip", Int32.Parse(Clinic.zip));
-            cmd.Parameters.AddWithValue("@AddrrName", Clinic.AddrName.ToString());
+            cmd.Parameters.AddWithValue("@Website", Clinic.Website.ToString());
+
+            if (Clinic.Email != null)
+            {    
+                cmd.Parameters.AddWithValue("@Email", Clinic.Email.ToString());
+            }
+
+
+            if (Clinic.AddrName != null)
+            {
+                cmd.Parameters.AddWithValue("@AddrrName", Clinic.AddrName.ToString());
+            }
+
+       
 
             cmd.ExecuteNonQuery();
 

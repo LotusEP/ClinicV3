@@ -209,7 +209,8 @@ namespace ClinicV2.Models
                                "Insert Into ClinicCriteria(Clinic_ID, Criteria_ID, Criteria_OptionID) Values(@ClinicName,@Crit,@Value); " +
                                "Commit; ";
                                 cmm = new MySqlCommand(sql, cnn);
-                                cmm.Parameters.AddWithValue("@ClinicName",Clinic);                        
+                                cmm.Parameters.AddWithValue("@ClinicName",Clinic);
+                                cmm.Parameters.AddWithValue("@Crit", Crit);
                                 cmm.Parameters.AddWithValue("@Value", Option);
                                 cnn.Open();
                                 cmm.ExecuteNonQuery();

@@ -13,6 +13,7 @@
 <table class="table table-striped table-hover table-bordered">
     <tr>
         <th>
+
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
@@ -25,6 +26,9 @@
             @Html.DisplayNameFor(model => model.Address)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Website)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.AddrName)
         </th>
         <th></th>
@@ -32,30 +36,35 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddrName)
-            </td>
-            <td>
-                @* |
-                    @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.ID })*@
-                @Html.ActionLink("Edit", "EditClinic", new { id = item.ClinicID })
-                @Html.ActionLink("Delete", "DeleteClinic", new { name = item.Name })
-            </td>
-        </tr>
+    <tr>
+        <td>
+
+            @Html.DisplayFor(model=>item.ClinicID)
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PhoneNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Website)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AddrName)
+        </td>
+        <td>
+            @* |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })*@
+            @Html.ActionLink("Edit", "EditClinic", new { id = item.ClinicID })
+            @Html.ActionLink("Delete", "DeleteClinic", new { id = item.ClinicID })
+        </td>
+    </tr>
     }
 
 </table>
