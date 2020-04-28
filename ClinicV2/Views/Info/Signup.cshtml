@@ -396,15 +396,21 @@
                             <option value="Monthly">Monthly</option>
                             <option value="Yearly">Yearly</option>
                         </select>
+                            
 
+                        <div>
+                            Household size:
+                            @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control", @onchange = "checkorder()" } })
+                            @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
 
-                        Household size:
-                        @Html.EditorFor(model => model.newPatient.Household, new { htmlAttributes = new { @class = "form-control", @onchange = "checkorder()" } })
-                        @Html.ValidationMessageFor(model => model.newPatient.Household, "", new { @class = "text-danger" })
+                        </div>
 
-                        Income:
-                        @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00", @onchange = "checkorder()" } })
-                        @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
+                        <div>
+                            Income:
+                            @Html.EditorFor(model => model.newPatient.Income, new { htmlAttributes = new { @class = "form-control", placeholder = "$0.00", @onchange = "checkorder()" } })
+                            @Html.ValidationMessageFor(model => model.newPatient.Income, "", new { @class = "text-danger" })
+                        </div>
+                   
                     </div>
 
                 </div>
@@ -600,7 +606,7 @@
                     var tableOfClinic = document.getElementById('list_Of_Clinic');
 
                     for (var u = 1; u < tableOfClinic.rows.length; u++) {
-                        tableOfClinic.rows[u].cells[5].innerHTML = "";
+                        tableOfClinic.rows[u].cells[3].innerHTML = "";
 
                     }
                     //add new distance info to table
@@ -611,7 +617,7 @@
                                     if (clinicName[v][0] == list[z].Address) {
                                         var distanceChange = document.getElementById(list[z].Name).cells;
                                         var numFormat = markersToShow[u][1];          
-                                        distanceChange[5].innerHTML = numFormat.toFixed(2) + "miles";
+                                        distanceChange[3].innerHTML = numFormat.toFixed(2) + "miles";
 
                                         }
                                     }
