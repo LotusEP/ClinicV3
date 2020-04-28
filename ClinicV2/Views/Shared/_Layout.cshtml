@@ -24,7 +24,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Info")</li>
-                    <li>@Html.ActionLink("Signup", "test", "Info")</li>
+                    <li>@Html.ActionLink("Signup", "Signup", "Info")</li>
                     <li>@Html.ActionLink("About", "AboutPage", "Info")</li>
 
                 </ul>
@@ -34,9 +34,9 @@
 
                         <li>@Html.ActionLink("Criteria", "ViewReq", "AdminOptions")</li>
                         <li>@Html.ActionLink("Clinic", "listofClinic", "AdminOptions")</li>
-                        <li>@Html.ActionLink("Traffic Info", "TestView", "AdminOptions")</li>
                         <li>@Html.ActionLink("AdminOption", "AdminOptions", "AdminOptions")</li>
-                        <li>@Html.ActionLink("Account Creation", "CreatAccount", "Account")</li>
+                        <li>@Html.ActionLink("Account", "ListAccount", "Account")</li>
+                        <li>@Html.ActionLink("Stmp ", "ListSmtp", "AdminOptions")</li>
                         <li class="btn-danger navbar-right">@Html.ActionLink("Logout", "Logout", "Account")</li>
                     }
                     else

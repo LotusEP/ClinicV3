@@ -18,9 +18,17 @@
     <div class="container" >
         <div>
             <form class="form-horizontal" role="form" method='post'>
-                <label><strong><p class="">Username:</p></strong> <input type='text' name='username' required></label><br /><br />
-                <label><strong><p class="">Password:</p></strong> <input type='password' name='password' required></label><br /><br />
+                <label><strong>Username:</strong> <input type='text' id='username' name='username' required>
+                <span class="field-validation-valid text-danger" data-valmsg-for="username" data-valmsg-replace="true"></span>
+                    </label><br /><br />
                 
+                <label>
+                    <strong>Password:</strong> <input type='password' id='password' name='password' required>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="password" data-valmsg-replace="true"></span>
+                </label><br /><br />
+
+             
+
                 <button class="btn btn-primary" type="submit">Sign In</button>
 
             </form>

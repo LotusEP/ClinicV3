@@ -28,6 +28,7 @@ namespace ClinicV2.Models
             NumDataValue = Value;
           
         }
+        //get traffic source
         public static List<DataModel> Source()
         {
 
@@ -104,6 +105,22 @@ namespace ClinicV2.Models
 
             return TrafficInfo;
 
+        }
+
+
+        //set the connection string 
+        public static MySqlConnection getSqlConnection()
+        {
+         
+            string connString;
+            MySqlConnection cnn;
+            //connString = @"Data Source=clinicserver1.database.windows.net;Initial Catalog=Patient;User ID=Lotus;Password=Server1@pass;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+
+            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
+
+            cnn = new MySqlConnection(connString);
+            return cnn;
         }
     }
 }

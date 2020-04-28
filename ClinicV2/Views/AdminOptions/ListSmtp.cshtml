@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ClinicV2.Models.SmtpModel>
+
+@{
+    ViewBag.Title = "ListSmtp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ListSmtp</h2>
+
+<p>
+    @Html.ActionLink("Create New", "AddSmtp")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.smtpID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Provider)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Smtp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Port)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>       
+        <td>
+            @Html.DisplayFor(modelItem => item.smtpID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Provider)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Smtp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Port)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditSmtp", new { id = item.smtpID }) |
+            @Html.ActionLink("Delete", "DeleteSmtp", new { id = item.smtpID })
+        </td>
+    </tr>
+}
+
+</table>

@@ -65,7 +65,7 @@ namespace ClinicV2.Controllers
         {
 
             CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
-            NewCriteria.listofClinic = clinicModel.GetClinicList();
+            NewCriteria.listofClinic = clinicModel.GetClinicList("No Password");
             NewCriteria.listofCriteria = Criteria.GetReqList("-10");
             NewCriteria.CriteriaOption = Criteria.CriteraiValue();
             NewCriteria.Criteria = new Criteria();
@@ -79,7 +79,7 @@ namespace ClinicV2.Controllers
  
             ViewBag.ExistMess = Criteria.AddCriteria(req.Criteria,"ClinicCriteria");
             CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
-            NewCriteria.listofClinic = clinicModel.GetClinicList();
+            NewCriteria.listofClinic = clinicModel.GetClinicList("No Password");
             NewCriteria.listofCriteria = Criteria.GetReqList("-10");
             NewCriteria.CriteriaOption = Criteria.CriteraiValue();
             NewCriteria.Criteria = new Criteria();
@@ -162,7 +162,7 @@ namespace ClinicV2.Controllers
         public ActionResult listofClinic()
         {
     
-            List<clinicModel> listofClinic = clinicModel.GetClinicList();
+            List<clinicModel> listofClinic = clinicModel.GetClinicList("Password");
 
 
             ViewBag.Collection = listofClinic;
@@ -178,7 +178,51 @@ namespace ClinicV2.Controllers
 
             return View(DataInfo);
         }
+        [HttpGet]
+        public ActionResult EditSmtp(int ID)
+        {
+            SmtpModel editModel = SmtpModel.GetStmp(ID);
+            return View(editModel);
+        }
+        [HttpPost]
+        public ActionResult EditSmtp(SmtpModel stmp)
+        {
+            SmtpModel.EditStmp(stmp);
+            ViewBag.mess = "Success";
+            return View();
+        }
+        [HttpGet]
+        public ActionResult AddSmtp()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddSmtp(SmtpModel stmp)
+        {
+            SmtpModel.AddStmp(stmp);
+            ViewBag.mess = "Success";
+            return View();
+        }
 
-      
+        public ActionResult DeleteSmtp(int ID)
+        {
+
+            SmtpModel.DeleteStmp(ID);
+            return RedirectToAction("ListSmtp");
+        }
+        public ActionResult ListSmtp()
+        {
+            List<SmtpModel> newlist = SmtpModel.getSmtpList();
+
+            return View(newlist);
+            
+        }
+
+        public ActionResult DetailPage(int ID)
+        {
+
+            clinicModel clinic = clinicModel.GetClinic(ID);
+            return View(clinic);
+        }
     }
 }

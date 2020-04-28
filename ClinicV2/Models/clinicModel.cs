@@ -15,6 +15,7 @@ namespace ClinicV2.Models
         [Required]
         public string Name { get; set; }
 
+        [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
         public string Email { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
@@ -30,9 +31,8 @@ namespace ClinicV2.Models
         public string Address { get; set; }
         [Required]
         public string Website { get; set; }
-
-
-   
+        
+        public string MailPassword { get; set; }
 
         public string AddrName { get; set; }
 
@@ -40,18 +40,11 @@ namespace ClinicV2.Models
 
 
 
-        public static List<clinicModel> GetClinicList()
+        public static List<clinicModel> GetClinicList(string arug)
         {
             List<clinicModel> listofClinic = new List<clinicModel>();
 
-            string connString;
-            MySqlConnection cnn;
-            //connString = @"Data Source=clinicserver1.database.windows.net;Initial Catalog=Patient;User ID=Lotus;Password=Server1@pass;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
-
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
             MySqlDataReader rdr = null;
 
@@ -62,21 +55,24 @@ namespace ClinicV2.Models
             rdr = cmd.ExecuteReader();
             while (rdr.Read())
             {
-                listofClinic.Add(new clinicModel
+                clinicModel toAdd = new clinicModel
                 {
                     ClinicID = Int32.Parse(rdr.GetValue(0).ToString()),
                     Name = rdr.GetValue(1).ToString(),
-                   
                     Email = rdr.GetValue(2).ToString(),
                     PhoneNumber = rdr.GetValue(3).ToString(),
-                    Address = rdr.GetValue(4).ToString() + " "+ rdr.GetValue(5).ToString() + " " + rdr.GetValue(6).ToString() + " " + rdr.GetValue(7).ToString(),
+                    Address = rdr.GetValue(4).ToString() + " " + rdr.GetValue(5).ToString() + " " + rdr.GetValue(6).ToString() + " " + rdr.GetValue(7).ToString(),
                     AddrName = rdr.GetValue(8).ToString(),
                     Website = rdr.GetValue(9).ToString(),
                     Req = new List<Criteria>()
+                };
 
+                if (arug == "Password")
+                {
+                   toAdd.MailPassword = rdr.GetValue(10).ToString();
+                }
 
-
-                });
+                listofClinic.Add(toAdd);
             }
 
 
@@ -96,13 +92,9 @@ namespace ClinicV2.Models
         public static void CreateClinic(clinicModel newClinic)
         {
 
-            string connString;
-            MySqlConnection cnn;
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
 
-      
             string sql ="Empty";
             string sqlp1 = "Insert Into Clinic (Name,PhoneNumber,Street,City,State,Zip,Website";
             string sqlp2 =") Values(@Name, @PhoneNumber, @Street, @City, @State, @Zip, @Website";
@@ -117,7 +109,11 @@ namespace ClinicV2.Models
                 sqlp1 += ",Email";
                 sqlp2 += ",@Email";
             }
-
+            if (newClinic.MailPassword == null)
+            {
+                sqlp1 += ",mailPassword";
+                sqlp2 += ",@MailP";
+            }
             sql = sqlp1 + sqlp2 + ")";
 
             MySqlCommand cmm = new MySqlCommand(sql, cnn);
@@ -138,7 +134,11 @@ namespace ClinicV2.Models
                 newClinic.Email = " ";
                 cmm.Parameters.AddWithValue("@Email", newClinic.Email.ToString());
             }
-
+            if (newClinic.MailPassword == null)
+            {
+                newClinic.MailPassword= " ";
+                cmm.Parameters.AddWithValue("@MailP", newClinic.MailPassword.ToString());
+            }
             cnn.Open();
             cmm.ExecuteNonQuery();
             cnn.Close();
@@ -147,11 +147,7 @@ namespace ClinicV2.Models
 
         public static void DeleteClinic(int ID)
         {
-            string connString;
-            MySqlConnection cnn;
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-            cnn = new MySqlConnection(connString);
-
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
 
             string sql;
@@ -168,14 +164,8 @@ namespace ClinicV2.Models
 
         public static clinicModel GetClinic(int Id)
         {
-            string connString;
-            MySqlConnection cnn;
-            //connString = @"Data Source=clinicserver1.database.windows.net;Initial Catalog=Patient;User ID=Lotus;Password=Server1@pass;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
             clinicModel clinic = new clinicModel();
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
             MySqlDataReader rdr = null;
 
@@ -198,6 +188,7 @@ namespace ClinicV2.Models
                 clinic.zip = rdr.GetValue(7).ToString();
                 clinic.AddrName = rdr.GetValue(8).ToString();
                 clinic.Website = rdr.GetValue(9).ToString();
+                clinic.MailPassword = rdr.GetValue(10).ToString();
 
             }
 
@@ -206,15 +197,7 @@ namespace ClinicV2.Models
         }
         public static void EditClinic(clinicModel Clinic)
         {
-            string connString;
-            MySqlConnection cnn;
-            //connString = @"Data Source=clinicserver1.database.windows.net;Initial Catalog=Patient;User ID=Lotus;Password=Server1@pass;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
-  
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-
-            cnn = new MySqlConnection(connString);
-
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
 
             cnn.Open();
@@ -226,16 +209,26 @@ namespace ClinicV2.Models
                 Clinic.Email = "None";
                 sql += " ,Email=@Email";
             }
+            else { sql += " ,Email=@Email"; }
 
             if (Clinic.AddrName == null)
             {
                 Clinic.AddrName = "None";
                 sql += "  ,NameAbbrev=@AddrrName";
-     
+
+            }
+            else { sql += "  ,NameAbbrev=@AddrrName"; }
+            if (Clinic.MailPassword == null)
+            {
+                Clinic.MailPassword = "None";
+                sql += "  ,mailPassword=@MailP";
+            }
+            else {
+                sql += "  ,mailPassword=@MailP";
             }
             sql += " Where ClinicID= @ID";
             MySqlCommand cmd = new MySqlCommand(sql, cnn);
-           
+
             
             cmd.Parameters.AddWithValue("@ID", Clinic.ClinicID);
             cmd.Parameters.AddWithValue("@Name", Clinic.Name.ToString());
@@ -251,13 +244,16 @@ namespace ClinicV2.Models
                 cmd.Parameters.AddWithValue("@Email", Clinic.Email.ToString());
             }
 
-
             if (Clinic.AddrName != null)
             {
                 cmd.Parameters.AddWithValue("@AddrrName", Clinic.AddrName.ToString());
             }
 
-       
+            if (Clinic.MailPassword != null)
+            {
+                cmd.Parameters.AddWithValue("@MailP", Clinic.MailPassword.ToString());
+            }
+
 
             cmd.ExecuteNonQuery();
 

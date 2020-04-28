@@ -39,10 +39,9 @@
     var criteria = ['No','No','No'];
     function getParam() {
         const queryString = window.location.search;
-        //console.log(queryString);
         const urlParams = new URLSearchParams(queryString);
         const clinicIntial = urlParams.get('clinicID');
-     //   console.log(clinicIntial);
+
         for (var i = 0; i < list.length; i++) {
     
             //console.log(list[i].ClinicID)

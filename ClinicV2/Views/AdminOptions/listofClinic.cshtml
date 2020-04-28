@@ -39,7 +39,7 @@
     <tr>
         <td>
 
-            @Html.DisplayFor(model=>item.ClinicID)
+        
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
@@ -58,11 +58,9 @@
             @Html.DisplayFor(modelItem => item.AddrName)
         </td>
         <td>
-            @* |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })*@
-            @Html.ActionLink("Edit", "EditClinic", new { id = item.ClinicID })
-            @Html.ActionLink("Delete", "DeleteClinic", new { id = item.ClinicID })
+            @Html.ActionLink("Details", "DetailPage", new { id=item.ClinicID }) |
+            @Html.ActionLink("Edit", "EditClinic", new { id = item.ClinicID }) |
+            @Html.ActionLink("Delete", "DeleteClinic", new { id = item.ClinicID }) |
         </td>
     </tr>
     }

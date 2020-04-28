@@ -24,23 +24,20 @@ namespace ClinicV2.Models
         [Required]
         public string State { get; set; }
         [Required]
+        [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
         public string Email { get; set; }
         public int Income { get; set; }
         public int Household { get; set; }
         
-        
+        //add the patient to the database
         public static void AddPatient(Patient patient)
             {
-            string connString;
-            MySqlConnection cnn;
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
             string sql;
-            //sql= "IF EXISTS(SELECT * FROM Req WHERE ReqName="+req.Name+") Update Req"
-            //sql = "Insert Into Req Values(@Aug1,@Aug2,@State,@ReqName)";
-            sql = "Insert Into PatientDB (FirstName,LastName,Street,CIty,Zip,State,Email,PhoneNumber) Values(@FirstName,@LastName" +
-                "@Street,@City,@State,@Email,@Cell";
+
+            sql = "Insert Into PatientDB (FirstName,LastName,Street,City,Zip,State,Email,PhoneNumber) Values(@FirstName,@LastName," +
+                "@Street,@City,@Zip,@State,@Email,@Cell)";
            
 
 

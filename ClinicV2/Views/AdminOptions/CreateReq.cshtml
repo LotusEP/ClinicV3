@@ -35,7 +35,7 @@
 <h2>Criteria Form</h2>
 
 <body onload="loadCriteria()">
-    @ViewBag.ExistMess
+    <h2 class="bg-success">@ViewBag.ExistMess</h2> 
     @using (Html.BeginForm("CreateReq", "AdminOptions", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
@@ -99,9 +99,9 @@
             {
                 
                 <tr>
-
+                 
                     <td>
-                        @Html.DisplayFor(modelItem => item.CriteriaID)
+
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>

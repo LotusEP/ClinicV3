@@ -154,13 +154,12 @@
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\clinicModel.cs" />
     <Compile Include="Models\CreateCriteriaModel.cs" />
-    <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\Criteria.cs" />
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\DataViewModel.cs" />
+    <Compile Include="Models\SmtpModel.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\Patient.cs" />
-    <Compile Include="Models\Requirement.cs" />
     <Compile Include="Models\SignupModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -290,9 +289,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Info\EmailRequest.cshtml" />
     <Content Include="Views\Info\Index.cshtml" />
-    <Content Include="Views\Info\test.cshtml" />
+    <Content Include="Views\Info\Signup.cshtml" />
     <Content Include="Views\Info\_ClinicPartView.cshtml" />
     <Content Include="Views\AdminOptions\listofClinic.cshtml" />
     <Content Include="Views\AdminOptions\ClinicAdd.cshtml" />
@@ -319,6 +317,14 @@
     <Content Include="Views\AdminOptions\EditClinic.cshtml" />
     <Content Include="Views\AdminOptions\EditReq.cshtml" />
     <Content Include="Views\Account\CreatAccount.cshtml" />
+    <Content Include="Views\Info\ConfirmationSub.cshtml" />
+    <Content Include="Views\Info\SignupConfirmation.cshtml" />
+    <Content Include="Views\AdminOptions\AddSmtp.cshtml" />
+    <Content Include="Views\AdminOptions\ListSmtp.cshtml" />
+    <Content Include="Views\AdminOptions\EditSmtp.cshtml" />
+    <Content Include="Views\Account\ListAccount.cshtml" />
+    <Content Include="Views\Account\EditAccount.cshtml" />
+    <Content Include="Views\AdminOptions\DetailPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

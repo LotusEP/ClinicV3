@@ -20,92 +20,89 @@ namespace ClinicV2.Controllers
         public ActionResult Index()
         {
             String Ref = Request.Headers["Referer"];
-
+           
             return View();
         }
 
         //2nd version of email ---------------------------------------------------------------------------------------------------------------------------
-        [HttpGet]
-        public ActionResult Signup()
-        {
-            String Ref = Request.Headers["Referer"];
-
-            List<clinicModel> listofClinic = clinicModel.GetClinicList();
-
-
-            ViewBag.Collection = listofClinic;
-            return View();
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Signup(SignupModel newSignee, string [] clinicName)
+        public ActionResult SignupConfirmation(SignupModel newSignee, string [] clinicName,string clinic, string clinicID)
         {
-            PageRedirct("Submittion");
-            String Ref = Request.Headers["Referer"];
+            //keep track where the patitent come from
+            if (clinic == null)
+            {
+                clinic = "Direct";
+            }
+            PageRedirct(clinic);
 
-            //foreach (var mail in clinicT)
-            //{
-            //    if (mail)
-            //}
-            //string result = collection["clinicT"];
-
+  
+            //create the patient object
             Patient patient = newSignee.newPatient;
+            //message for the email
             string message = "Patient Email: " + patient.Email + "\n" + "Patient Phone Number: " + patient.CellPhone + "\n" + "Patient Address: " + patient.Street
            + "\n" + patient.City + "\n" + patient.State + "\n" + patient.Zip;
+            //determine which clinic to send the email
+            int ID;
+            if (clinicID != null)
+            {
+                ID = Int32.Parse(clinicID);
+
+            }
+            else {
+                ID = 1;
+            }
+
+            //create and get the send info 
+            SmtpModel senderInfo = new SmtpModel();
+            senderInfo = SmtpModel.getStmpInfo(ID);
+    
+            //send the infomation
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+
+                    var mess = new MailMessage();
+                    var senderEmail = new MailAddress(senderInfo.Email, senderInfo.Name);
+                    var receiverEmail = new MailAddress(patient.Email, patient.FirstName);
+                    var password = senderInfo.MailPassword;
+                    var sub = "New Patient";
+                    var body = message;
+                    var smtp = new SmtpClient
+                    {
+                        Host = senderInfo.Smtp,
+                        Port = senderInfo.Port,
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential(senderEmail.Address, password)
+                    };
+
+                    mess.From = senderEmail;
+                    mess.To.Add(receiverEmail);
+                    mess.Subject = sub;
+                    mess.Body = message;
 
 
-            
-            //try
-            //{
-            //    if (ModelState.IsValid)
-            //    {
-            //        var mess = new MailMessage();
-            //        var senderEmail = new MailAddress("Baon23@outlook.com", "Bao");
-            //        var receiverEmail = new MailAddress(patient.Email, "Receiver");
-            //        var password = "RandomPass";
-            //        var sub = "New Patient";
-            //        var body = message;
-            //        var smtp = new SmtpClient
-            //        {
-            //            Host = "smtp-mail.outlook.com",
-            //            Port = 587,
-            //            EnableSsl = true,
-            //            DeliveryMethod = SmtpDeliveryMethod.Network,
-            //            UseDefaultCredentials = false,
-            //            Credentials = new NetworkCredential(senderEmail.Address, password)
-            //        };
 
-            //        mess.From = senderEmail;
-            //        mess.To.Add(receiverEmail);
-            //        //for (int i = 0; i < clinicName.Length; i++)
-            //        //{
-            //        //    if (clinicName != null)
-            //        //    {
-            //        //        mess.Bcc.Add(clinicName[i]);
-            //        //    }
-
-            //        //}
-            //        mess.Subject = sub;
-            //        mess.Body = message;
-
-
-
-            //        using (smtp)
-            //        {
-            //            smtp.Send(mess);
-            //        }
+                    using (smtp)
+                    {
+                        smtp.Send(mess);
+                    }
 
                     Patient.AddPatient(patient);
 
-
-                return RedirectToAction("test");
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    ViewBag.Error = "Some Error";
-            //}
-            //return RedirectToAction("test");
+                    ViewBag.mess = patient.FirstName;
+                    return View();
+                }
+            }
+            catch (Exception)
+            {
+                ViewBag.Error = "Some Error";
+            }
+            return RedirectToAction("Signup");
 
         }
 
@@ -118,13 +115,13 @@ namespace ClinicV2.Controllers
         }
 
 
-   
-        public ActionResult test(string clinic)
+        
+        public ActionResult Signup(string clinic)
         {
             PageRedirct(clinic);
-
+            //get information for the signup form
             SignupModel tModel = new SignupModel();
-            tModel.listofClinic = clinicModel.GetClinicList();
+            tModel.listofClinic = clinicModel.GetClinicList("No password");
             tModel.listofCriteria = Criteria.GetReqList("old");
             tModel.listofInsurance = Criteria.GetSpecificCriteira("Insurance");
             tModel.GuidelineValue = Criteria.GetCriteria("200% Guidelines"); 
@@ -133,28 +130,9 @@ namespace ClinicV2.Controllers
 
             return View(tModel);
         }
-        //[HttpGet]
-        //public ActionResult EditCriteria(int id)
-        //{
-
-        //    Criteria criteria = new Criteria();
-        //    criteria = Criteria.GetCriteria(id);
 
 
-        //    return View(criteria);
-        //}
-        //[HttpPost]
-        //public ActionResult EditCriteria(Criteria req)
-        //{
-
-        //    Criteria.AddCriteria(req);
-
-        //    return RedirectToAction("ViewReq");
-        //}
-   
- 
-
-
+        //get the source desitnation and store it
         public void PageRedirct(string PageName)
         {
             if (PageName != null)

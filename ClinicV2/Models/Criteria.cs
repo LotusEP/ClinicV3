@@ -15,7 +15,7 @@ namespace ClinicV2.Models
         public string Name { get; set; }
         [Required]
         public string Value { get; set; }
-
+        //constructer-----------------------------------------------------------------
         public Criteria()
         { }
         public Criteria(string Req_Name, string Req_Value)
@@ -37,7 +37,9 @@ namespace ClinicV2.Models
             Name = Req_Name;
             Value = Req_Value;
         }
+        //-----------------------------------------------------------------------
 
+            //get the criteria in list
         public static List<Criteria> GetReqList(string clinic)
         {
             List<Criteria> listofReq = new List<Criteria>();
@@ -114,17 +116,14 @@ namespace ClinicV2.Models
             cnn.Close();
             return listofReq;
         }
-
+        //add criteria
         public static String AddCriteria(Criteria newCriteria, string mess)
         {
             String Mess = null;
             if (newCriteria.Name != null && newCriteria.Name != "" && newCriteria.Value != null && newCriteria.Value != "")
             {
-                string connString;
-                MySqlConnection cnn;
-                connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-                cnn = new MySqlConnection(connString);
-            
+                MySqlConnection cnn = DataModel.getSqlConnection();
+
                 MySqlCommand cmm;
                 MySqlDataReader rdr = null;
                 int val;
@@ -142,11 +141,10 @@ namespace ClinicV2.Models
                 {
                         Crit = FindDuplicate(newCriteria.Name, "Criteria");
                 }
-             
+                
                 if (mess == "ClinicCriteria")
                 {
-                    //sql= "IF EXISTS(SELECT * FROM Req WHERE ReqName="+req.Name+") Update Req"
-                    //sql = "Insert Into Req Values(@Aug1,@Aug2,@State,@ReqName)";
+
                     sql = "Select count(1) " +
                             "From ClinicCriteria " +
                            "Join CriteriaOption on CriteriaOption.CriteriaOptionID = ClinicCriteria.Criteria_OptionID " +
@@ -176,7 +174,7 @@ namespace ClinicV2.Models
                     else if (val == 0)
 
                     {
-                        //if no match check if there is already a criterian Name
+                        //if no match criteria check if there is already a criterian Name
                         sql = "Select count(1) From Criteria Where CriteriaName = @Name";
                         cmm = new MySqlCommand(sql, cnn);                  
                         cmm.Parameters.AddWithValue("@Name", newCriteria.Name);
@@ -189,7 +187,7 @@ namespace ClinicV2.Models
                         cnn.Close();
                         if (val > 0)
                         {
-                            //it there is check to see if there is a value for it
+                            //it there criteria name than is check to see if there is a value for it
                             sql = "Select count(1) From CriteriaOption Where Value = @Value";
                             cmm = new MySqlCommand(sql, cnn);
                             cmm.Parameters.AddWithValue("@Value", newCriteria.Value);
@@ -217,14 +215,14 @@ namespace ClinicV2.Models
                             }
                             else
                             {
-
+                                //add the criteria option
                                 sql = "Insert Into CriteriaOption (FK_Criteria_ID,Value) Values(@Crit,@Value);";
                                 cmm = new MySqlCommand(sql, cnn);                        
                                 cmm.Parameters.AddWithValue("@Crit", Crit);
                                 cmm.Parameters.AddWithValue("@Value", newCriteria.Value);
                                 cnn.Open();
                                 cmm.ExecuteNonQuery();
-                               
+                               //link it to the clinic
                                 sql = "Insert Into ClinicCriteria(Clinic_ID, Criteria_ID, Criteria_OptionID) Values(@ClinicName,@Crit,@Value);"; 
                                 cmm = new MySqlCommand(sql, cnn);
                                 cmm.Parameters.AddWithValue("@ClinicName", Clinic);
@@ -239,7 +237,7 @@ namespace ClinicV2.Models
                         }
                         else
                         {
-
+                            //if there no criteria add it
                             sql = "Begin; " +
                                           "Insert Into Criteria (CriteriaName) Values(@Name);" +
                                            "Insert Into CriteriaOption (FK_Criteria_ID,Value) Values(@Crit,@Value);" +
@@ -264,11 +262,12 @@ namespace ClinicV2.Models
                     }
 
                 }
+                //check for exisitn criteria name
                 else if (mess == "CriteriaOption")
                 {
                     val = 0;
                     //if no match check if there is already a criterian Name
-                    sql = "Select count(1) From Criteria Where CriteriaName = @NAme";
+                    sql = "Select count(1) From Criteria Where CriteriaName = @Name";
                     cmm = new MySqlCommand(sql, cnn);
                     cmm.Parameters.AddWithValue("@Name", newCriteria.Name);
                     cnn.Open();
@@ -328,7 +327,7 @@ namespace ClinicV2.Models
             }
             return Mess;
         }
-
+        //delete criteria
         public static void DeleteCriteria(int IDvalue, string toDelete)
         {
             string connString;
@@ -339,7 +338,7 @@ namespace ClinicV2.Models
 
 
             string sql = "Empty";
-
+            //determine deleting whether deleting criteria or critera option
             if (toDelete == "ClinicCriteria")
             {
                 sql = "Delete From ClinicCriteria Where ClinicCriteriaID = @IdValue";
@@ -358,6 +357,8 @@ namespace ClinicV2.Models
 
 
         }
+
+        //main fucntion to delete critera completely
         public static void DeleteCriteriaComplete(int DeleteID)
         {
 
@@ -381,17 +382,15 @@ namespace ClinicV2.Models
 
         }
         
+        //finding data to need to add critera option
         private  static int FindDuplicate(string val,string table)
         { int v = 0;
-            string connString;
-            MySqlConnection cnn;
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
 
             MySqlDataReader rdr = null;
             string sql = "";
-
+            //determine the data to find
             if (table == "Option")
             {
                 sql = "Select CriteriaOptionID From CriteriaOption Where Value =@Val";
@@ -418,19 +417,13 @@ namespace ClinicV2.Models
 
             return v;
         }
-        
+        //get the criteria
         public static Criteria GetCriteria(int ID)
         {
             Criteria clinicReq = null;
 
-            string connString;
-            MySqlConnection cnn;
-            //connString = @"Data Source=clinicserver1.database.windows.net;Initial Catalog=Patient;User ID=Lotus;Password=Server1@pass;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
-
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-
-            cnn = new MySqlConnection(connString);
 
             MySqlDataReader rdr = null;
 
@@ -459,19 +452,12 @@ namespace ClinicV2.Models
             cnn.Close();
             return clinicReq;
         }
+        // get criteria value
         public static int GetCriteria(string Name)
         {
             int value = 0;
 
-
-            string connString;
-            MySqlConnection cnn;
-            //connString = @"Data Source=clinicserver1.database.windows.net;Initial Catalog=Patient;User ID=Lotus;Password=Server1@pass;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
-
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
             MySqlDataReader rdr = null;
 
@@ -499,16 +485,15 @@ namespace ClinicV2.Models
             return value;
 
         }
+        //get the list of criteria name value   
         public static List<string> CriteraiValue()
         {
             string[,] list = new string[,] { };
             List<string> ls = new List<string>();
  
-            string connString;
+       
             MySqlDataReader rdr = null;
-            MySqlConnection cnn;
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
 
 
@@ -527,17 +512,15 @@ namespace ClinicV2.Models
             return ls;
 
         }
+        //get list of criteria value
         public static List<Criteria> GetCriteriaValue()
         {
             string[,] list = new string[,] { };
             List<Criteria> ls = new List<Criteria>();
 
 
-            string connString;
             MySqlDataReader rdr = null;
-            MySqlConnection cnn;
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
 
 
@@ -567,14 +550,13 @@ namespace ClinicV2.Models
 
             return ls;
         }
+        //getting a specifc value
         public static List<string> GetSpecificCriteira(string specValueNeed)
         {
             List<string> SpecList = new List<string>();
-            string connString;
+
             MySqlDataReader rdr = null;
-            MySqlConnection cnn;
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
 
 
@@ -593,17 +575,11 @@ namespace ClinicV2.Models
 
             return SpecList;
         }
+        //getting criteria to edit
         public static Criteria GetInCriteria(int ID)
         {
             Criteria editCritera = new Criteria();
-            string connString;
-            MySqlConnection cnn;
-            //connString = @"Data Source=clinicserver1.database.windows.net;Initial Catalog=Patient;User ID=Lotus;Password=Server1@pass;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
-
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
             MySqlDataReader rdr = null;
 
@@ -631,18 +607,15 @@ namespace ClinicV2.Models
 
             return editCritera;
         }
+        //update the criteria
         public static void EditCriteria(Criteria UpCriteria)
         {
-            string connString;
-            MySqlConnection cnn;
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-            cnn = new MySqlConnection(connString);
+            MySqlConnection cnn = DataModel.getSqlConnection();
 
 
             //check for exisitng criteria
             string sql;
-            //sql= "IF EXISTS(SELECT * FROM Req WHERE ReqName="+req.Name+") Update Req"
-            //sql = "Insert Into Req Values(@Aug1,@Aug2,@State,@ReqName)";
+
             sql = "Update CriteriaOption Set Value=@Value Where CriteriaOptionID =@ID";
 
 

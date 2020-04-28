@@ -47,16 +47,41 @@ namespace ClinicV2.Controllers
             Session["AdminIsLogin"] = null;
             return RedirectToAction("Login", "Account");
         }
-
+        [Filters.AuthorizeAdmin]
         public ActionResult CreatAccount()
         {
         
             return View();
         }
+        [Filters.AuthorizeAdmin]
         [HttpPost]
         public ActionResult CreatAccount(Account account)
         {
             Account.Create(account);
+            return View();
+        }
+        [Filters.AuthorizeAdmin]
+        public ActionResult ListAccount()
+        {
+            List<Account> newlist = Account.GetAccountList() ;
+
+            return View(newlist);
+        }
+        [Filters.AuthorizeAdmin]
+        [HttpGet]
+        public ActionResult EditAccount(int ID)
+        {
+            return View();
+        }
+        [Filters.AuthorizeAdmin]
+        [HttpPost]
+        public ActionResult EditAccount(Account acc)
+        {
+            ViewBag.mess = "Success";
+            return View();
+        }
+        [Filters.AuthorizeAdmin]
+        public ActionResult DeleteAccount(int ID) {
             return View();
         }
     }
