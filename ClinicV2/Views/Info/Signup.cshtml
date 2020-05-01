@@ -36,6 +36,9 @@
     var Employeed = "No";
     var ClinisNot = ["inital"];
     list = @Html.Raw(Json.Encode(Model.listofClinic));
+
+    var te;
+    te =@Html.Raw(Json.Encode(Model.GuidelineValue));
     var criteria = ['No','No','No'];
     function getParam() {
         const queryString = window.location.search;
@@ -226,9 +229,6 @@
                 var Requirement = Employeed;
 
             }
-           
-
-    
             var dis = null;
             var x = 0;
 
@@ -319,6 +319,7 @@
                         for (w = 0; w < list[z].Req.length; w++) {
                             if (list[z].Req[w].Name == ("+IncomePerPerson")) {
 
+                                
                                 Requiredhouse = parseInt(list[z].Req[w].Value);
                             }
                             else {

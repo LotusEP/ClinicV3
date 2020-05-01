@@ -468,8 +468,9 @@ namespace ClinicV2.Models
 
             sql = "Select Value from CriteriaOption " +
             "join Criteria on Criteria.CriteriaID = CriteriaOption.FK_Criteria_ID " +
-             "Where CriteriaName ='200% Guidelines' ;";
+             "Where CriteriaName =@Criteria ;";
             MySqlCommand cmd = new MySqlCommand(sql, cnn);
+            cmd.Parameters.AddWithValue("@Criteria", Name);
                 rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
