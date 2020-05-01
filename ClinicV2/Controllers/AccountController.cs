@@ -84,7 +84,8 @@ namespace ClinicV2.Controllers
         }
         [Filters.AuthorizeAdmin]
         public ActionResult DeleteAccount(int ID) {
-            return View();
+            Account.DeleteAccount(ID);
+            return RedirectToAction("ListAccount");
         }
     }
 }
