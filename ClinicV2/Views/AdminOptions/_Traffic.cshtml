@@ -37,7 +37,7 @@
     <hr />
     <div id="chart" class="col-md-6"></div>
 
-    <div id="chart2" class="col-md-6"></div>
+    @*<div id="chart2" class="col-md-6"></div>*@
 </body>
 
 
@@ -88,7 +88,7 @@
     function Pop() {
 
         displaySource();
-        displaySub();
+        //displaySub();
 
 
     }
@@ -112,37 +112,37 @@
 
     }
 
-    function displaySub() {
+    //function displaySub() {
 
-        var optionSubmittion = options;
-        optionSubmittion.series = [];
-        optionSubmittion.labels = [];
-        var total = 0;
-        var subtotal = 0;
-        var submition = 0;
-        optionSubmittion.labels.push("Submittion");
-        optionSubmittion.labels.push("Non-Submittion");
-        for (var i = 0; i < model.length; i++) {
-            if (model[i].DateName != "Submittion") {
-                total += model[i].NumDataValue;
+    //    var optionSubmittion = options;
+    //    optionSubmittion.series = [];
+    //    optionSubmittion.labels = [];
+    //    var total = 0;
+    //    var subtotal = 0;
+    //    var submition = 0;
+    //    optionSubmittion.labels.push("Submittion");
+    //    optionSubmittion.labels.push("Non-Submittion");
+    //    for (var i = 0; i < model.length; i++) {
+    //        if (model[i].DateName != "Submittion") {
+    //            total += model[i].NumDataValue;
 
-            } else if (model[i].DateName == "Submittion")
-            {
-                submition = model[i].NumDataValue;
-                optionSubmittion.series.push(submition);
+    //        } else if (model[i].DateName == "Submittion")
+    //        {
+    //            submition = model[i].NumDataValue;
+    //            optionSubmittion.series.push(submition);
                
-            }
+    //        }
 
-        }
+    //    }
 
         
-        optionSubmittion.title.text = 'Submittion';
-        optionSubmittion.series.push(total);
+    //    optionSubmittion.title.text = 'Submittion';
+    //    optionSubmittion.series.push(total);
        
-        var chart = new ApexCharts(document.querySelector("#chart2"), optionSubmittion);
-        chart.render();
+    //    var chart = new ApexCharts(document.querySelector("#chart2"), optionSubmittion);
+    //    chart.render();
 
-    }
+    //}
 
 
 
