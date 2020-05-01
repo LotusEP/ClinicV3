@@ -208,12 +208,9 @@
     }
     function insurancecheck(xas) {
         var NoReq = "No";
-        //var xas = 'Input_' + Requi;
 
-        //alert('helloFirst');
-        //alert(xas);
         if (xas == "Income") {
-           // alert('hellsFrst');
+      
             displayClinic()
         }
         else {
@@ -222,10 +219,14 @@
                 var Requirement = document.getElementById("listofInsurance").value;
 
             }
+            else if (xas == "NoInsurance") {
+                var Requirement = "NoHealthCare";
+            }
             else {
                 var Requirement = Employeed;
 
             }
+           
 
     
             var dis = null;
@@ -361,7 +362,7 @@
 </script>
 <body onload="getParam()">
 
-    @using (Html.BeginForm("Signup", "Info", FormMethod.Post))
+    @using (Html.BeginForm("SignupConfirmation", "Info", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         <h4>Patient Form</h4>
@@ -374,7 +375,7 @@
                 <input type="radio" name="insurance" value="No" onclick="Getnewlist('InsuranceNo')" checked="checked"> No<br>
                 <div class="col-md-10" id="Insurancelist" style="display:none">
                     <label class="control-label"> Insurance</label>
-                    @*@Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "insurancecheck('Insurance')" })*@
+                   
                     @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
                 </div>
             </div>

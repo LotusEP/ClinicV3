@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 
 namespace ClinicV2.Models
@@ -201,6 +203,22 @@ namespace ClinicV2.Models
 
         }
 
+        public static SmtpClient SmtpMail(SmtpModel senderInfo)
+        {
+            var senderEmail = new MailAddress(senderInfo.Email, senderInfo.Name);
+            var password = senderInfo.MailPassword;
+            var smtp = new SmtpClient
+            {
+                Host = senderInfo.Smtp,
+                Port = senderInfo.Port,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(senderEmail.Address, password)
+            };
+
+            return smtp;
+        }
 
         public static void DeleteStmp(int ID) {
             MySqlConnection cnn = DataModel.getSqlConnection();

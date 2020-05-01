@@ -35,8 +35,8 @@
                 @foreach (var item in Model)
                 {
 
-                <tr id="@item.Name">
-                    <td scope="row"><input type="checkbox" name="clinicName" id="ID_@item.Name" value="@item.Email" onclick="geocode('@item.Address','ID_@item.Name','fromList')"> <a href="http://@item.Website" target="_blank">@item.Name</a></td>
+                <tr id="@item.Name" name="clinicOption">
+                    <td scope="row"><input type="checkbox" name="clinicName" id="ID_@item.Name" value="@item.ClinicID" onclick="geocode('@item.Address','ID_@item.Name','fromList')"> <a href="http://@item.Website" target="_blank">@item.Name</a></td>
                     <td scope="row"> @item.Address </td>     
                     <td scope="row"> @item.PhoneNumber</td>
                     <td id="Distance_@item.Name" scope="row"></td>

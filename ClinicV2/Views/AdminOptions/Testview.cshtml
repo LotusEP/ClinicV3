@@ -5,9 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     }
 
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
 
     <html lang="en-US">
-    <body>
+    <body  onload="Pop()">
 
 
         <div class="col-md-12  ">
@@ -18,64 +21,7 @@
         </div>
 
 
-        @*<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-        <script type="text/javascript">
-              var Traffic = [];
-            Traffic = @Html.Raw(Json.Encode(Model.TrafficInfo));
-            var trafficData = [];
-            var traffArray = [];
-            // Load google charts
-            google.charts.load('current', { 'packages': ['corechart'] });
-            google.charts.setOnLoadCallback(drawChart);
-
-            // Draw the chart and set the chart values
-            function drawChart() {
-
-                // ['Origin', 'Amount of Traffic'];
-
-
-                for (var trafficCounter = 0; trafficCounter < Traffic.length; trafficCounter++) {
-                    trafficData.push(Traffic[trafficCounter]);
-                    // alert(trafficData[trafficCounter].DateName);
-
-
-                }
-                alert("test" + trafficData[0].DataName);
-
-                for (var arleng = 0; arleng < trafficData.length; arleng++) {
-
-                    traffArray.push(trafficData[0].DataName);
-
-                }
-
-                var data = new google.visualization.DataTable();
-                data.addColumn('string', 'Task');
-                data.addColumn('number', 'Hours per Day');
-
-                data.addRow(['Work', 8]);
-                data.addRow(['Eat', 2]);
-                data.addRow(['TV', 4]);
-                data.addRow(['Gym', 2]);
-                data.addRow(['Sleep', 8]);
-
-
-
-
-
-
-                // Optional; add a title and set the width and height of the chart
-                var options = { 'title': 'My Average Day', 'width': 550, 'height': 400 };
-
-                // Display the chart inside the <div> element with id="piechart"
-                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-                chart.draw(data, options);
-            }
-
-            function test() {
-                alert(Traffic[0].DataName);
-            }
-        </script>*@
-
+    
+   
     </body>
 </html>

@@ -1,34 +1,144 @@
 ﻿@model IEnumerable<ClinicV2.Models.DataModel>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-           Origin Website
-        </th>
-        <th>
-            Number of Redirect
-        </th>
-        <th>
-            Page Visit
-        </th>
-    </tr>
+<head>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NumDataValue)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DataValue)
-        </td>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-    </tr>
-}
+</head>
 
-</table>
+
+
+<body>
+    <table class="table">
+        <tr>
+            <th>
+                Origin Website
+            </th>
+            <th>
+                Number of Redirect
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumDataValue)
+                </td>
+
+            </tr>
+        }
+
+
+    </table>
+    <hr />
+    <div id="chart" class="col-md-6"></div>
+
+    <div id="chart2" class="col-md-6"></div>
+</body>
+
+
+
+<script>
+
+
+
+
+    var model = @Html.Raw(Json.Encode(Model));
+
+
+    var options = {
+        series: [],
+        chart: {
+            width: 380,
+            type: 'pie',
+        },
+        labels: [],
+        title: {
+            text: 'title',
+            align: 'left',
+            margin: 10,
+            offsetX: 0,
+            offsetY: -5,
+            floating: false,
+            style: {
+                fontSize: '14px',
+                fontWeight: 'bold',
+                fontFamily: undefined,
+                color: '#263238'
+            }
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+
+    }
+
+    function Pop() {
+
+        displaySource();
+        displaySub();
+
+
+    }
+
+    function displaySource() {
+        var optionClinic = options;
+        optionClinic.series = [];
+        optionClinic.labels = [];
+        for (var i = 0; i < model.length; i++) {
+            if (model[i].DateName != "Submittion") {
+                optionClinic.series.push(model[i].NumDataValue);
+                optionClinic.labels.push(model[i].DateName);
+            }
+
+        }
+
+
+        optionClinic.title.text = 'Clinic Reference';
+        var chart = new ApexCharts(document.querySelector("#chart"), optionClinic);
+        chart.render();
+
+    }
+
+    function displaySub() {
+
+        var optionSubmittion = options;
+        optionSubmittion.series = [];
+        optionSubmittion.labels = [];
+        var total = 0;
+        var submition = 0;
+        for (var i = 0; i < model.length; i++) {
+            if (model[i].DateName != "Submittion") {
+                total += model[i].NumDataValue;
+
+            } else if (model[i].DateName == "Submittion")
+            {
+                submition = model[i].NumDataValue;
+                optionSubmittion.series.push(submition);
+                optionSubmittion.labels.push("Non-Submittion");
+            }
+
+        }
+        optionSubmittion.title.text = 'Submittion';
+        optionSubmittion.series.push(total);
+        optionSubmittion.labels.push("Submittion");
+        var chart = new ApexCharts(document.querySelector("#chart2"), optionSubmittion);
+        chart.render();
+
+    }
+
+
+
+</script>

@@ -192,7 +192,7 @@ namespace ClinicV2.Models
 
             }
 
-
+            cnn.Close();
             return clinic;
         }
         public static void EditClinic(clinicModel Clinic)
@@ -256,6 +256,7 @@ namespace ClinicV2.Models
 
 
             cmd.ExecuteNonQuery();
+            cnn.Close();
 
 
 

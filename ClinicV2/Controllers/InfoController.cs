@@ -27,7 +27,7 @@ namespace ClinicV2.Controllers
         //2nd version of email ---------------------------------------------------------------------------------------------------------------------------
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignupConfirmation(SignupModel newSignee, string [] clinicName,string clinic, string clinicID)
+        public ActionResult SignupConfirmation(SignupModel newSignee, int [] clinicName,string clinic, string clinicID)
         {
             //keep track where the patitent come from
             if (clinic == null)
@@ -36,12 +36,45 @@ namespace ClinicV2.Controllers
             }
             PageRedirct(clinic);
 
-  
+            List<clinicModel> listOfClin = new List<clinicModel>();
+
+            for (int x = 0; x < clinicName.Length; x++)
+            {
+                clinicModel toAdd = clinicModel.GetClinic(clinicName[x]);
+
+                if (toAdd != null)
+                {
+                    listOfClin.Add(toAdd);
+                }
+            }
             //create the patient object
             Patient patient = newSignee.newPatient;
             //message for the email
-            string message = "Patient Email: " + patient.Email + "\n" + "Patient Phone Number: " + patient.CellPhone + "\n" + "Patient Address: " + patient.Street
-           + "\n" + patient.City + "\n" + patient.State + "\n" + patient.Zip;
+            string message ="", message2="";
+
+            message += "This person have match with your clinic requirement, this is their information. They have received your information. \n " +
+                "Below is their contact information. \n" +
+                "Please contact them in the new few days.";
+
+   
+
+                message += "Name:" + patient.FirstName +" " + patient.LastName + "\n Email: " + patient.Email + "\n  Phone Number: " + patient.CellPhone + "\n" + " Address: " + patient.Street
+           + "," + patient.City + "," + patient.State + "," + patient.Zip;
+
+
+            message2 += "We thank you for using our service, below is the list and information regarding the clinic you have chosen.\n";
+            message2 += "----------------------------------------------------------------------------------------------------------------- \n";
+
+            for (int x = 0; x < clinicName.Length; x++)
+            {
+                message2 += "Clinic: " + listOfClin[x].Name + "\n" +
+                    "Clinic Email: " + listOfClin[x].Email + "\n" +
+                    "Clinic Phone Number: " + listOfClin[x].PhoneNumber + "\n" +
+                    "Clinic Address: " + listOfClin[x].Address + "\n" +
+                    "Clinic Website: " + listOfClin[x].Website + "\n";
+                message2 += "----------------------------------------------------------------------------------------------------------------- \n";
+
+            }
             //determine which clinic to send the email
             int ID;
             if (clinicID != null)
@@ -68,32 +101,44 @@ namespace ClinicV2.Controllers
                     var senderEmail = new MailAddress(senderInfo.Email, senderInfo.Name);
                     var receiverEmail = new MailAddress(patient.Email, patient.FirstName);
                     var password = senderInfo.MailPassword;
-                    var sub = "New Patient";
+                
                     var body = message;
-                    var smtp = new SmtpClient
-                    {
-                        Host = senderInfo.Smtp,
-                        Port = senderInfo.Port,
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false,
-                        Credentials = new NetworkCredential(senderEmail.Address, password)
-                    };
 
+                    var smtpMess2 = SmtpModel.SmtpMail(senderInfo);
                     mess.From = senderEmail;
                     mess.To.Add(receiverEmail);
-                    mess.Subject = sub;
-                    mess.Body = message;
-
-
-
-                    using (smtp)
+                    mess.Subject = "New Patient";
+                    mess.Body = message2;
+                    if (mess.To != null)
                     {
-                        smtp.Send(mess);
+                        using (smtpMess2)
+                        {
+                            smtpMess2.Send(mess);
+                        }
                     }
 
-                    Patient.AddPatient(patient);
+                    var smtpMess1 = SmtpModel.SmtpMail(senderInfo);
+                    var mess2 = new MailMessage();
+                    mess2.From = senderEmail;
+                    for (int x = 0; x < clinicName.Length; x++)
+                    {
+                        mess2.To.Add(receiverEmail = new MailAddress(listOfClin[x].Email, listOfClin[x].Name));
 
+                    }
+                    mess2.Subject = "Clinic Info";
+                    mess2.Body = message;
+
+                    if(mess2.To != null)
+                    {
+                         using (smtpMess1)
+                        {
+                            smtpMess1.Send(mess2);
+                        }
+                    }
+                 
+
+                   // Patient.AddPatient(patient);
+   
                     ViewBag.mess = patient.FirstName;
                     return View();
                 }
@@ -105,7 +150,6 @@ namespace ClinicV2.Controllers
             return RedirectToAction("Signup");
 
         }
-
 
 
         public ActionResult AboutPage()
