@@ -71,12 +71,14 @@ namespace ClinicV2.Controllers
         [HttpGet]
         public ActionResult EditAccount(int ID)
         {
-            return View();
+              
+            return View(Account.GetAccount(ID));
         }
         [Filters.AuthorizeAdmin]
         [HttpPost]
         public ActionResult EditAccount(Account acc)
         {
+            Account.EditAccountInfo(acc);
             ViewBag.mess = "Success";
             return View();
         }

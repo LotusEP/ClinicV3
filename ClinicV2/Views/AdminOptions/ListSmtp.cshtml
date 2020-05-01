@@ -10,7 +10,7 @@
 <p>
     @Html.ActionLink("Create New", "AddSmtp")
 </p>
-<table class="table">
+<table class="table table-striped table-hover table-bordered">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.smtpID)
@@ -20,9 +20,6 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Smtp)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Port)
         </th>
         <th></th>
     </tr>
@@ -37,9 +34,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Smtp)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Port)
         </td>
         <td>
             @Html.ActionLink("Edit", "EditSmtp", new { id = item.smtpID }) |

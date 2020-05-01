@@ -96,6 +96,8 @@ namespace ClinicV2.Models
 
         }
 
+
+
         [Filters.AuthorizeAdmin]
         public static List<Account> GetAccountList()
         {
@@ -141,11 +143,37 @@ namespace ClinicV2.Models
             cnn.Close();
         }
 
-        //update stmp
-        public static void EditStmp(Account acc)
+        public static Account GetAccount(int ID)
         {
             MySqlConnection cnn = DataModel.getSqlConnection();
-            string sql = "Update AdminUser Set AdminUserName =@UserName, AdminPass =@Pass, FirstName =@FName,LastName =@LName, Email =@Email  AdminID =@ID";
+            string sql = "Select * From AdminUser Where AdminID =@ID";
+            cnn.Open();
+            MySqlCommand cmd = new MySqlCommand(sql, cnn);
+            cmd.Parameters.AddWithValue("@ID", ID);
+            MySqlDataReader rdr = null;
+
+            rdr = cmd.ExecuteReader();
+
+            Account EditAccount = new Account();
+            while (rdr.Read())
+            {
+                EditAccount.AdminID = Int32.Parse(rdr.GetValue(0).ToString());
+                EditAccount.Username = rdr.GetValue(1).ToString();
+                EditAccount.Password = rdr.GetValue(2).ToString();
+                EditAccount.FirstName = rdr.GetValue(3).ToString();
+                EditAccount.LastName= rdr.GetValue(4).ToString();
+
+            }
+            cnn.Close();
+
+            return EditAccount;
+
+        }
+        //update account
+        public static void EditAccountInfo(Account acc)
+        {
+            MySqlConnection cnn = DataModel.getSqlConnection();
+            string sql = "Update AdminUser Set AdminUserName =@UserName, AdminPass =@Pass, FirstName =@FName,LastName =@LName, Email =@Email Where AdminID =@ID";
             cnn.Open();
             MySqlCommand cmd = new MySqlCommand(sql, cnn);
             cmd.Parameters.AddWithValue("@UserName", acc.Username);

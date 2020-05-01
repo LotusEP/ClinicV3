@@ -88,11 +88,10 @@
     function Pop() {
 
         displaySource();
-        //displaySub();
-
+ 
 
     }
-
+    //display chart
     function displaySource() {
         var optionClinic = options;
         optionClinic.series = [];
@@ -112,37 +111,7 @@
 
     }
 
-    //function displaySub() {
-
-    //    var optionSubmittion = options;
-    //    optionSubmittion.series = [];
-    //    optionSubmittion.labels = [];
-    //    var total = 0;
-    //    var subtotal = 0;
-    //    var submition = 0;
-    //    optionSubmittion.labels.push("Submittion");
-    //    optionSubmittion.labels.push("Non-Submittion");
-    //    for (var i = 0; i < model.length; i++) {
-    //        if (model[i].DateName != "Submittion") {
-    //            total += model[i].NumDataValue;
-
-    //        } else if (model[i].DateName == "Submittion")
-    //        {
-    //            submition = model[i].NumDataValue;
-    //            optionSubmittion.series.push(submition);
-               
-    //        }
-
-    //    }
-
-        
-    //    optionSubmittion.title.text = 'Submittion';
-    //    optionSubmittion.series.push(total);
-       
-    //    var chart = new ApexCharts(document.querySelector("#chart2"), optionSubmittion);
-    //    chart.render();
-
-    //}
+    
 
 
 
