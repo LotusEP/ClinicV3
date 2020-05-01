@@ -9,13 +9,13 @@
 
 
 <body>
-    <table class="table">
+    <table class="table table-striped table-hover table-bordered"  >
         <tr>
             <th>
                 Origin Website
             </th>
             <th>
-                Number of Redirect
+                Number of Visit
             </th>
         </tr>
 
@@ -118,7 +118,10 @@
         optionSubmittion.series = [];
         optionSubmittion.labels = [];
         var total = 0;
+        var subtotal = 0;
         var submition = 0;
+        optionSubmittion.labels.push("Submittion");
+        optionSubmittion.labels.push("Non-Submittion");
         for (var i = 0; i < model.length; i++) {
             if (model[i].DateName != "Submittion") {
                 total += model[i].NumDataValue;
@@ -127,13 +130,15 @@
             {
                 submition = model[i].NumDataValue;
                 optionSubmittion.series.push(submition);
-                optionSubmittion.labels.push("Non-Submittion");
+               
             }
 
         }
+
+        
         optionSubmittion.title.text = 'Submittion';
         optionSubmittion.series.push(total);
-        optionSubmittion.labels.push("Submittion");
+       
         var chart = new ApexCharts(document.querySelector("#chart2"), optionSubmittion);
         chart.render();
 

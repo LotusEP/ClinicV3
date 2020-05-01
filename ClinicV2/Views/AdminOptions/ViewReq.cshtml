@@ -10,10 +10,8 @@
     var q = @Html.Raw(Json.Encode(Model.listofCriteriaValue));
 
  
-
-    function test() {
-
-
+    //automatically populate the criteria with the right value
+    function addCriteria() {
 
         var Criteria = document.getElementById("Criteria_Name").value;
         var Criterialist = document.getElementById("Criteria_Value");
@@ -35,7 +33,7 @@
 
 </script>
 
-<body onload="test()">
+<body onload="addCriteria()">
     <h3 style="color:green">
         @ViewBag.ExistMess
     </h3>
@@ -59,7 +57,7 @@
             <div class="col-md-12">
                 <strong>Criteria</strong>
                 <div>
-                    @Html.DropDownListFor(model => model.Criteria.Name, new SelectList(Model.CriteriaOption), "Select Criteria", new { @class = "from-control ", @onchange = "test()" })
+                    @Html.DropDownListFor(model => model.Criteria.Name, new SelectList(Model.CriteriaOption), "Select Criteria", new { @class = "from-control ", @onchange = "addCriteria()" })
                 </div>
                
             </div>

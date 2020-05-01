@@ -13,25 +13,59 @@
 
 
 
-<form method="post">
-
-    <center><input type="button" value="Clinic Management" class="btn btn-primary" onclick="window.location.href = '@Url.Action("listofClinic", "AdminOptions")';" /></center>
-    <p><br /></p>
 
 
-    <center><input type="button" value="Criteria Management" class="btn btn-primary" onclick="window.location.href = '@Url.Action("ViewReq", "AdminOptions")';" /></center>
-    <p><br /></p>
+<center>
+    <button type="button" class="btn btn-primary"
+            onclick="window.location.href = '@Url.Action("listofClinic", "AdminOptions")';">
+        <strong>Clinic Management</strong>
+    </button>
+</center>
+<br />
 
 
-    <center><input type="button" value="Traffic Info" class="btn btn-primary" onclick="window.location.href = '@Url.Action( "TestView", "AdminOptions")';" /></center>
-    <p><br /></p>
+<center>
+    <button type="button" class="btn btn-primary"
+            onclick="window.location.href = '@Url.Action("ViewReq", "AdminOptions")';">
+        <strong>Criteria Management</strong>
+    </button>
+</center>
+<br />
 
 
-    <center><input type="button" value="Stmp Mangement" class="btn btn-primary" onclick="window.location.href = '@Url.Action( "ListSmtp", "AdminOptions")';" /></center>
-    <p><br /></p>
-    <center><input type="button" value="Account Mangement" class="btn btn-primary" onclick="window.location.href = '@Url.Action( "ListAccount", "Account")';" /></center>
-    <p><br /></p>
+<center>
+    <button type="button" class="btn btn-primary"
+            onclick="window.location.href = '@Url.Action( "SourceInfo", "AdminOptions")';">
+        <strong>Traffic Report</strong>
+    </button>
+</center>
+<br />
 
-    <input type='button' class="btn btn-danger" value="Logout" onclick="window.location.href ='@Url.Action("Logout", "Account")';" />
-</form>
+
+<center>
+    <button type="button" class="btn btn-primary"
+            onclick="window.location.href = '@Url.Action( "ListSmtp", "AdminOptions")';">
+        <strong>SMTP Mangement</strong>
+    </button>
+</center>
+<br />
+<center>
+    <button type="button" class="btn btn-primary"
+            onclick="window.location.href = '@Url.Action( "ListAccount", "Account")';">
+        <strong>Account Management</strong>
+    </button>
+</center>
+<br />
+
+<center>
+    <button type="button" class="btn btn-primary"
+            onclick="window.location.href = '@Url.Action( "listofPaitent", "AdminOptions")';">
+        <strong>User Submittion Report</strong>
+    </button>
+</center>
+<br />
+
+
+<input type='button' class="btn btn-danger" value="Logout" onclick="window.location.href ='@Url.Action("Logout", "Account")';" />
+
 <br /><br />

@@ -27,28 +27,34 @@ namespace ClinicV2.Controllers
         //2nd version of email ---------------------------------------------------------------------------------------------------------------------------
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignupConfirmation(SignupModel newSignee, int [] clinicName,string clinic, string clinicID)
+        public ActionResult SignupConfirmation(SignupModel newSignee, int[] clinicName, string clinic, string clinicID, string listofInsurance)
         {
             //keep track where the patitent come from
             if (clinic == null)
             {
                 clinic = "Direct";
+
             }
             PageRedirct(clinic);
-
+      
             List<clinicModel> listOfClin = new List<clinicModel>();
-
-            for (int x = 0; x < clinicName.Length; x++)
+            if (clinicName != null)
             {
-                clinicModel toAdd = clinicModel.GetClinic(clinicName[x]);
+                 for (int x = 0; x < clinicName.Length; x++)
+                    {
+                        clinicModel toAdd = clinicModel.GetClinic(clinicName[x]);
 
-                if (toAdd != null)
-                {
-                    listOfClin.Add(toAdd);
-                }
+                        if (toAdd != null)
+                        {
+                            listOfClin.Add(toAdd);
+                        }
+                    }
             }
+   
             //create the patient object
             Patient patient = newSignee.newPatient;
+            patient.Reference = clinic;
+          
             //message for the email
             string message ="", message2="";
 
@@ -64,17 +70,21 @@ namespace ClinicV2.Controllers
 
             message2 += "We thank you for using our service, below is the list and information regarding the clinic you have chosen.\n";
             message2 += "----------------------------------------------------------------------------------------------------------------- \n";
-
-            for (int x = 0; x < clinicName.Length; x++)
+            if (clinicName != null)
             {
-                message2 += "Clinic: " + listOfClin[x].Name + "\n" +
-                    "Clinic Email: " + listOfClin[x].Email + "\n" +
-                    "Clinic Phone Number: " + listOfClin[x].PhoneNumber + "\n" +
-                    "Clinic Address: " + listOfClin[x].Address + "\n" +
-                    "Clinic Website: " + listOfClin[x].Website + "\n";
-                message2 += "----------------------------------------------------------------------------------------------------------------- \n";
+                for (int x = 0; x < clinicName.Length; x++)
+                {
+                    message2 += "Clinic: " + listOfClin[x].Name + "\n" +
+                        "Clinic Email: " + listOfClin[x].Email + "\n" +
+                        "Clinic Phone Number: " + listOfClin[x].PhoneNumber + "\n" +
+                        "Clinic Address: " + listOfClin[x].Address + "\n" +
+                        "Clinic Website: " + listOfClin[x].Website + "\n";
+                    message2 += "----------------------------------------------------------------------------------------------------------------- \n";
+
+                }
 
             }
+          
             //determine which clinic to send the email
             int ID;
             if (clinicID != null)
@@ -135,10 +145,11 @@ namespace ClinicV2.Controllers
                             smtpMess1.Send(mess2);
                         }
                     }
-                 
 
-                   // Patient.AddPatient(patient);
-   
+
+
+                    Patient.AddPatient(patient);
+
                     ViewBag.mess = patient.FirstName;
                     return View();
                 }

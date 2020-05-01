@@ -309,7 +309,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Info\ConfirmationPage.cshtml" />
     <Content Include="Views\AdminOptions\ViewReq.cshtml" />
-    <Content Include="Views\AdminOptions\Testview.cshtml" />
+    <Content Include="Views\AdminOptions\SourceInfo.cshtml" />
     <Content Include="Views\AdminOptions\_Traffic.cshtml" />
     <Content Include="Views\Info\AboutPage.cshtml" />
     <Content Include="Views\Shared\AuthorizeFailed.cshtml" />
@@ -325,6 +325,8 @@
     <Content Include="Views\Account\ListAccount.cshtml" />
     <Content Include="Views\Account\EditAccount.cshtml" />
     <Content Include="Views\AdminOptions\DetailPage.cshtml" />
+    <Content Include="Views\AdminOptions\listofPaitent.cshtml" />
+    <Content Include="Views\AdminOptions\PatientDetailPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

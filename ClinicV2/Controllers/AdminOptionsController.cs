@@ -170,7 +170,7 @@ namespace ClinicV2.Controllers
         }
 
 
-        public ActionResult Testview()
+        public ActionResult SourceInfo()
         {
 
             DataViewModel DataInfo = new DataViewModel();
@@ -223,6 +223,17 @@ namespace ClinicV2.Controllers
 
             clinicModel clinic = clinicModel.GetClinic(ID);
             return View(clinic);
+        }
+
+        public ActionResult listofPaitent()
+        {
+            
+            return View(Patient.ListofPatient());
+        }
+
+        public ActionResult PatientDetailPage(int ID)
+        {
+            return View(Patient.GetPatientInfo(ID));
         }
     }
 }

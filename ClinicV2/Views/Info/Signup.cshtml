@@ -261,7 +261,7 @@
                         }
 
                         if (Household > 1) {
-                            for (var x = 0; x < Household; x++) {
+                            for (var x = 1; x < Household; x++) {
                                 val += te;
                             }
                         }
@@ -275,7 +275,7 @@
                                 
                             }
                             else if (criteria[0] == "Yes") {
-                                requirement = document.getElementById("listofInsurance").value;
+                                requirement = document.getElementById("newPatient_Insurance").value;
                             }
                         }
                         else if (criteriaReq == 'Employeed') {
@@ -291,7 +291,7 @@
             if (val != null) {
 
                 if (criteriaReq == "Income") {
-
+          
                     if (requirement <= val) {
             
                         updatingClinictoDisplay(list[x].Name, "ADD");
@@ -347,7 +347,7 @@
                 <div class="col-md-10" id="Insurancelist" style="display:none">
                     <label class="control-label"> Insurance</label>
                    
-                    @Html.DropDownListFor(model => model.listofInsurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
+                    @Html.DropDownListFor(model => model.newPatient.Insurance, new SelectList(Model.listofInsurance), "Select Insurance", new { @class = "from-control ", @onchange = "checkorder()" })
                 </div>
             </div>
 
