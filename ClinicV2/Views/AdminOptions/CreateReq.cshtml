@@ -2,14 +2,41 @@
 
 @{
     ViewBag.Title = "CreateReq";
-    Layout = "~/Views/Shared/_Layout2.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>CreateReq</h2>
 
-<body>
-    @ViewBag.ExistMess
-    @using (Html.BeginForm("CreateReq", "Info", FormMethod.Post))
+<script>
+
+    function CriteriaChangeDrop() {
+        var listCriteria = document.getElementById('Criteria').value;
+        document.getElementById("Criteria_Name").value = listCriteria;
+      
+    }
+    function CriteriaChangeInput() {
+        document.getElementById('Criteria').value = "Custom";
+     
+
+    }
+    function loadCriteria()
+    {
+        var listCriteria = document.getElementById('Criteria');
+        var list =  @Html.Raw(Json.Encode(Model.CriteriaOption));     
+        for (var x = 0; x < list.length; x++) {
+            console.log(list[x]);
+            var op = document.createElement('option');
+            op.text = list[x];
+            listCriteria.add(op);
+        }
+
+    }
+
+</script>
+<h2>Criteria Form</h2>
+
+<body onload="loadCriteria()">
+    <h2 class="bg-success">@ViewBag.ExistMess</h2> 
+    @using (Html.BeginForm("CreateReq", "AdminOptions", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
@@ -20,21 +47,27 @@
 
 
             <div class="form-group">
-                <div class="col-md-12">
-                    Criteria
-                    <div >
-                        @Html.DropDownListFor(model => model.Criteria.Name, new SelectList(Model.CriteriaOption), "Select Criteria", new { @class = "from-control " })
+                <div class="col-md-12">    
+                    <div>
+                        <h3>Existing Criteria</h3>
+                        <select id="Criteria" onchange="CriteriaChangeDrop()">
+                            <option>Custom</option>
+                        </select>
                     </div>
-                    <div >
-                        @Html.EditorFor(model => model.Criteria.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    <div>
+                        <h3>
+                            Criteria
+                        </h3>
+                        @Html.EditorFor(model => model.Criteria.Name, new { htmlAttributes = new { @class = "form-control", @onchange = "CriteriaChangeInput()" } })
                     </div>
-                   
+
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Criteria.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+              
                 <div class="col-md-10">
+                    <h3>Criteria Value</h3>
                     @Html.EditorFor(model => model.Criteria.Value, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Criteria.Value, "", new { @class = "text-danger" })
                 </div>
@@ -64,15 +97,18 @@
 
             @foreach (var item in Model.listofCriteriaValue)
             {
+                
                 <tr>
-
+                 
                     <td>
+
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Value)
                     </td>
                     <td>
+                        @Html.ActionLink("Edit", "EditReq", new { id = item.CriteriaID })
                         @Html.ActionLink("Delete", "DeleteCriteriaComplete", new { id = item.CriteriaID })
                     </td>
                 </tr>
@@ -83,7 +119,7 @@
     </div>
 
     <div>
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Back to List", "ViewReq", "AdminOptions");
     </div>
 
 

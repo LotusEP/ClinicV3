@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ClinicV2.Models.clinicModel>
+
+@{
+    ViewBag.Title = "listofClinic";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Current Avaliable Clinic</h2>
+
+<p>
+    @Html.ActionLink("Add new Clinic", "ClinicAdd")
+</p>
+<table class="table table-striped table-hover table-bordered">
+    <tr>
+        <th>
+
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Website)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+
+        
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PhoneNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Website)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "DetailPage", new { id=item.ClinicID }) |
+            @Html.ActionLink("Edit", "EditClinic", new { id = item.ClinicID }) |
+            @Html.ActionLink("Delete", "DeleteClinic", new { id = item.ClinicID }) |
+        </td>
+    </tr>
+    }
+
+</table>

@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Login</h2>
+
+
+
+<p><br /></p>
+<p class="">Enter your username and password to login.</p>
+<p><br /></p>
+
+<br /><br />
+
+<body>
+    <div class="container" >
+        <div>
+            <form class="form-horizontal" role="form" method='post'>
+                <label><strong>Username:</strong> <input type='text' id='username' name='username' required>
+                <span class="field-validation-valid text-danger" data-valmsg-for="username" data-valmsg-replace="true"></span>
+                    </label><br /><br />
+                
+                <label>
+                    <strong>Password:</strong> <input type='password' id='password' name='password' required>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="password" data-valmsg-replace="true"></span>
+                </label><br /><br />
+
+             
+
+                <button class="btn btn-primary" type="submit">Sign In</button>
+
+            </form>
+        </div>
+    </div>
+</body>

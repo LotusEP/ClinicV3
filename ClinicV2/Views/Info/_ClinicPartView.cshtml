@@ -4,40 +4,65 @@
     ViewBag.Title = "GetRequirement";
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css">
 }
+    <head>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <style>
+        #map {
+        height:400px;
+        width:100%;
+        }
 
+    </style>
 
 
 
 <body>
+    <script>
+
+        //function to display the distance in real time
+      async  function ClinicDisplayOrder(address, ID,param) {
+            await  geocode(address, ID,param);
+            if (PatientCoord[0] != null) {
+                console.log("hi");
+                setTimeout(function () {
+                    showClosetClinic();
+    
+                }, 1000);
+            }
+        }
+    </script>
+    <script src="~/Scripts/CustScript/MapScript.js"></script>
     <hr>
     <div>
-        @*<input type="checkbox" id="18+" onclick="Getnewlist()">Age <br />
-            <input type="checkbox" id="Housing" onclick="Getnewlist()"> Housing<br />
-            <input type="checkbox" id="Income" onclick="displayClinic()"> Income<br />
-            <input type="checkbox" id="Insurance" onclick="Getnewlist()"> Insurance<br />*@
+   
         <div>
-            <table class="table-bordered">
+            <table class="table table-striped table-hover table-bordered" id="list_Of_Clinic" >
                 <tr>
 
-                    <th>Clinic Name</th>
-                    <th>Address</th>
-                    <th>Email and <br /> Phone Number</th>
+                    <th scope="col">Clinic Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Phonenumber</th>
+                    <th scope="col">Distance</th>
                 </tr>
 
                 @foreach (var item in Model)
                 {
 
-                    <tr id="@item.Name">
-                        <td><input type="checkbox" name="clinicName" value="@item.Email"> <a href="https://massclinic.org/" target="_blank">@item.Name</a></td>
-                        <td><label> @item.Address </label></td>
-                        <td><label> @item.PhoneNumber <br /> @item.Email </label></td>
-                    </tr>
+                <tr id="@item.Name" name="clinicOption">
+                    <td scope="row"><input type="checkbox" name="clinicName" id="ID_@item.Name" value="@item.ClinicID" onclick="ClinicDisplayOrder('@item.Address','ID_@item.Name','fromList')"> <a href="http://@item.Website" target="_blank">@item.Name</a></td>
+                    <td scope="row"> @item.Address </td>     
+                    <td scope="row"> @item.PhoneNumber</td>
+                    <td id="Distance_@item.Name" scope="row"></td>
+                </tr>
                 }
             </table>
 
         </div>
     </div>
     <hr>
+
+
 </body>
 
 

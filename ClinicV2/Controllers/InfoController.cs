@@ -20,292 +20,211 @@ namespace ClinicV2.Controllers
         public ActionResult Index()
         {
             String Ref = Request.Headers["Referer"];
-
+           
             return View();
         }
 
         //2nd version of email ---------------------------------------------------------------------------------------------------------------------------
-        [HttpGet]
-        public ActionResult Signup()
-        {
-            String Ref = Request.Headers["Referer"];
-
-            List<clinicModel> listofClinic = clinicModel.GetClinicList();
-
-
-            ViewBag.Collection = listofClinic;
-            return View();
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Signup(SignupModel newSignee, string [] clinicName)
+        public ActionResult SignupConfirmation(SignupModel newSignee, int[] clinicName, string clinic, string clinicID, string listofInsurance)
         {
-            PageRedirct("Submittion");
-            String Ref = Request.Headers["Referer"];
+            //keep track where the patitent come from
+            if (clinic == null)
+            {
+                clinic = "Direct";
 
-            //foreach (var mail in clinicT)
-            //{
-            //    if (mail)
-            //}
-            //string result = collection["clinicT"];
+            }
+            PageRedirct(clinic);
+      
+            List<clinicModel> listOfClin = new List<clinicModel>();
+            if (clinicName != null)
+            {
+                 for (int x = 0; x < clinicName.Length; x++)
+                    {
+                        clinicModel toAdd = clinicModel.GetClinic(clinicName[x]);
 
+                        if (toAdd != null)
+                        {
+                            listOfClin.Add(toAdd);
+                        }
+                    }
+            }
+   
+            //create the patient object
             Patient patient = newSignee.newPatient;
-            string message = "Patient Email: " + patient.Email + "\n" + "Patient Phone Number: " + patient.CellPhone + "\n" + "Patient Address: " + patient.Street
-           + "\n" + patient.City + "\n" + patient.State + "\n" + patient.Zip;
+            patient.Reference = clinic;
+          
+            //message for the email
+            string message ="", message2="";
+
+            message += "This person have match with your clinic requirement, this is their information. They have received your information. \n " +
+                "Below is their contact information. \n" +
+                "Please contact them in the new few days.";
+
+   
+
+                message += "Name:" + patient.FirstName +" " + patient.LastName + "\n Email: " + patient.Email + "\n  Phone Number: " + patient.CellPhone + "\n" + " Address: " + patient.Street
+           + "," + patient.City + "," + patient.State + "," + patient.Zip;
 
 
-            
-            //try
-            //{
-            //    if (ModelState.IsValid)
-            //    {
-            //        var mess = new MailMessage();
-            //        var senderEmail = new MailAddress("Baon23@outlook.com", "Bao");
-            //        var receiverEmail = new MailAddress(patient.Email, "Receiver");
-            //        var password = "RandomPass";
-            //        var sub = "New Patient";
-            //        var body = message;
-            //        var smtp = new SmtpClient
-            //        {
-            //            Host = "smtp-mail.outlook.com",
-            //            Port = 587,
-            //            EnableSsl = true,
-            //            DeliveryMethod = SmtpDeliveryMethod.Network,
-            //            UseDefaultCredentials = false,
-            //            Credentials = new NetworkCredential(senderEmail.Address, password)
-            //        };
+            message2 += "We thank you for using our service, below is the list and information regarding the clinic you have chosen.\n";
+            message2 += "----------------------------------------------------------------------------------------------------------------- \n";
+            if (clinicName != null)
+            {
+                for (int x = 0; x < clinicName.Length; x++)
+                {
+                    message2 += "Clinic: " + listOfClin[x].Name + "\n" +
+                        "Clinic Email: " + listOfClin[x].Email + "\n" +
+                        "Clinic Phone Number: " + listOfClin[x].PhoneNumber + "\n" +
+                        "Clinic Address: " + listOfClin[x].Address + "\n" +
+                        "Clinic Website: " + listOfClin[x].Website + "\n";
+                    message2 += "----------------------------------------------------------------------------------------------------------------- \n";
 
-            //        mess.From = senderEmail;
-            //        mess.To.Add(receiverEmail);
-            //        //for (int i = 0; i < clinicName.Length; i++)
-            //        //{
-            //        //    if (clinicName != null)
-            //        //    {
-            //        //        mess.Bcc.Add(clinicName[i]);
-            //        //    }
+                }
 
-            //        //}
-            //        mess.Subject = sub;
-            //        mess.Body = message;
+            }
+          
+            //determine which clinic to send the email
+            int ID;
+            if (clinicID != null)
+            {
+                ID = Int32.Parse(clinicID);
+
+            }
+            else {
+                ID = 1;
+            }
+
+            //create and get the send info 
+            SmtpModel senderInfo = new SmtpModel();
+            senderInfo = SmtpModel.getStmpInfo(ID);
+    
+            //send the infomation
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+
+                    var mess = new MailMessage();
+                    var senderEmail = new MailAddress(senderInfo.Email, senderInfo.Name);
+                    var receiverEmail = new MailAddress(patient.Email, patient.FirstName);
+                    var password = senderInfo.MailPassword;
+                
+                    var body = message;
+
+                    var smtpMess2 = SmtpModel.SmtpMail(senderInfo);
+                    mess.From = senderEmail;
+                    mess.To.Add(receiverEmail);
+                    mess.Subject = "New Patient";
+                    mess.Body = message2;
+                    if (mess.To != null)
+                    {
+                        using (smtpMess2)
+                        {
+                            smtpMess2.Send(mess);
+                        }
+                    }
+
+                    var smtpMess1 = SmtpModel.SmtpMail(senderInfo);
+                    var mess2 = new MailMessage();
+                    mess2.From = senderEmail;
+                    for (int x = 0; x < clinicName.Length; x++)
+                    {
+                        mess2.To.Add(receiverEmail = new MailAddress(listOfClin[x].Email, listOfClin[x].Name));
+
+                    }
+                    mess2.Subject = "Clinic Info";
+                    mess2.Body = message;
+
+                    if(mess2.To != null)
+                    {
+                         using (smtpMess1)
+                        {
+                            smtpMess1.Send(mess2);
+                        }
+                    }
 
 
-
-            //        using (smtp)
-            //        {
-            //            smtp.Send(mess);
-            //        }
 
                     Patient.AddPatient(patient);
 
-
-                return RedirectToAction("test");
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    ViewBag.Error = "Some Error";
-            //}
-            //return RedirectToAction("test");
-
-        }
-
-        [HttpGet]
-        public ActionResult listofClinic()
-        {
-            PageRedirct("Clinic list");
-            List<clinicModel> listofClinic = clinicModel.GetClinicList();
-
-
-            ViewBag.Collection = listofClinic;
-            return View(listofClinic);
-        }
-
-        public ActionResult DeleteClinic(string name)
-        {
-            clinicModel.deleteClinic(name);
-
-            return RedirectToAction("listofCLinic");
+                    ViewBag.mess = patient.FirstName;
+                    return View();
+                }
+            }
+            catch (Exception)
+            {
+                ViewBag.Error = "Some Error";
+            }
+            return RedirectToAction("Signup");
 
         }
+
 
         public ActionResult AboutPage()
         {
 
             return View();
         }
-      
 
-        [HttpGet]
-        public ActionResult ClinicAdd()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult ClinicAdd(clinicModel clinic)
-        {
-            clinicModel.CreateClinic(clinic);
-            return RedirectToAction("listofCLinic");
-        }
-        [HttpGet]
-        public ActionResult GetRequirement()
-        {
-            List<Criteria>Req = Criteria.GetReqList("-10");
-       
-            return View(Req);
-        }
 
-        [HttpGet]
-        public ActionResult ViewReq()
+        
+        public ActionResult Signup(string clinic)
         {
-
-            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
-            NewCriteria.listofClinic = clinicModel.GetClinicList();
-            NewCriteria.listofCriteria = Criteria.GetReqList("-10");
-            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
-            NewCriteria.Criteria = new Criteria();
-            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
-            return View(NewCriteria);
-        }
-        [HttpPost]
-        public ActionResult ViewReq(CreateCriteriaModel req)
-        {
- 
-            ViewBag.ExistMess = Criteria.AddCriteria(req.Criteria,"ClinicCriteria");
-            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
-            NewCriteria.listofClinic = clinicModel.GetClinicList();
-            NewCriteria.listofCriteria = Criteria.GetReqList("-10");
-            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
-            NewCriteria.Criteria = new Criteria();
-            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
-            return View(NewCriteria);
-
-        }
-   
-        public ActionResult test()
-        {
-            PageRedirct("Signup");
-
+            PageRedirct(clinic);
+            //get information for the signup form
             SignupModel tModel = new SignupModel();
-            tModel.listofClinic = clinicModel.GetClinicList();
+            tModel.listofClinic = clinicModel.GetClinicList("No password");
             tModel.listofCriteria = Criteria.GetReqList("old");
             tModel.listofInsurance = Criteria.GetSpecificCriteira("Insurance");
-            tModel.GuidelineValue = Criteria.GetCriteria("200% Guidelines"); 
+            tModel.GuidelineValue = Criteria.GetCriteria("+IncomePerPerson"); 
             tModel.newPatient = new Patient();
 
 
             return View(tModel);
         }
-        //[HttpGet]
-        //public ActionResult EditCriteria(int id)
-        //{
-
-        //    Criteria criteria = new Criteria();
-        //    criteria = Criteria.GetCriteria(id);
-            
-
-        //    return View(criteria);
-        //}
-        //[HttpPost]
-        //public ActionResult EditCriteria(Criteria req)
-        //{
-
-        //    Criteria.AddCriteria(req);
-
-        //    return RedirectToAction("ViewReq");
-        //}
-        [HttpGet]
-        public ActionResult DeleteCriteria(int id)
-        {
-   
-            Criteria.DeleteCriteria(id,"ClinicCriteria");
-
-            return RedirectToAction("ViewReq");
-        }
-
-        [HttpGet]
-        public ActionResult DeleteCriteriaComplete(int id)
-        {
-          
-            Criteria.DeleteCriteriaComplete(id);
-
-            return RedirectToAction("ViewReq");
-        }
-
-        [HttpGet]
-        public ActionResult CreateReq()
-        {
-            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
-            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
-            NewCriteria.Criteria = new Criteria();
-            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
-            return View(NewCriteria);
-        }
-        [HttpPost]
-        public ActionResult CreateReq(CreateCriteriaModel req)
-        {
-            ViewBag.ExistMess = Criteria.AddCriteria(req.Criteria, "CriteriaOption");
-            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
-            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
-            NewCriteria.Criteria = new Criteria();
-            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
-            return View(NewCriteria);
-        }
-        public ActionResult Testview()
-        {
-
-            DataViewModel DataInfo = new DataViewModel();
-            DataInfo.TrafficInfo = DataModel.Source();
-           
-            return View(DataInfo);
-        }
 
 
+        //get the source desitnation and store it
         public void PageRedirct(string PageName)
         {
-            String Ref = "Direct";
+            if (PageName != null)
+            {
+                     DateTime localtime = DateTime.Now;
+                    string sqlFormattedDate = localtime.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
-            Ref = Request.Headers["Referer"];
+                    string Time = localtime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+                    //----------------------------
+                    string connString;
+                    MySqlConnection cnn;
+                    connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
+                    cnn = new MySqlConnection(connString);
+
+
+                    //check for exisitng criteria
+                    string sql;
+
+
+                    sql =
+                   " Insert Into DestinationSource (SourceName,TimeStamp) Values ('" + PageName + "','" + Time + "');";
+
+                    MySqlCommand cmm = new MySqlCommand(sql, cnn);
+                    cnn.Open();
+                    cmm.ExecuteNonQuery();
+
+
+
+                    //----------------------------
+
+
+            }
           
-            DateTime localtime = DateTime.Now;
-
-            string Time = localtime.ToString("dd MMMM yyyy hh:mm:ss tt");
-
-            //----------------------------
-            string connString;
-            MySqlConnection cnn;
-            connString = @"Server=clinicsystemdb.cfkpw0ap0abf.us-east-1.rds.amazonaws.com;user id=Lotusep5ep; Pwd=Pat123forsell; database=ClinicSysDB";
-            cnn = new MySqlConnection(connString);
-
-
-            //check for exisitng criteria
-            string sql;
-
-
-            sql =
-           " Insert Into Traffic (TrafficSource,TimeStamp,Page) Values ('" + Ref + "','" + Time + "','" + PageName + "');";
-
-            MySqlCommand cmm = new MySqlCommand(sql, cnn);
-            cnn.Open();
-            cmm.ExecuteNonQuery();
-
-
-
-            //----------------------------
-
+            
         }
 
-
-        public ActionResult AdminOptions()
-        {
-            ViewBag.Message = "Admin Options page.";
-            return View();
-        }
-
-        public ActionResult Logout()
-        {
-            ViewBag.Message = "Logout";
-            return RedirectToAction("Index", "Info");
-        }
 
 
     }

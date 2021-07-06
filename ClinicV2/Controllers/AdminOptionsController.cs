@@ -14,78 +14,226 @@ using System.Activities;
 
 namespace ClinicV2.Controllers
 {
+    [Filters.AuthorizeAdmin]
     public class AdminOptionsController : Controller
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
 
-        public ActionResult AddClinics()
+        public ActionResult DeleteClinic(int ID)
         {
-            ViewBag.Message = "Add a New Clinic page.";
-            return View();
-        }
+            clinicModel.DeleteClinic(ID);
 
-        public ActionResult EditClinics()
-        {
-            ViewBag.Message = "Edit Clinics page.";
-            return View();
-        }
+            return RedirectToAction("listofClinic");
 
-        public ActionResult DeleteClinics()
-        {
-            ViewBag.Message = "Delete Clinics page.";
-            return View();
-        }
-
-        public ActionResult ViewDemographics()
-        {
-            ViewBag.Message = "View Demographics page.";
-            return View();
         }
 
         [HttpGet]
-        public ActionResult ClinicAdded()
+        public ActionResult ClinicAdd()
         {
-            ViewBag.Message = "Clinic added";
             return View();
         }
 
         [HttpPost]
-        public ActionResult ClinicAdd(clinicModel NewClinic)
+        public ActionResult ClinicAdd(clinicModel clinic)
         {
-            return RedirectToAction("listofCLinic", "Info");
+            clinicModel.CreateClinic(clinic);
+            return RedirectToAction("listofClinic");
         }
-         public ActionResult FindClinics()
-            {
-                ViewBag.Message = "Find Clinics page.";
+        [HttpGet]
+        public ActionResult EditClinic(int id)
+        {
+            clinicModel clinic = clinicModel.GetClinic(id);
+            return View(clinic);
+        }
 
-                return View();
-            }
+        [HttpPost]
+        public ActionResult EditClinic(clinicModel clinic)
+        {
+            clinicModel.EditClinic(clinic);
+            ViewBag.editMess = "Success";
+            return View();
+        }
+        [HttpGet]
+        public ActionResult GetRequirement()
+        {
+            List<Criteria>Req = Criteria.GetReqList("-10");
+       
+            return View(Req);
+        }
+ 
+        [HttpGet]
+        public ActionResult ViewReq()
+        {
 
-            
+            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
+            NewCriteria.listofClinic = clinicModel.GetClinicList("No Password");
+            NewCriteria.listofCriteria = Criteria.GetReqList("-10");
+            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
+            NewCriteria.Criteria = new Criteria();
+            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
+            return View(NewCriteria);
+        }
+  
+        [HttpPost]
+        public ActionResult ViewReq(CreateCriteriaModel req)
+        {
+ 
+            ViewBag.ExistMess = Criteria.AddCriteria(req.Criteria,"ClinicCriteria");
+            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
+            NewCriteria.listofClinic = clinicModel.GetClinicList("No Password");
+            NewCriteria.listofCriteria = Criteria.GetReqList("-10");
+            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
+            NewCriteria.Criteria = new Criteria();
+            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
+            return View(NewCriteria);
+
+        }
+
+        [HttpGet]
+        public ActionResult DeleteCriteria(int id)
+        {
+   
+            Criteria.DeleteCriteria(id,"ClinicCriteria");
+
+            return RedirectToAction("ViewReq");
+        }
+
+        [HttpGet]
+        public ActionResult DeleteCriteriaComplete(int id)
+        {
+          
+            Criteria.DeleteCriteriaComplete(id);
+
+            return RedirectToAction("ViewReq");
+        }
+
+        [HttpGet]
+        public ActionResult CreateReq()
+        {
+            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
+            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
+            NewCriteria.Criteria = new Criteria();
+            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
+            return View(NewCriteria);
+        }
+
+        [HttpPost]
+        public ActionResult CreateReq(CreateCriteriaModel req)
+        {
+            ViewBag.ExistMess = Criteria.AddCriteria(req.Criteria, "CriteriaOption");
+            CreateCriteriaModel NewCriteria = new CreateCriteriaModel();
+            NewCriteria.CriteriaOption = Criteria.CriteraiValue();
+            NewCriteria.Criteria = new Criteria();
+            NewCriteria.listofCriteriaValue = Criteria.GetCriteriaValue();
+            return View(NewCriteria);
+        }
+        [HttpGet]
+        public ActionResult EditReq(int ID)
+        {
+            Criteria updateCriteria = Criteria.GetInCriteria(ID);
+            return View(updateCriteria);
+        }
+        [HttpPost]
+        public ActionResult EditReq(Criteria criteria)
+        {
         
-            public ActionResult AdminLogin()
+            Criteria.EditCriteria(criteria);
+                ViewBag.editMess = "Success";
+            return View();
+        }
+           
+
+        public ActionResult AdminOptions()
+        {
+            ViewBag.Message = "Admin Options page.";
+            return View();
+        }
+
+       
+        public ActionResult AdminLogin()
             {
                
-
-            //Connection to database (Login credentials retrieval at a later date)
              
             return View(); 
 
             }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //    public IActionResult Error()
-        //    {
-        //        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //    }
+        [Filters.AuthorizeAdmin]
+        [HttpGet]
+        public ActionResult listofClinic()
+        {
     
-        //[responsecache(duration = 0, location = responsecachelocation.none, nostore = true)]
-        //public iactionresult error()
-        //{
-        //    return view(new errorviewmodel { requestid = activity.current?.id ?? httpcontext.traceidentifier });
-        //}
+            List<clinicModel> listofClinic = clinicModel.GetClinicList("Password");
+
+
+            ViewBag.Collection = listofClinic;
+            return View(listofClinic);
+        }
+
+
+        public ActionResult SourceInfo()
+        {
+
+            DataViewModel DataInfo = new DataViewModel();
+            DataInfo.TrafficInfo = DataModel.Source();
+
+            return View(DataInfo);
+        }
+        [HttpGet]
+        public ActionResult EditSmtp(int ID)
+        {
+            SmtpModel editModel = SmtpModel.GetStmp(ID);
+            return View(editModel);
+        }
+        [HttpPost]
+        public ActionResult EditSmtp(SmtpModel stmp)
+        {
+            SmtpModel.EditStmp(stmp);
+            ViewBag.mess = "Success";
+            return View();
+        }
+        [HttpGet]
+        public ActionResult AddSmtp()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddSmtp(SmtpModel stmp)
+        {
+            SmtpModel.AddStmp(stmp);
+            ViewBag.mess = "Success";
+            return View();
+        }
+
+        public ActionResult DeleteSmtp(int ID)
+        {
+
+            SmtpModel.DeleteStmp(ID);
+            return RedirectToAction("ListSmtp");
+        }
+        public ActionResult ListSmtp()
+        {
+            List<SmtpModel> newlist = SmtpModel.getSmtpList();
+
+            return View(newlist);
+            
+        }
+
+        public ActionResult DetailPage(int ID)
+        {
+
+            clinicModel clinic = clinicModel.GetClinic(ID);
+            return View(clinic);
+        }
+
+        public ActionResult listofPaitent()
+        {
+            
+            return View(Patient.ListofPatient());
+        }
+
+        public ActionResult PatientDetailPage(int ID)
+        {
+            return View(Patient.GetPatientInfo(ID));
+        }
     }
 }

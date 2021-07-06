@@ -1,0 +1,27 @@
+﻿@model ClinicV2.Models.DataViewModel
+
+    @{
+    ViewBag.Title = "Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+
+    <html lang="en-US">
+    <body  onload="Pop()">
+
+
+        <div class="col-md-12  ">
+            <div>
+                @Html.Partial("_Traffic", Model.TrafficInfo);
+
+            </div>
+        </div>
+
+
+    
+   
+    </body>
+</html>

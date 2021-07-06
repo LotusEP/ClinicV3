@@ -1,29 +1,23 @@
 ﻿@model ClinicV2.Models.Criteria
 
 @{
-    ViewBag.Title = "EditCriteria";
+    ViewBag.Title = "EditReq";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>EditCriteria</h2>
-
+<h2>Edit Criteria</h2>
+<h2 class="bg-success">@ViewBag.editMess</h2>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Criteria</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.CriteriaID)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.clinicName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.clinicName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.clinicName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -50,5 +44,5 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "CreateReq")
 </div>

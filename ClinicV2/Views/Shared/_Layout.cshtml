@@ -7,7 +7,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
-    @Html.Partial("_GoogleAntalytics");
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -19,22 +19,39 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Finding a medical home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Finding a Medical Home", "Index", "Info", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Info")</li>
-                    <li>@Html.ActionLink("Signup", "test", "Info")</li>
+                    <li>@Html.ActionLink("Signup", "Signup", "Info")</li>
                     <li>@Html.ActionLink("About", "AboutPage", "Info")</li>
+
                 </ul>
-            </div>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Session["AdminIsLogin"] != null)
+                    {
+
+                        <li>@Html.ActionLink("Criteria", "ViewReq", "AdminOptions")</li>
+                        <li>@Html.ActionLink("Clinic", "listofClinic", "AdminOptions")</li>
+                        <li>@Html.ActionLink("AdminOption", "AdminOptions", "AdminOptions")</li>
+                        <li>@Html.ActionLink("Account", "ListAccount", "Account")</li>
+                        <li>@Html.ActionLink("Stmp ", "ListSmtp", "AdminOptions")</li>
+                        <li class="btn-danger navbar-right">@Html.ActionLink("Logout", "Logout", "Account")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "Account")</li>
+                    }
+                </ul>
+                </div>
         </div>
     </div>
     <div class="container">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Finding a Medical Home</p>
         </footer>
     </div>
 

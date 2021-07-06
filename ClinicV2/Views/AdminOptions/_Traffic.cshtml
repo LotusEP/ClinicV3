@@ -1,0 +1,118 @@
+﻿@model IEnumerable<ClinicV2.Models.DataModel>
+
+<head>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+</head>
+
+
+
+<body>
+    <table class="table table-striped table-hover table-bordered"  >
+        <tr>
+            <th>
+                Origin Website
+            </th>
+            <th>
+                Number of Visit
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumDataValue)
+                </td>
+
+            </tr>
+        }
+
+
+    </table>
+    <hr />
+    <div id="chart" class="col-md-6"></div>
+
+    @*<div id="chart2" class="col-md-6"></div>*@
+</body>
+
+
+
+<script>
+
+
+
+
+    var model = @Html.Raw(Json.Encode(Model));
+
+
+    var options = {
+        series: [],
+        chart: {
+            width: 380,
+            type: 'pie',
+        },
+        labels: [],
+        title: {
+            text: 'title',
+            align: 'left',
+            margin: 10,
+            offsetX: 0,
+            offsetY: -5,
+            floating: false,
+            style: {
+                fontSize: '14px',
+                fontWeight: 'bold',
+                fontFamily: undefined,
+                color: '#263238'
+            }
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+
+    }
+
+    function Pop() {
+
+        displaySource();
+ 
+
+    }
+    //display chart
+    function displaySource() {
+        var optionClinic = options;
+        optionClinic.series = [];
+        optionClinic.labels = [];
+        for (var i = 0; i < model.length; i++) {
+            if (model[i].DateName != "Submission") {
+                optionClinic.series.push(model[i].NumDataValue);
+                optionClinic.labels.push(model[i].DateName);
+            }
+
+        }
+
+
+        optionClinic.title.text = 'Clinic Reference';
+        var chart = new ApexCharts(document.querySelector("#chart"), optionClinic);
+        chart.render();
+
+    }
+
+    
+
+
+
+</script>
